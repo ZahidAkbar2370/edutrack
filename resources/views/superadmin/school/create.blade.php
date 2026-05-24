@@ -1,0 +1,179 @@
+@extends('adminlayout.layout')
+
+@section('title', 'Register School')
+
+@section('content')
+
+<div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-4">
+    <div>
+        <h1 class="h3 mb-1 fw-bold">Register School</h1>
+        <p class="text-muted mb-0">Add a new school to EduTrack</p>
+    </div>
+</div>
+
+<form action="{{ URL::to('school/store') }}" method="POST" id="school-form">
+    @csrf
+
+    {{-- School col-6 | Principal col-6 --}}
+    <div class="row g-3 mb-3">
+        <div class="col-lg-6">
+            <div class="card h-100 shadow-sm">
+                <div class="card-header bg-light">
+                    <h2 class="h6 mb-0 fw-semibold">School Information</h2>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label for="school_name" class="form-label">School Name <span class="text-danger">*</span></label>
+                        <input type="text" name="school_name" id="school_name" class="form-control" value="{{ old('school_name') }}" placeholder="e.g. City Public School" required>
+                        @error('school_name')
+                            <div class="text-danger small">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="phone_no" class="form-label">School Phone No <span class="text-danger">*</span></label>
+                        <input type="text" name="school_phone_no" id="school_phone_no" class="form-control" value="{{ old('school_phone_no') }}" placeholder="923001234567" required>
+                        @error('school_phone_no')
+                            <div class="text-danger small">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="mb-3">
+                        <label for="school_email" class="form-label">School Email</label>
+                        <input type="email" name="school_email" id="school_email" class="form-control" value="{{ old('school_email') }}" placeholder="example@edutrack.school">
+                        @error('school_email')
+                            <div class="text-danger small">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="city" class="form-label">City <span class="text-danger">*</span></label>
+                        <input type="text" name="city" id="city" class="form-control" value="{{ old('city') }}" placeholder="e.g. Lahore" required>
+                        @error('city')
+                            <div class="text-danger small">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="mb-0">
+                        <label for="address" class="form-label">School Address <span class="text-danger">*</span></label>
+                        <textarea name="address" id="address" class="form-control" rows="2">{{ old('address') }}</textarea>
+                        @error('address')
+                            <div class="text-danger small">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card h-100 shadow-sm">
+                <div class="card-header bg-light">
+                    <h2 class="h6 mb-0 fw-semibold">Principal Information</h2>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label for="priciple_name" class="form-label">Principal Name <span class="text-danger">*</span></label>
+                        <input type="text" name="priciple_name" id="priciple_name" class="form-control" value="{{ old('priciple_name') }}" placeholder="Principal full name" required>
+                        @error('priciple_name')
+                            <div class="text-danger small">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="mb-3">
+                        <label for="priciple_phone_no" class="form-label">Principal Phone No</label>
+                        <input type="text" name="priciple_phone_no" id="priciple_phone_no" class="form-control" value="{{ old('priciple_phone_no') }}" placeholder="+92 321 9876543">
+                        @error('priciple_phone_no')
+                            <div class="text-danger small">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="mb-0">
+                        <label for="priciple_email" class="form-label">Principal Email</label>
+                        <input type="email" name="priciple_email" id="priciple_email" class="form-control" value="{{ old('priciple_email') }}" placeholder="principal@example.com">
+                        @error('priciple_email')
+                            <div class="text-danger small">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card h-100 shadow-sm">
+                <div class="card-header bg-light">
+                    <h2 class="h6 mb-0 fw-semibold">Login Credentials</h2>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Username <span class="text-danger">*</span></label>
+                        <input type="email" name="user_email" id="user_email" class="form-control" value="{{ old('user_email') }}" placeholder="example@edutrack.school.com" required>
+                        @error('user_email')
+                            <div class="text-danger small">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password <span class="text-danger">*</span></label>
+                        <input type="password" name="user_password" id="user_password" class="form-control" value="{{ old('user_password') }}" placeholder="Password" required>
+                        @error('user_password')
+                            <div class="text-danger small">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="mb-3">
+                        <label for="user_role" class="form-label">Role <span class="text-danger">*</span></label>
+                        <select name="user_role" id="user_role" class="form-select" readonly required>
+                            <option value="school-admin" selected>School Admin</option>
+                        </select>
+                        @error('user_role')
+                            <div class="text-danger small">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card h-100 shadow-sm">
+                <div class="card-header bg-light">
+                    <h2 class="h6 mb-0 fw-semibold">Assign Membership</h2>
+                </div>
+                <div class="card-body">
+
+                    <div class="mb-3">
+                        <label for="priciple_email" class="form-label">Membership <span class="text-danger">*</span></label>
+                        <select name="membership_id" id="membership_id" class="form-select" required>
+                            <option value="">Select Membership</option>
+                            @if(!empty($memberships))
+                            @foreach($memberships as $membership)
+                                <option value="{{ $membership->id }}" {{ old('membership_id') == $membership->id ? 'selected' : '' }}>{{ $membership->membership_name }}</option>
+                            @endforeach
+                            @endif
+                        </select>
+                        @error('membership_id')
+                            <div class="text-danger small">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Membership Expiry Date <span class="text-danger">*</span></label>
+                        <input type="date" name="membership_expiry_date" id="membership_expiry_date" class="form-control" value="{{ old('membership_expiry_date') }}" placeholder="Membership Expiry Date" required>
+                        @error('membership_expiry_date')
+                            <div class="text-danger small">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Paid Amount <span class="text-danger">*</span></label>
+                        <input type="number" name="paid_amount" id="paid_amount" class="form-control" value="{{ old('paid_amount') }}" placeholder="Paid Amount" required>
+                        @error('paid_amount')
+                            <div class="text-danger small">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-end gap-2">
+        <button type="submit" class="btn btn-primary" onclick="return confirm('Are you sure you want to register this school?')"><i class="bi bi-building me-1"></i> Register School</button>
+    </div>
+
+</form>
+
+@endsection

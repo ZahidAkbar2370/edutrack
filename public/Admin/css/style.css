@@ -1,0 +1,195 @@
+/* EduTrack Admin — Bootstrap 5 base + minimal custom (brand, sidebar, special components) */
+
+:root {
+    --bs-primary: #D81B60;
+    --bs-primary-rgb: 216, 27, 96;
+    --bs-link-color: #D81B60;
+    --bs-link-hover-color: #C2185B;
+    --edutrack-dark: #05192D;
+    --sidebar-width: 260px;
+}
+
+body {
+    font-family: 'Inter', system-ui, sans-serif;
+}
+
+/* Brand buttons & switches (Bootstrap variables) */
+.btn-primary {
+    --bs-btn-bg: #D81B60;
+    --bs-btn-border-color: #D81B60;
+    --bs-btn-hover-bg: #C2185B;
+    --bs-btn-hover-border-color: #C2185B;
+}
+
+.form-check-input:checked {
+    background-color: #D81B60;
+    border-color: #D81B60;
+}
+
+.bg-edutrack-dark {
+    background-color: var(--edutrack-dark) !important;
+}
+
+/* Fixed sidebar (no Bootstrap equivalent for this layout) */
+.admin-sidebar {
+    width: var(--sidebar-width);
+    min-height: 100vh;
+    background: var(--edutrack-dark);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1040;
+    transition: transform 0.3s ease;
+    overflow-y: auto;
+}
+
+.admin-sidebar .nav-link {
+    color: rgba(255, 255, 255, 0.85);
+    padding: 0.6rem 1rem;
+    border-radius: 0.375rem;
+    margin: 0.1rem 0.5rem;
+}
+
+.admin-sidebar .nav-link:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.admin-sidebar .nav-link.active {
+    background: #D81B60;
+    color: #fff;
+}
+
+.admin-sidebar .submenu {
+    background: #0B2A45;
+    margin: 0 0.5rem 0.25rem;
+    border-radius: 0.375rem;
+    padding: 0.25rem 0;
+}
+
+.admin-sidebar .submenu .nav-link {
+    font-size: 0.875rem;
+    padding-left: 1.25rem;
+}
+
+.admin-sidebar .logo-text span {
+    font-size: 0.7rem;
+    opacity: 0.75;
+}
+
+.admin-main {
+    margin-left: var(--sidebar-width);
+    min-height: 100vh;
+    width: calc(100% - var(--sidebar-width));
+    transition: margin-left 0.3s ease, width 0.3s ease;
+}
+
+.sidebar-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(5, 25, 45, 0.5);
+    z-index: 1035;
+}
+
+.sidebar-overlay.active {
+    display: block;
+}
+
+@media (max-width: 991.98px) {
+    .admin-sidebar {
+        transform: translateX(-100%);
+    }
+
+    .admin-sidebar.sidebar-open {
+        transform: translateX(0);
+        box-shadow: 0.25rem 0 1rem rgba(0, 0, 0, 0.15);
+    }
+
+    .admin-main {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    body.sidebar-mobile-open {
+        overflow: hidden;
+    }
+}
+
+/* Table: sticky actions column */
+.table-sticky-actions {
+    position: sticky;
+    right: 0;
+    background: #fff;
+    box-shadow: -4px 0 8px rgba(0, 0, 0, 0.05);
+    white-space: nowrap;
+}
+
+.table-hover > tbody > tr:hover > .table-sticky-actions {
+    background: var(--bs-table-hover-bg);
+}
+
+.table-scroll-wrap.no-scroll-needed .table-scroll-hint {
+    display: none !important;
+}
+
+/* Membership plan comparison */
+.membership-plan-card {
+    position: relative;
+}
+
+.membership-plan-featured {
+    transform: translateY(-2px);
+}
+
+.membership-compare-table .membership-feature-col {
+    position: sticky;
+    left: 0;
+    z-index: 2;
+    min-width: 11rem;
+    box-shadow: 4px 0 8px rgba(0, 0, 0, 0.04);
+}
+
+.membership-compare-table .min-w-plan-col {
+    min-width: 8.5rem;
+}
+
+/* Student ID card (print/download) */
+.student-card {
+    border: 2px solid var(--edutrack-dark);
+    border-radius: 0.5rem;
+    overflow: hidden;
+    background: #fff;
+}
+
+.student-card-header {
+    background: var(--edutrack-dark);
+    color: #fff;
+}
+
+.student-card-photo {
+    width: 56px;
+    height: 68px;
+    background: rgba(216, 27, 96, 0.1);
+    color: #D81B60;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+@media print {
+    body.print-student-card-only * {
+        visibility: hidden;
+    }
+
+    body.print-student-card-only #student-card,
+    body.print-student-card-only #student-card * {
+        visibility: visible;
+    }
+
+    body.print-student-card-only #student-card {
+        position: absolute;
+        left: 0;
+        top: 0;
+        max-width: 400px;
+    }
+}
