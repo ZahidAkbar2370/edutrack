@@ -15,14 +15,14 @@
     </a>
 </div>
 {{-- Feature comparison table --}}
-<div class=" shadow-sm">
+<div class="card shadow-sm">
     <div class="card-body pt-2">
         <div class="table-scroll-wrap">
             <p class="table-scroll-hint alert alert-light border py-2 mb-2 text-center">
                 <i class="bi bi-arrows-expand me-1"></i> Scroll horizontally to compare all plans
             </p>
             <div class="table-responsive">
-                <table class="table table-bordered table-hover align-middle mb-0 membership-compare-table">
+                <table class="table table-bordered table-hover align-middle mb-0 membership-compare-table" data-js-paginate data-page-sizes="10,20,50,100,all" data-default-size="20">
                     
                     <tbody>
 
@@ -47,7 +47,7 @@
 
                         @endphp
 
-                        @if(!empty($memberships))
+                        @if($memberships->count())
                             @foreach($memberships as $membership)
                                 <tr>
                                     <th scope="row" class="membership-feature-col bg-light">

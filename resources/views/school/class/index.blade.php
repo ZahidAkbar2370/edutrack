@@ -24,7 +24,7 @@
 <div class="card shadow-sm">
     <div class="card-body p-0">
         <div class="table-responsive">
-            <table class="table table-bordered table-hover align-middle mb-0">
+            <table class="table table-bordered table-hover align-middle mb-0" data-js-paginate data-page-sizes="10,20,50,100,all" data-default-size="20">
                 <thead class="table-light">
                     <tr>
                         <th>#</th>
@@ -33,9 +33,9 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse($classes as $key => $class)
+                    @forelse($classes as $class)
                         <tr>
-                            <td>{{ $key + 1 }}</td>
+                            <td>{{ $loop->iteration }}</td>
                             <td class="fw-medium">{{ $class->class_name }}</td>
                             <td class="text-center">
                                 <div class="btn-group btn-group-sm">

@@ -27,7 +27,7 @@ class HomeController extends Controller
         if(Auth::user()->role == 'super-admin') {
             return redirect('membership');
         } else if(Auth::user()->role == 'school-admin') {
-            return redirect('student');
+            return redirect('dashboard');
         } else {
             return view('home');
         }

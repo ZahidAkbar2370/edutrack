@@ -21,7 +21,7 @@
 @if(!$student)
     <div class="alert alert-danger">Student not found</div>
 @else
-<form action="{{ url('student/update/' . $student->id) }}" method="POST">
+<form action="{{ url('student/update/' . $student->id) }}" method="POST" enctype="multipart/form-data">
     @csrf
 
     <div class="row g-3">
@@ -31,6 +31,17 @@
                     <h2 class="h6 mb-0 fw-semibold">Student Information</h2>
                 </div>
                 <div class="card-body">
+                    <div class="mb-3">
+                        <label for="student_photo" class="form-label">Profile Image</label>
+                        <input type="file" name="student_photo" id="student_photo" class="form-control" accept="image/jpeg,image/png,image/gif,image/webp">
+                        <div class="form-text">Leave empty to keep the current photo.</div>
+                        @error('student_photo')
+                            <div class="text-danger small">{{ $message }}</div>
+                        @enderror
+                        <div class="mt-2">
+                            <img id="student_photo_preview" src="{{ $student->photo_url }}" alt="Current photo" class="rounded border" style="width:120px;height:120px;object-fit:cover;">
+                        </div>
+                    </div>
                     <div class="mb-3">
                         <label for="class_id" class="form-label">Class <span class="text-danger">*</span></label>
                         <select name="class_id" id="class_id" class="form-select" required>
@@ -88,12 +99,25 @@
                             <div class="text-danger small">{{ $message }}</div>
                         @enderror
                     </div>
-                    <div class="mb-0">
+                    <div class="mb-3">
                         <label for="student_admission_date" class="form-label">Admission Date</label>
                         <input type="date" name="student_admission_date" id="student_admission_date"
                                value="{{ old('student_admission_date', $student->student_admission_date ? \Illuminate\Support\Carbon::parse($student->student_admission_date)->format('Y-m-d') : '') }}"
                                class="form-control">
                         @error('student_admission_date')
+                            <div class="text-danger small">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="mb-0">
+                        <label for="status" class="form-label">Status <span class="text-danger">*</span></label>
+                        <select name="status" id="status" class="form-select" required>
+                            @foreach($statuses as $statusOption)
+                                <option value="{{ $statusOption }}" {{ old('status', $student->status) === $statusOption ? 'selected' : '' }}>
+                                    {{ ucfirst($statusOption) }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('status')
                             <div class="text-danger small">{{ $message }}</div>
                         @enderror
                     </div>
@@ -180,6 +204,17 @@
 
         classSelect.addEventListener('change', filterSections);
         filterSections();
+
+        var photoInput = document.getElementById('student_photo');
+        var photoPreview = document.getElementById('student_photo_preview');
+        var currentPhoto = photoPreview ? photoPreview.src : '';
+
+        if (photoInput && photoPreview) {
+            photoInput.addEventListener('change', function () {
+                var file = photoInput.files[0];
+                photoPreview.src = file ? URL.createObjectURL(file) : currentPhoto;
+            });
+        }
     });
 </script>
 @endpush

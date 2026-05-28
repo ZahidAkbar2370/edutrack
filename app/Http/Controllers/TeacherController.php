@@ -2,29 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\School;
 use App\Models\Teacher;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class TeacherController extends Controller
 {
-    // Get school_id from logged-in user, or first school when auth is not set up
-    private function resolveSchoolId(): ?string
+    public function index(Request $request)
     {
-        if (Auth::check() && Auth::user()->school_id) {
-            return Auth::user()->school_id;
+        $schoolId = Auth::user()->school_id;
+        if (! $schoolId) {
+            return redirect('home')->with('error', 'No school is assigned to this user.');
         }
 
-        return School::orderBy('created_at')->value('id');
-    }
-
-    public function index()
-    {
-        $schoolId = $this->resolveSchoolId();
-
         $teachers = Teacher::with('school')
-            ->when($schoolId, fn ($query) => $query->where('school_id', $schoolId))
+            ->where('school_id', $schoolId)
             ->orderBy('teacher_name')
             ->get();
 
@@ -45,10 +37,10 @@ class TeacherController extends Controller
             'teacher_address' => 'nullable|string|max:255',
         ]);
 
-        $schoolId = $this->resolveSchoolId();
+        $schoolId = Auth::user()->school_id;
 
         if (! $schoolId) {
-            return redirect('teacher/create')->with('error', 'No school found. Please register a school first.');
+            return redirect('teacher/create')->with('error', 'No school is assigned to this user.');
         }
 
         Teacher::create([

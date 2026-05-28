@@ -15,8 +15,8 @@
 </div>
 
 <div class="row g-3">
-    @if(!empty($schools))
-    @foreach($schools as $key => $school)
+    @if($schools->count())
+    @foreach($schools as $school)
     <div class="col-sm-6 col-lg-4 col-xl-3">
         <div class="card h-100 shadow-sm">
             <div class="card-header bg-edutrack-dark text-white text-center py-2">

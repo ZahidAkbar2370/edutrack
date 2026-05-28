@@ -73,17 +73,37 @@
                 </div>
                 <div class="col-md-6">
                     <label for="subject" class="form-label">Subject <span class="text-danger">*</span></label>
-                    <input type="text" name="subject" id="subject" value="{{ old('subject') }}" class="form-control" placeholder="e.g. Mathematics" required>
+                    <select name="subject" id="subject" class="form-select" required>
+                        <option value="">Select Subject</option>
+                        @foreach($subjects as $subject)
+                            <option value="{{ $subject->subject_name }}" {{ old('subject') == $subject->subject_name ? 'selected' : '' }}>
+                                {{ $subject->subject_name }}
+                            </option>
+                        @endforeach
+                    </select>
                     @error('subject')
                         <div class="text-danger small">{{ $message }}</div>
                     @enderror
+                    @if($subjects->isEmpty())
+                        <div class="form-text text-warning">No subjects found. Add subjects from Settings first.</div>
+                    @endif
                 </div>
                 <div class="col-md-6">
-                    <label for="teacher_name" class="form-label">Teacher Name <span class="text-danger">*</span></label>
-                    <input type="text" name="teacher_name" id="teacher_name" value="{{ old('teacher_name') }}" class="form-control" placeholder="Teacher full name" required>
+                    <label for="teacher_name" class="form-label">Teacher <span class="text-danger">*</span></label>
+                    <select name="teacher_name" id="teacher_name" class="form-select" required>
+                        <option value="">Select Teacher</option>
+                        @foreach($teachers as $teacher)
+                            <option value="{{ $teacher->teacher_name }}" {{ old('teacher_name') == $teacher->teacher_name ? 'selected' : '' }}>
+                                {{ $teacher->teacher_name }}
+                            </option>
+                        @endforeach
+                    </select>
                     @error('teacher_name')
                         <div class="text-danger small">{{ $message }}</div>
                     @enderror
+                    @if($teachers->isEmpty())
+                        <div class="form-text text-warning">No teachers found. Register teachers first.</div>
+                    @endif
                 </div>
                 <div class="col-md-6">
                     <label for="daily_test_total" class="form-label">Total Marks <span class="text-danger">*</span></label>

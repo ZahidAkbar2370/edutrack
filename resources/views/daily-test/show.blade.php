@@ -24,6 +24,12 @@
         </p>
         <p class="text-muted small mb-0">Teacher: {{ $teacherName }} · Total Marks: {{ $totalMarks }} · Subject: {{ $subject }}</p>
     </div>
+
+    <div class="d-flex flex-wrap gap-2">
+        <a href="#" onclick="return confirm('we are working on it... this feature will be available soon...')" class="btn btn-success">
+            <i class="bi bi-whatsapp me-1"></i> Send Daily Test Result to Parents via Whatsapp
+        </a>
+    </div>
 </div>
 
 @if(session('success'))

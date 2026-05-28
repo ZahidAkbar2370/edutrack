@@ -4,8 +4,8 @@ namespace App\Http\Controllers\SuperAdmin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\School;
 use App\Models\Membership;
+use App\Models\School;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Transaction;
@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\DB;
 
 class SchoolController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $schools = School::with('membership', 'user')->orderBy('created_at', 'desc')->get();
 

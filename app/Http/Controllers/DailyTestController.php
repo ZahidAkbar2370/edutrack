@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\DailyTest;
-use App\Models\School;
 use App\Models\SchoolClass;
 use App\Models\Section;
 use App\Models\Student;
+use App\Models\Subject;
 use App\Models\Teacher;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,37 +14,52 @@ use Illuminate\Support\Facades\DB;
 
 class DailyTestController extends Controller
 {
-    // Get school_id from logged-in user, or first school when auth is not set up
-    private function resolveSchoolId(): ?string
+    private function classesForSchool(string $schoolId)
     {
-        if (Auth::check() && Auth::user()->school_id) {
-            return Auth::user()->school_id;
-        }
-
-        return School::orderBy('created_at')->value('id');
-    }
-
-    private function classesForSchool(?string $schoolId)
-    {
-        return SchoolClass::when($schoolId, fn ($query) => $query->where('school_id', $schoolId))
+        return SchoolClass::where('school_id', $schoolId)
             ->orderBy('class_name')
             ->get();
     }
 
-    private function sectionsForSchool(?string $schoolId)
+    private function sectionsForSchool(string $schoolId)
     {
         return Section::with('schoolClass')
-            ->when($schoolId, fn ($query) => $query->where('school_id', $schoolId))
+            ->where('school_id', $schoolId)
             ->orderBy('section_name')
             ->get();
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $schoolId = $this->resolveSchoolId();
+        $schoolId = Auth::user()->school_id;
+        if (! $schoolId) {
+            return redirect('home')->with('error', 'No school is assigned to this user.');
+        }
+
+        $filterClasses = $this->classesForSchool($schoolId);
+        $filterSections = $this->sectionsForSchool($schoolId);
+
+        $filterTeachers = Teacher::where('school_id', $schoolId)
+            ->orderBy('teacher_name')
+            ->get();
+
+        $filterSubjects = Subject::where('school_id', $schoolId)
+            ->orderBy('subject_name')
+            ->get();
 
         $testGroups = DailyTest::query()
-            ->when($schoolId, fn ($query) => $query->where('school_id', $schoolId))
+            ->whereHas('student', fn ($query) => $query->active())
+            ->where('school_id', $schoolId)
+            ->when($request->filled('class_id'), fn ($query) => $query->where('class_id', $request->class_id))
+            ->when($request->filled('section_id'), fn ($query) => $query->where('section_id', $request->section_id))
+            ->when($request->filled('subject'), fn ($query) => $query->where('subject', $request->subject))
+            ->when($request->filled('date'), fn ($query) => $query->whereDate('daily_test_date', $request->date))
+            ->when($request->filled('teacher_name'), function ($query) use ($request, $schoolId) {
+                $teacherIds = Teacher::where('school_id', $schoolId)
+                    ->where('teacher_name', $request->teacher_name)
+                    ->pluck('id');
+                $query->whereIn('teacher_id', $teacherIds);
+            })
             ->select('class_id', 'section_id', 'daily_test_date', 'daily_test_name', 'teacher_id', 'subject')
             ->selectRaw('MAX(daily_test_total) as total_marks')
             ->selectRaw('COUNT(*) as total_students')
@@ -60,21 +75,47 @@ class DailyTestController extends Controller
         $sections = Section::whereIn('id', $sectionIds)->get()->keyBy('id');
         $teachers = Teacher::whereIn('id', $teacherIds)->get()->keyBy('id');
 
-        return view('daily-test.index', compact('testGroups', 'classes', 'sections', 'teachers'));
+        $filters = $request->only(['class_id', 'section_id', 'teacher_name', 'subject', 'date']);
+
+        return view('daily-test.index', compact(
+            'testGroups',
+            'classes',
+            'sections',
+            'teachers',
+            'filterClasses',
+            'filterSections',
+            'filterTeachers',
+            'filterSubjects',
+            'filters'
+        ));
     }
 
     public function create()
     {
-        $schoolId = $this->resolveSchoolId();
+        $schoolId = Auth::user()->school_id;
+        if (! $schoolId) {
+            return redirect('home')->with('error', 'No school is assigned to this user.');
+        }
         $classes = $this->classesForSchool($schoolId);
         $sections = $this->sectionsForSchool($schoolId);
 
-        return view('daily-test.create', compact('classes', 'sections'));
+        $subjects = Subject::where('school_id', $schoolId)
+            ->orderBy('subject_name')
+            ->get();
+
+        $teachers = Teacher::where('school_id', $schoolId)
+            ->orderBy('teacher_name')
+            ->get();
+
+        return view('daily-test.create', compact('classes', 'sections', 'subjects', 'teachers'));
     }
 
     public function studentsList(Request $request)
     {
-        $schoolId = $this->resolveSchoolId();
+        $schoolId = Auth::user()->school_id;
+        if (! $schoolId) {
+            return response()->json(['message' => 'No school is assigned to this user.'], 422);
+        }
 
         $request->validate([
             'class_id' => 'required|exists:classes,id',
@@ -86,6 +127,7 @@ class DailyTestController extends Controller
         }
 
         $students = Student::where('school_id', $schoolId)
+            ->active()
             ->where('class_id', $request->class_id)
             ->where('section_id', $request->section_id)
             ->orderBy('student_name')
@@ -96,7 +138,7 @@ class DailyTestController extends Controller
 
     public function store(Request $request)
     {
-        $schoolId = $this->resolveSchoolId();
+        $schoolId = Auth::user()->school_id;
 
         $request->validate([
             'class_id' => 'required|exists:classes,id',
@@ -111,7 +153,7 @@ class DailyTestController extends Controller
         ]);
 
         if (! $schoolId) {
-            return redirect('daily-test/create')->with('error', 'No school found. Please register a school first.');
+            return redirect('daily-test/create')->with('error', 'No school is assigned to this user.');
         }
 
         if (! $this->validClassAndSection($schoolId, $request->class_id, $request->section_id)) {
@@ -146,6 +188,7 @@ class DailyTestController extends Controller
 
         $studentIds = array_keys($request->students);
         $validCount = Student::where('school_id', $schoolId)
+            ->active()
             ->where('class_id', $request->class_id)
             ->where('section_id', $request->section_id)
             ->whereIn('id', $studentIds)
@@ -190,10 +233,14 @@ class DailyTestController extends Controller
             'subject' => 'required|string',
         ]);
 
-        $schoolId = $this->resolveSchoolId();
+        $schoolId = Auth::user()->school_id;
+        if (! $schoolId) {
+            return redirect('daily-test')->with('error', 'No school is assigned to this user.');
+        }
 
         $dailyTests = DailyTest::with('student', 'teacher')
-            ->when($schoolId, fn ($query) => $query->where('school_id', $schoolId))
+            ->whereHas('student', fn ($query) => $query->active())
+            ->where('school_id', $schoolId)
             ->where('class_id', $request->class_id)
             ->where('section_id', $request->section_id)
             ->whereDate('daily_test_date', $request->daily_test_date)
@@ -212,7 +259,10 @@ class DailyTestController extends Controller
 
     public function update(Request $request)
     {
-        $schoolId = $this->resolveSchoolId();
+        $schoolId = Auth::user()->school_id;
+        if (! $schoolId) {
+            return redirect('daily-test')->with('error', 'No school is assigned to this user.');
+        }
 
         $request->validate([
             'class_id' => 'required|exists:classes,id',
@@ -239,7 +289,7 @@ class DailyTestController extends Controller
                 $obtained = (int) $obtained;
                 $percentage = $totalMarks > 0 ? round(($obtained / $totalMarks) * 100, 2) : 0;
 
-                DailyTest::when($schoolId, fn ($query) => $query->where('school_id', $schoolId))
+                DailyTest::where('school_id', $schoolId)
                     ->where('class_id', $request->class_id)
                     ->where('section_id', $request->section_id)
                     ->where('student_id', $studentId)

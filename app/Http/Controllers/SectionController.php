@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\School;
 use App\Models\SchoolClass;
 use App\Models\Section;
 use Illuminate\Http\Request;
@@ -10,29 +9,22 @@ use Illuminate\Support\Facades\Auth;
 
 class SectionController extends Controller
 {
-    // Get school_id from logged-in user, or first school when auth is not set up
-    private function resolveSchoolId(): ?string
+    private function classesForSchool(string $schoolId)
     {
-        if (Auth::check() && Auth::user()->school_id) {
-            return Auth::user()->school_id;
-        }
-
-        return School::orderBy('created_at')->value('id');
-    }
-
-    private function classesForSchool(?string $schoolId)
-    {
-        return SchoolClass::when($schoolId, fn ($query) => $query->where('school_id', $schoolId))
+        return SchoolClass::where('school_id', $schoolId)
             ->orderBy('class_name')
             ->get();
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $schoolId = $this->resolveSchoolId();
+        $schoolId = Auth::user()->school_id;
+        if (! $schoolId) {
+            return redirect('home')->with('error', 'No school is assigned to this user.');
+        }
 
         $sections = Section::with('schoolClass', 'school')
-            ->when($schoolId, fn ($query) => $query->where('school_id', $schoolId))
+            ->where('school_id', $schoolId)
             ->orderBy('section_name')
             ->get();
 
@@ -41,7 +33,10 @@ class SectionController extends Controller
 
     public function create()
     {
-        $schoolId = $this->resolveSchoolId();
+        $schoolId = Auth::user()->school_id;
+        if (! $schoolId) {
+            return redirect('home')->with('error', 'No school is assigned to this user.');
+        }
         $classes = $this->classesForSchool($schoolId);
 
         return view('section.create', compact('classes'));
@@ -49,7 +44,7 @@ class SectionController extends Controller
 
     public function store(Request $request)
     {
-        $schoolId = $this->resolveSchoolId();
+        $schoolId = Auth::user()->school_id;
 
         $request->validate([
             'class_id' => 'required|exists:classes,id',
@@ -57,7 +52,7 @@ class SectionController extends Controller
         ]);
 
         if (! $schoolId) {
-            return redirect('section/create')->with('error', 'No school found. Please register a school first.');
+            return redirect('section/create')->with('error', 'No school is assigned to this user.');
         }
 
         $class = SchoolClass::where('id', $request->class_id)
@@ -87,7 +82,10 @@ class SectionController extends Controller
     public function edit($id)
     {
         $section = Section::find($id);
-        $schoolId = $this->resolveSchoolId();
+        $schoolId = Auth::user()->school_id;
+        if (! $schoolId) {
+            return redirect('home')->with('error', 'No school is assigned to this user.');
+        }
         $classes = $this->classesForSchool($schoolId);
 
         return view('section.edit', compact('section', 'classes'));
@@ -95,7 +93,10 @@ class SectionController extends Controller
 
     public function update(Request $request, $id)
     {
-        $schoolId = $this->resolveSchoolId();
+        $schoolId = Auth::user()->school_id;
+        if (! $schoolId) {
+            return redirect('section')->with('error', 'No school is assigned to this user.');
+        }
 
         $request->validate([
             'class_id' => 'required|exists:classes,id',

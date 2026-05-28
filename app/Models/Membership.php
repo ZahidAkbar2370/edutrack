@@ -19,6 +19,7 @@ class Membership extends Model
         'teachers_limit',
         'allowed_attendance',
         'allowed_daily_test',
+        'allowed_fee_management',
         'allowed_student_card',
         'allowed_whatsapp_message',
     ];

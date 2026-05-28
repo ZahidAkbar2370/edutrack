@@ -18,6 +18,12 @@
             · {{ $attendanceDate ? \Illuminate\Support\Carbon::parse($attendanceDate)->format('d M Y') : '' }}
         </p>
     </div>
+
+    <div class="d-flex flex-wrap gap-2">
+        <a href="#" onclick="return confirm('we are working on it... this feature will be available soon...')" class="btn btn-success">
+            <i class="bi bi-whatsapp me-1"></i> Send Attendance Report to Parents via Whatsapp
+        </a>
+    </div>
 </div>
 
 @if(session('success'))
@@ -27,6 +33,8 @@
 @if($attendances->isEmpty())
     <div class="alert alert-warning">No attendance records found.</div>
 @else
+
+
 <form action="{{ url('attendance/update') }}" method="POST">
     @csrf
     <input type="hidden" name="class_id" value="{{ $classId }}">

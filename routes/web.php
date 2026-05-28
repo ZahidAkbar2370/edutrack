@@ -4,25 +4,34 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SuperAdmin\SchoolController;
 use App\Http\Controllers\SuperAdmin\MembershipController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\StudentCardController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\DailyTestController;
 use App\Http\Controllers\ClassController;
 use App\Http\Controllers\SectionController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\SubjectController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\GeneralController;
 use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
-| Common routes 
+| Landing & Common routes 
 |--------------------------------------------------------------------------
 */
 
-    Route::get('/dashboard', function () {
-        return view('admin.dashboard');
-    });
+Route::get('/', function () {
+    return view('landing');
+})->name('landing');
 
-
+Route::middleware('auth')->get('/dashboard', function () {
+    return match (Auth::user()->role) {
+        'school-admin' => app(DashboardController::class)->index(),
+        'super-admin' => redirect('membership'),
+        default => redirect('home'),
+    };
+});
 
 /*
 |--------------------------------------------------------------------------
@@ -107,9 +116,20 @@ Route::group(['middleware' => ['auth', 'school-admin']], function () {
 
     // Student routes
     Route::prefix('student')->group(function () {
+        Route::post('status/{id}', [StudentController::class, 'updateStatus']);
         Route::get('/', [StudentController::class, 'index']);
+        Route::get('upgrade-class', [StudentController::class, 'upgradeClass']);
+        Route::post('upgrade-class', [StudentController::class, 'upgradeClassStore']);
+        Route::get('export-csv', [StudentController::class, 'exportCsv']);
+        Route::get('import', [StudentController::class, 'importForm']);
+        Route::get('import-template', [StudentController::class, 'importTemplate']);
+        Route::post('import', [StudentController::class, 'importStore']);
         Route::get('create', [StudentController::class, 'create']);
         Route::post('store', [StudentController::class, 'store']);
+        // Student ID card — pick design and download PNG
+        Route::get('card/{id}', [StudentCardController::class, 'select']);
+        Route::get('{id}/attendance-history', [StudentController::class, 'attendanceHistory']);
+        Route::get('{id}/daily-test-history', [StudentController::class, 'dailyTestHistory']);
         Route::get('show/{id}', [StudentController::class, 'show']);
         Route::get('edit/{id}', [StudentController::class, 'edit']);
         Route::post('update/{id}', [StudentController::class, 'update']);
@@ -136,10 +156,23 @@ Route::group(['middleware' => ['auth', 'school-admin']], function () {
         Route::post('update', [DailyTestController::class, 'update']);
     });
 
-    Route::get('logout', function () {
-        Auth::logout();
-        return redirect('/login');
+    // General routes
+    Route::prefix('general')->group(function () {
+        Route::get('/', [GeneralController::class, 'index']);
+        Route::get('create', [GeneralController::class, 'create']);
+        Route::post('store', [GeneralController::class, 'store']);
+        Route::get('show/{id}', [GeneralController::class, 'show']);
+        Route::get('edit/{id}', [GeneralController::class, 'edit']);
+        Route::post('update/{id}', [GeneralController::class, 'update']);
     });
+
+});
+
+require __DIR__.'/fee_management.php';
+
+Route::get('logout', function () {
+    Auth::logout();
+    return redirect('/login');
 });
 
 Auth::routes(['register' => false]);

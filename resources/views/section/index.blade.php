@@ -4,6 +4,8 @@
 
 @section('content')
 
+@include('adminlayout.setting_menu')
+
 <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-4">
     <div>
         <h1 class="h3 mb-1 fw-bold">Sections</h1>
@@ -24,7 +26,7 @@
 <div class="card shadow-sm">
     <div class="card-body p-0">
         <div class="table-responsive">
-            <table class="table table-bordered table-hover align-middle mb-0">
+            <table class="table table-bordered table-hover align-middle mb-0" data-js-paginate data-page-sizes="10,20,50,100,all" data-default-size="20">
                 <thead class="table-light">
                     <tr>
                         <th>#</th>
@@ -34,9 +36,9 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse($sections as $key => $section)
+                    @forelse($sections as $section)
                         <tr>
-                            <td>{{ $key + 1 }}</td>
+                            <td>{{ $loop->iteration }}</td>
                             <td class="fw-medium">{{ $section->schoolClass->class_name ?? 'N/A' }}</td>
                             <td>{{ $section->section_name }}</td>
                             <td class="text-center">

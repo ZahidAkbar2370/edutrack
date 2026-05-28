@@ -10,7 +10,11 @@
         <p class="text-muted mb-0">Student and parent information</p>
     </div>
 
-    <div class="d-flex justify-content-end gap-2 mt-3">
+    @if($student)
+    <div class="d-flex flex-wrap justify-content-end gap-2">
+        <a href="{{ url('student/card/' . $student->id) }}" class="btn btn-outline-success btn-sm">
+            <i class="bi bi-person-badge me-1"></i> ID Card
+        </a>
         <a href="{{ url('student/edit/' . $student->id) }}" class="btn btn-info btn-sm">
             <i class="bi bi-pencil me-1"></i> Edit
         </a>
@@ -23,7 +27,7 @@
             </button>
         </form>
     </div>
-
+    @endif
 </div>
 
 @if(!$student)
@@ -36,20 +40,24 @@
                 <h2 class="h6 mb-0 fw-semibold">Personal Information</h2>
             </div>
             <div class="card-body">
+                <div class="text-center mb-3">
+                    <img src="{{ $student->photo_url }}" alt="{{ $student->student_name }}" class="rounded border" style="width:140px;height:140px;object-fit:cover;">
+                </div>
                 <dl class="row mb-0">
                     <dt class="col-sm-4 text-muted">Roll Number</dt>
                     <dd class="col-sm-8">{{ $student->student_roll_number ?? '—' }}</dd>
-
                     <dt class="col-sm-4 text-muted">Name</dt>
                     <dd class="col-sm-8 fw-medium">{{ $student->student_name }}</dd>
-
-
                     <dt class="col-sm-4 text-muted">Email</dt>
                     <dd class="col-sm-8">{{ $student->student_email ?? '—' }}</dd>
-
                     <dt class="col-sm-4 text-muted">Phone</dt>
                     <dd class="col-sm-8">{{ $student->student_phone_no ?? '—' }}</dd>
-
+                    <dt class="col-sm-4 text-muted">Status</dt>
+                    <dd class="col-sm-8">
+                        <span class="badge bg-{{ $student->status == 'active' ? 'success' : ($student->status == 'completed' ? 'warning' : ($student->status == 'banned' ? 'danger' : 'secondary')) }}">
+                            {{ ucfirst($student->status) }}
+                        </span>
+                    </dd>
                 </dl>
             </div>
         </div>
@@ -65,13 +73,10 @@
                 <dl class="row mb-0">
                     <dt class="col-sm-4 text-muted">Name</dt>
                     <dd class="col-sm-8 fw-medium">{{ $student->parent->parent_name }}</dd>
-
                     <dt class="col-sm-4 text-muted">Phone</dt>
                     <dd class="col-sm-8">{{ $student->parent->parent_phone_no }}</dd>
-
                     <dt class="col-sm-4 text-muted">Email</dt>
                     <dd class="col-sm-8">{{ $student->parent->parent_email ?? '—' }}</dd>
-
                     <dt class="col-sm-4 text-muted">Address</dt>
                     <dd class="col-sm-8">{{ $student->parent->parent_address ?? '—' }}</dd>
                 </dl>
@@ -82,25 +87,92 @@
         </div>
     </div>
 
-
     <div class="col-lg-4">
         <div class="card shadow-sm h-100">
             <div class="card-header bg-light">
-                <h2 class="h6 mb-0 fw-semibold">Class & Section Information</h2>
+                <h2 class="h6 mb-0 fw-semibold">Class & Section</h2>
             </div>
             <div class="card-body">
                 <dl class="row mb-0">
                     <dt class="col-sm-4 text-muted">Class</dt>
                     <dd class="col-sm-8">{{ $student->schoolClass->class_name ?? 'N/A' }}</dd>
-
                     <dt class="col-sm-4 text-muted">Section</dt>
                     <dd class="col-sm-8">{{ $student->section->section_name ?? 'N/A' }}</dd>
-
-                    <dt class="col-sm-4 text-muted">Admission Date</dt>
+                    <dt class="col-sm-4 text-muted">Admission</dt>
                     <dd class="col-sm-8">
                         {{ $student->student_admission_date ? \Illuminate\Support\Carbon::parse($student->student_admission_date)->format('d M Y') : '—' }}
                     </dd>
                 </dl>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{-- Attendance summary --}}
+<div class="card shadow-sm mt-4">
+    <div class="card-header bg-light d-flex justify-content-between align-items-center flex-wrap gap-2">
+        <h2 class="h6 mb-0 fw-semibold">Attendance Summary</h2>
+        <a href="{{ url('student/' . $student->id . '/attendance-history') }}" class="text-decoration-none small">
+            View history <i class="bi bi-arrow-right"></i>
+        </a>
+    </div>
+    <div class="card-body">
+        <div class="row g-3">
+            <div class="col-6 col-lg-3">
+                <div class="border rounded p-3 text-center h-100">
+                    <div class="text-muted small">Total Records</div>
+                    <div class="fs-4 fw-bold">{{ $attendanceStats['total'] }}</div>
+                </div>
+            </div>
+            <div class="col-6 col-lg-3">
+                <div class="border rounded p-3 text-center h-100 border-success">
+                    <div class="text-muted small">Present</div>
+                    <div class="fs-4 fw-bold text-success">{{ $attendanceStats['present'] }}</div>
+                </div>
+            </div>
+            <div class="col-6 col-lg-3">
+                <div class="border rounded p-3 text-center h-100 border-danger">
+                    <div class="text-muted small">Absent</div>
+                    <div class="fs-4 fw-bold text-danger">{{ $attendanceStats['absent'] }}</div>
+                </div>
+            </div>
+            <div class="col-6 col-lg-3">
+                <div class="border rounded p-3 text-center h-100 border-warning">
+                    <div class="text-muted small">Leave</div>
+                    <div class="fs-4 fw-bold text-warning">{{ $attendanceStats['leave'] }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{-- Daily test summary --}}
+<div class="card shadow-sm mt-4">
+    <div class="card-header bg-light d-flex justify-content-between align-items-center flex-wrap gap-2">
+        <h2 class="h6 mb-0 fw-semibold">Daily Test Summary</h2>
+        <a href="{{ url('student/' . $student->id . '/daily-test-history') }}" class="text-decoration-none small">
+            View history <i class="bi bi-arrow-right"></i>
+        </a>
+    </div>
+    <div class="card-body">
+        <div class="row g-3">
+            <div class="col-md-4">
+                <div class="border rounded p-3 text-center h-100">
+                    <div class="text-muted small">Total Tests</div>
+                    <div class="fs-4 fw-bold">{{ $dailyTestStats['total'] }}</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="border rounded p-3 text-center h-100 border-success">
+                    <div class="text-muted small">Attempted (marks &gt; 0)</div>
+                    <div class="fs-4 fw-bold text-success">{{ $dailyTestStats['attempted'] }}</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="border rounded p-3 text-center h-100 border-secondary">
+                    <div class="text-muted small">Zero Marks</div>
+                    <div class="fs-4 fw-bold text-secondary">{{ $dailyTestStats['not_attempted'] }}</div>
+                </div>
             </div>
         </div>
     </div>

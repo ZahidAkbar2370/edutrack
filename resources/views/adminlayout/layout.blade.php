@@ -31,6 +31,13 @@
 
         <form class="flex-grow-1 me-3" role="search">
             <div class="input-group">
+
+            @php
+                $user = \Illuminate\Support\Facades\Auth::user();
+                $school = \App\Models\School::find($user->school_id);
+            @endphp
+
+                <h5 class="mb-0" style="color: #D81B60;">{{ $school->school_name ?? 'N/A' }} - <span class="text-muted small">{{ $school->city ?? 'N/A' }}</span></h5>
                 <!-- <span class="input-group-text bg-white"><i class="bi bi-search text-muted"></i></span> -->
                 <!-- <input type="search" class="form-control border-start-0 w-25" placeholder="Search..." aria-label="Search"> -->
             </div>
@@ -69,6 +76,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="{{ asset('Admin/js/main.js') }}"></script>
+<script src="{{ asset('js/table-pagination.js') }}"></script>
 @stack('scripts')
 
 </body>

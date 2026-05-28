@@ -3,15 +3,15 @@
 namespace App\Http\Controllers\SuperAdmin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Membership;
+use Illuminate\Http\Request;
 
 class MembershipController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
-        $memberships = Membership::all();
+        $memberships = Membership::query()->orderBy('membership_name')->get();
 
         return view('superadmin.membership.index', compact('memberships'));
     }

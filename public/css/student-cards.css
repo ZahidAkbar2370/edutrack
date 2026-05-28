@@ -1,0 +1,228 @@
+/* Student ID card — portrait (front only), university diamond layout */
+
+.id-card-university {
+    width: 540px;
+    height: 856px;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #fdf5f2;
+    border-radius: 28px;
+    overflow: hidden;
+    position: relative;
+    color: #1a237e;
+}
+
+.id-card-university * {
+    box-sizing: border-box;
+}
+
+/* Lanyard hole */
+.id-card-university .id-hole {
+    position: absolute;
+    top: 14px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #fdf5f2;
+    border: 3px solid #1a237e;
+    z-index: 10;
+}
+
+/* Navy header */
+.id-card-university .id-header-uni {
+    background: #1a237e;
+    color: #fff;
+    padding: 36px 20px 48px;
+    text-align: center;
+    position: relative;
+    clip-path: polygon(0 0, 100% 0, 100% 72%, 50% 100%, 0 72%);
+}
+
+.id-card-university .id-logo-text {
+    position: absolute;
+    top: 32px;
+    left: 24px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    opacity: 0.95;
+}
+
+.id-card-university .id-school-title {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    line-height: 1.25;
+    margin: 8px 40px 0;
+    text-transform: uppercase;
+}
+
+/* Diagonal accent stripes beside diamond */
+.id-card-university .id-photo-zone {
+    position: relative;
+    margin-top: -20px;
+    padding: 0 20px 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 280px;
+}
+
+.id-card-university .id-stripe-left,
+.id-card-university .id-stripe-right {
+    position: absolute;
+    top: 50%;
+    width: 56px;
+    height: 120px;
+    transform: translateY(-50%);
+}
+
+.id-card-university .id-stripe-left {
+    left: 28px;
+    background: linear-gradient(135deg, #1a237e 0%, #1a237e 45%, #42a5f5 45%, #42a5f5 55%, transparent 55%);
+    transform: translateY(-50%) skewY(-8deg);
+}
+
+.id-card-university .id-stripe-right {
+    right: 28px;
+    background: linear-gradient(-135deg, #1a237e 0%, #1a237e 45%, #42a5f5 45%, #42a5f5 55%, transparent 55%);
+    transform: translateY(-50%) skewY(8deg);
+}
+
+/* Diamond photo frame */
+.id-card-university .id-diamond {
+    width: 230px;
+    height: 230px;
+    transform: rotate(45deg);
+    border-radius: 16px;
+    overflow: hidden;
+    border: 5px solid #fff;
+    box-shadow: 0 4px 20px rgba(26, 35, 126, 0.15);
+    background: #fff;
+    position: relative;
+    z-index: 2;
+    flex-shrink: 0;
+}
+
+.id-card-university .id-diamond img {
+    width: 145%;
+    height: 145%;
+    object-fit: cover;
+    transform: rotate(-45deg);
+    margin: -22.5%;
+    display: block;
+}
+
+/* Student info */
+.id-card-university .id-student-block {
+    text-align: center;
+    padding: 8px 32px 16px;
+}
+
+.id-card-university .id-student-name {
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    margin: 0 0 6px;
+    text-transform: uppercase;
+    color: #1a237e;
+}
+
+.id-card-university .id-course-line {
+    font-size: 17px;
+    font-weight: 500;
+    margin: 0 0 20px;
+    color: #1a237e;
+}
+
+.id-card-university .id-fields {
+    text-align: left;
+    display: inline-block;
+    font-size: 15px;
+    line-height: 2;
+    color: #1a237e;
+}
+
+.id-card-university .id-fields .id-label {
+    display: inline-block;
+    min-width: 88px;
+}
+
+/* Footer corners + signatures */
+.id-card-university .id-footer-uni {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 0 24px 28px;
+}
+
+.id-card-university .id-corner-bl,
+.id-card-university .id-corner-br {
+    position: absolute;
+    bottom: 0;
+    width: 0;
+    height: 0;
+    border-style: solid;
+}
+
+.id-card-university .id-corner-bl {
+    left: 0;
+    border-width: 0 0 100px 120px;
+    border-color: transparent transparent #1a237e transparent;
+}
+
+.id-card-university .id-corner-br {
+    right: 0;
+    border-width: 0 120px 100px 0;
+    border-color: transparent #1a237e transparent transparent;
+}
+
+.id-card-university .id-signatures {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    position: relative;
+    z-index: 2;
+    padding: 0 8px;
+    margin-top: 40px;
+}
+
+.id-card-university .id-sig-block {
+    text-align: center;
+    width: 42%;
+}
+
+.id-card-university .id-sig-script {
+    font-family: 'Brush Script MT', 'Segoe Script', cursive;
+    font-size: 22px;
+    color: #1a237e;
+    border-bottom: 1px solid #1a237e;
+    padding-bottom: 4px;
+    margin-bottom: 6px;
+    min-height: 32px;
+}
+
+.id-card-university .id-sig-label {
+    font-size: 11px;
+    color: #1a237e;
+}
+
+/* Page preview wrapper */
+.id-card-page-preview {
+    display: flex;
+    justify-content: center;
+    padding: 24px 0 32px;
+    background: #f1f3f5;
+    border-radius: 12px;
+}
+
+.id-card-export-hidden {
+    position: fixed;
+    left: -10000px;
+    top: 0;
+    pointer-events: none;
+    opacity: 0;
+}

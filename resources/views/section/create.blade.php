@@ -4,6 +4,8 @@
 
 @section('content')
 
+@include('adminlayout.setting_menu')
+
 <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-4">
     <div>
         <h1 class="h3 mb-1 fw-bold">Create Section</h1>

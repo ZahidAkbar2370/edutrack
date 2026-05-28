@@ -1,3 +1,10 @@
+@php
+
+    use Illuminate\Support\Facades\Auth;
+
+    $membership = \App\Models\Membership::find(Auth::user()->membership_id);
+@endphp
+
 <aside class="admin-sidebar text-white" id="admin-sidebar">
 
     <div class="d-flex align-items-center gap-2 p-3 border-bottom border-secondary border-opacity-25">
@@ -53,41 +60,39 @@
 
         @if(Auth::user()->role == 'school-admin')
 
+        <a class="nav-link {{ request()->is('dashboard') ? 'active' : '' }}" href="{{ url('dashboard') }}">
+            <i class="bi bi-grid me-2"></i> Dashboard
+        </a>
+
         <!-- School : Students -->
         <a class="nav-link {{ request()->is('student*') ? 'active' : '' }}" href="{{ url('student') }}">
             <i class="bi bi-people me-2"></i> Students
         </a>
 
-        <!-- School : Attendance -->
-        <a class="nav-link {{ request()->is('attendance*') ? 'active' : '' }}" href="{{ url('attendance') }}">
-            <i class="bi bi-calendar-check me-2"></i> Attendance
-        </a>
+        @if($membership->allowed_attendance)
+            <!-- School : Attendance -->
+            <a class="nav-link {{ request()->is('attendance*') ? 'active' : '' }}" href="{{ url('attendance') }}">
+                <i class="bi bi-calendar-check me-2"></i> Attendance
+            </a>
+        @endif
 
-        <!-- School : Daily Test -->
-        <a class="nav-link {{ request()->is('daily-test*') ? 'active' : '' }}" href="{{ url('daily-test') }}">
-            <i class="bi bi-clipboard-check me-2"></i> Daily Test
-        </a>
+        @if($membership->allowed_daily_test)
+            <!-- School : Daily Test -->
+            <a class="nav-link {{ request()->is('daily-test*') ? 'active' : '' }}" href="{{ url('daily-test') }}">
+                <i class="bi bi-clipboard-check me-2"></i> Daily Test
+            </a>
+        @endif
 
-        <a class="nav-link d-flex align-items-center {{ (request()->is('class*') || request()->is('section*') || request()->is('subject*')) ? '' : 'collapsed' }}"
-           data-bs-toggle="collapse" href="#settingsSubmenu" role="button"
-           aria-expanded="{{ (request()->is('class*') || request()->is('section*') || request()->is('subject*')) ? 'true' : 'false' }}">
+        @if($membership->allowed_fee_management)
+        <a class="nav-link {{ request()->is('fee-management*') ? 'active' : '' }}" href="{{ url('fee-management') }}">
+            <i class="bi bi-cash-coin me-2"></i> Fee Management
+        </a>
+        @endif
+
+        <a class="nav-link {{ request()->is('general*') ? 'active' : '' }}" href="{{ url('general') }}">
             <i class="bi bi-gear me-2"></i> Settings
-            <i class="bi bi-chevron-down small ms-auto"></i>
         </a>
 
-
-        <div class="collapse submenu {{ request()->is('class*') || request()->is('section*') || request()->is('subject*') ? 'show' : '' }}" id="settingsSubmenu">
-
-        <a class="nav-link {{ (request()->is('teacher') && ! request()->is('teacher/create') || request()->is('teacher/edit*')) ? 'active' : '' }}" href="{{ url('teacher') }}">Teacher List</a>
-
-
-            <a class="nav-link {{ (request()->is('class') && ! request()->is('class/create') || request()->is('class/edit*')) ? 'active' : '' }}" href="{{ url('class') }}">Class List</a>
-
-            <a class="nav-link {{ (request()->is('section') && ! request()->is('section/create') || request()->is('section/edit*')) ? 'active' : '' }}" href="{{ url('section') }}">Section List</a>
-
-            <a class="nav-link {{ (request()->is('subject') && ! request()->is('subject/create') || request()->is('subject/edit*')) ? 'active' : '' }}" href="{{ url('subject') }}">Subject List</a>
-
-        </div>
         @endif
 
     </nav>
