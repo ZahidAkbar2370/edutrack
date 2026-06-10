@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignUuid('teacher_id')->constrained('teachers')->cascadeOnDelete();
             $table->date('daily_test_date');
             $table->string('daily_test_name');
+            $table->string('subject');
             $table->unsignedInteger('daily_test_obtained');
             $table->unsignedInteger('daily_test_total');
             $table->double('daily_test_percentage');

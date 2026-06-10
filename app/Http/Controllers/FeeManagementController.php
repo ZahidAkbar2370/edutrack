@@ -44,8 +44,8 @@ class FeeManagementController extends Controller
             ->orderBy('class_name')
             ->get();
 
-        $studentsByClass = Student::active()
-            ->where('school_id', $schoolId)
+        $studentsByClass = Student::where('school_id', $schoolId)
+            ->where('status', 'active')
             ->get(['id', 'class_id'])
             ->groupBy('class_id');
 
@@ -100,7 +100,7 @@ class FeeManagementController extends Controller
         $feeMonth = $this->feeMonth($request);
 
         $students = Student::with('section')
-            ->active()
+            ->where('status', 'active')
             ->where('school_id', $schoolId)
             ->where('class_id', $schoolClass->id)
             ->orderBy('student_name')
@@ -138,7 +138,7 @@ class FeeManagementController extends Controller
         $schoolClass = SchoolClass::where('school_id', $schoolId)->findOrFail($classId);
         $studentPayload = $request->input('students', []);
 
-        $students = Student::active()
+        $students = Student::where('status', 'active')
             ->where('school_id', $schoolId)
             ->where('class_id', $schoolClass->id)
             ->whereIn('id', array_keys($studentPayload))

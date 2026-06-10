@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AjaxController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SuperAdmin\SchoolController;
 use App\Http\Controllers\SuperAdmin\MembershipController;
@@ -22,10 +23,11 @@ use Illuminate\Support\Facades\Auth;
 */
 
 Route::get('/', function () {
+    return redirect('login');
     return view('landing');
 })->name('landing');
 
-Route::middleware('auth')->get('/dashboard', function () {
+Route::middleware(['auth', 'verified'])->get('/dashboard', function () {
     return match (Auth::user()->role) {
         'school-admin' => app(DashboardController::class)->index(),
         'super-admin' => redirect('membership'),
@@ -39,7 +41,8 @@ Route::middleware('auth')->get('/dashboard', function () {
 |--------------------------------------------------------------------------
 */
 
-Route::group(['middleware' => ['auth', 'super-admin']], function () {
+Route::group(['middleware' => ['auth', 'super-admin', 'verified']], function () {
+
     // Membership routes
     Route::prefix('membership')->group(function () {    
         Route::get('/', [MembershipController::class, 'index']);
@@ -69,38 +72,32 @@ Route::group(['middleware' => ['auth', 'super-admin']], function () {
 |--------------------------------------------------------------------------
 */
 
-Route::group(['middleware' => ['auth', 'school-admin']], function () {
+Route::group(['middleware' => ['auth', 'school-admin', 'verified']], function () {
+
+    // Ajax routes
+    Route::prefix('ajax')->group(function () {
+        Route::get('sections/{classId}', [AjaxController::class, 'sectionsByClassId']);
+
+        Route::get('students/{classId}/{sectionId}', [AjaxController::class, 'studentsBySectionId']);
+    });
+
     // Class routes
     Route::prefix('class')->group(function () {
         Route::get('/', [ClassController::class, 'index']);
-        Route::get('create', [ClassController::class, 'create']);
-        Route::post('store', [ClassController::class, 'store']);
-        Route::get('show/{id}', [ClassController::class, 'show']);
-        Route::get('edit/{id}', [ClassController::class, 'edit']);
-        Route::post('update/{id}', [ClassController::class, 'update']);
-        Route::delete('delete/{id}', [ClassController::class, 'destroy']);
+        Route::post('update-publication-status', [ClassController::class, 'updatePublicationStatus']);
     });
 
     // Section routes
     Route::prefix('section')->group(function () {
         Route::get('/', [SectionController::class, 'index']);
-        Route::get('create', [SectionController::class, 'create']);
-        Route::post('store', [SectionController::class, 'store']);
-        Route::get('show/{id}', [SectionController::class, 'show']);
-        Route::get('edit/{id}', [SectionController::class, 'edit']);
-        Route::post('update/{id}', [SectionController::class, 'update']);
-        Route::delete('delete/{id}', [SectionController::class, 'destroy']);
+        Route::post('update-publication-status', [SectionController::class, 'updatePublicationStatus']);
+
     });
 
     // Subject routes
     Route::prefix('subject')->group(function () {
         Route::get('/', [SubjectController::class, 'index']);
-        Route::get('create', [SubjectController::class, 'create']);
-        Route::post('store', [SubjectController::class, 'store']);
-        Route::get('show/{id}', [SubjectController::class, 'show']);
-        Route::get('edit/{id}', [SubjectController::class, 'edit']);
-        Route::post('update/{id}', [SubjectController::class, 'update']);
-        Route::delete('delete/{id}', [SubjectController::class, 'destroy']);
+        Route::post('update-publication-status', [SubjectController::class, 'updatePublicationStatus']);
     });
 
     // Teacher routes
@@ -116,7 +113,7 @@ Route::group(['middleware' => ['auth', 'school-admin']], function () {
 
     // Student routes
     Route::prefix('student')->group(function () {
-        Route::post('status/{id}', [StudentController::class, 'updateStatus']);
+        Route::post('status/{studentId}', [StudentController::class, 'updateStatus']);
         Route::get('/', [StudentController::class, 'index']);
         Route::get('upgrade-class', [StudentController::class, 'upgradeClass']);
         Route::post('upgrade-class', [StudentController::class, 'upgradeClassStore']);
@@ -126,6 +123,10 @@ Route::group(['middleware' => ['auth', 'school-admin']], function () {
         Route::post('import', [StudentController::class, 'importStore']);
         Route::get('create', [StudentController::class, 'create']);
         Route::post('store', [StudentController::class, 'store']);
+
+        Route::get('trash', [StudentController::class, 'trashStudents']);
+        Route::get('restore-trash-student/{studentId}', [StudentController::class, 'restoreTrashStudent']);
+
         // Student ID card — pick design and download PNG
         Route::get('card/{id}', [StudentCardController::class, 'select']);
         Route::get('{id}/attendance-history', [StudentController::class, 'attendanceHistory']);
@@ -175,6 +176,6 @@ Route::get('logout', function () {
     return redirect('/login');
 });
 
-Auth::routes(['register' => false]);
+Auth::routes(['register' => true, 'verify' => true]);
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

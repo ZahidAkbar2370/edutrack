@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('teacher_phone_no')->nullable();
             $table->string('teacher_photo')->nullable();
             $table->string('teacher_address')->nullable();
+            $table->enum('publication_status', ['active', 'inactive'])->default('active');
             $table->timestamps();
             $table->softDeletes();
         });

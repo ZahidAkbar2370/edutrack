@@ -89,8 +89,48 @@
         </a>
         @endif
 
-        <a class="nav-link {{ request()->is('general*') ? 'active' : '' }}" href="{{ url('general') }}">
+        <!-- <a class="nav-link {{ request()->is('general*') ? 'active' : '' }}" href="{{ url('class') }}">
             <i class="bi bi-gear me-2"></i> Settings
+        </a> -->
+
+        <a class="nav-link d-flex align-items-center {{ request()->is('class*') || request()->is('section*') || request()->is('teacher*') ? '' : 'collapsed' }}"
+   data-bs-toggle="collapse"
+   href="#settingsSubmenu"
+   role="button"
+   aria-expanded="{{ request()->is('class*') || request()->is('section*') || request()->is('teacher*') ? 'true' : 'false' }}">
+
+    <i class="bi bi-gear me-2"></i> Settings
+    <i class="bi bi-chevron-down small ms-auto"></i>
+</a>
+
+<div class="collapse submenu {{ request()->is('class*') || request()->is('section*') || request()->is('subject*') || request()->is('teacher*') ? 'show' : '' }}"
+     id="settingsSubmenu">
+
+    <a class="nav-link {{ request()->is('class*') ? 'active' : '' }}"
+       href="{{ url('class') }}">
+        Classes
+    </a>
+
+    <a class="nav-link {{ request()->is('section*') ? 'active' : '' }}"
+       href="{{ url('section') }}">
+        Sections
+    </a>
+
+    <a class="nav-link {{ request()->is('subject*') ? 'active' : '' }}"
+       href="{{ url('subject') }}">
+        Subjects
+    </a>
+
+    <a class="nav-link {{ request()->is('teacher*') ? 'active' : '' }}"
+       href="{{ url('teacher') }}">
+        Teachers
+    </a>
+
+</div>
+
+<hr class=" border-opacity-25">
+<a class="nav-link text-danger" href="{{ url('logout') }}" onclick="return confirm('Are you sure you want to logout?')">
+            <i class="bi bi-box-arrow-right me-2"></i> Logout
         </a>
 
         @endif

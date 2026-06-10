@@ -12,27 +12,23 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $schoolId = Auth::user()->school_id;
-        if (! $schoolId) {
-            return redirect('home')->with('error', 'No school is assigned to this user.');
-        }
 
-        $students = fn () => Student::query()->where('school_id', $schoolId);
+        $students = fn () => Student::query()->where('school_id', Auth::user()->school_id);
 
         $stats = [
             'total_students' => $students()->count(),
-            'active_students' => $students()->where('status', Student::STATUS_ACTIVE)->count(),
-            'completed_students' => $students()->where('status', Student::STATUS_COMPLETED)->count(),
-            'banned_students' => $students()->where('status', Student::STATUS_BANNED)->count(),
-            'inactive_students' => $students()->where('status', Student::STATUS_INACTIVE)->count(),
+            'active_students' => $students()->where('status', 'active')->count(),
+            'completed_students' => $students()->where('status', 'completed')->count(),
+            'banned_students' => $students()->where('status', 'banned')->count(),
+            'inactive_students' => $students()->where('status', 'inactive')->count(),
             'total_classes' => SchoolClass::query()
-                ->where('school_id', $schoolId)
+                ->where('school_id', Auth::user()->school_id)
                 ->count(),
             'total_daily_tests' => DailyTest::query()
-                ->where('school_id', $schoolId)
+                ->where('school_id', Auth::user()->school_id)
                 ->count(),
             'total_teachers' => Teacher::query()
-                ->where('school_id', $schoolId)
+                ->where('school_id', Auth::user()->school_id)
                 ->count(),
         ];
 

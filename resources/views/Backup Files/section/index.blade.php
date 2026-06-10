@@ -1,16 +1,18 @@
 @extends('adminlayout.layout')
 
-@section('title', 'Classes')
+@section('title', 'Sections')
 
 @section('content')
 
+@include('adminlayout.setting_menu')
+
 <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-4">
     <div>
-        <h1 class="h3 mb-1 fw-bold">Classes</h1>
-        <p class="text-muted mb-0">All classes for your school</p>
+        <h1 class="h3 mb-1 fw-bold">Sections</h1>
+        <p class="text-muted mb-0">All sections by class</p>
     </div>
-    <a href="{{ url('class/create') }}" class="btn btn-primary">
-        <i class="bi bi-plus-lg me-1"></i> Add Class
+    <a href="{{ url('section/create') }}" class="btn btn-primary">
+        <i class="bi bi-plus-lg me-1"></i> Add Section
     </a>
 </div>
 
@@ -29,24 +31,26 @@
                     <tr>
                         <th>#</th>
                         <th>Class Name</th>
+                        <th>Section Name</th>
                         <th class="text-center">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse($classes as $class)
+                    @forelse($sections as $section)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
-                            <td class="fw-medium">{{ $class->class_name }}</td>
+                            <td class="fw-medium">{{ $section->schoolClass->class_name ?? 'N/A' }}</td>
+                            <td>{{ $section->section_name }}</td>
                             <td class="text-center">
                                 <div class="btn-group btn-group-sm">
-                                    <a href="{{ url('class/show/' . $class->id) }}" class="btn btn-outline-secondary" title="View">
+                                    <a href="{{ url('section/show/' . $section->id) }}" class="btn btn-outline-secondary" title="View">
                                         <i class="bi bi-eye"></i>
                                     </a>
-                                    <a href="{{ url('class/edit/' . $class->id) }}" class="btn btn-outline-primary" title="Edit">
+                                    <a href="{{ url('section/edit/' . $section->id) }}" class="btn btn-outline-primary" title="Edit">
                                         <i class="bi bi-pencil"></i>
                                     </a>
-                                    <form action="{{ url('class/delete/' . $class->id) }}" method="POST" class="d-inline"
-                                          onsubmit="return confirm('Are you sure you want to delete this class?');">
+                                    <form action="{{ url('section/delete/' . $section->id) }}" method="POST" class="d-inline"
+                                          onsubmit="return confirm('Are you sure you want to delete this section?');">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-outline-danger" title="Delete">
@@ -58,7 +62,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="4" class="text-center text-muted py-4">No classes found</td>
+                            <td colspan="5" class="text-center text-muted py-4">No sections found</td>
                         </tr>
                     @endforelse
                 </tbody>

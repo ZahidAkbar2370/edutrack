@@ -8,49 +8,13 @@
     <div>
         <h1 class="h3 mb-1 fw-bold">Attendance History</h1>
         <p class="text-muted mb-0">
-            {{ $student->student_name }}
-            · Roll {{ $student->student_roll_number ?? '—' }}
-            · {{ $student->schoolClass->class_name ?? 'N/A' }} — {{ $student->section->section_name ?? 'N/A' }}
+        <code><span class="fw-medium">{{ $student->student_name }}</span> -> (Roll # {{ $student->student_roll_number ?? '—' }})
+            -> {{ $student->schoolClass->class_name ?? 'N/A' }} -> {{ $student->section->section_name ?? 'N/A' }} </code>
         </p>
     </div>
     <a href="{{ url('student/show/' . $student->id) }}" class="btn btn-outline-secondary btn-sm">
         <i class="bi bi-arrow-left me-1"></i> Back to Student
     </a>
-</div>
-
-<div class="row g-3 mb-4">
-    <div class="col-6 col-lg-3">
-        <div class="card shadow-sm text-center">
-            <div class="card-body py-3">
-                <div class="text-muted small">Total</div>
-                <div class="fs-4 fw-bold">{{ $attendanceStats['total'] }}</div>
-            </div>
-        </div>
-    </div>
-    <div class="col-6 col-lg-3">
-        <div class="card shadow-sm text-center border-success">
-            <div class="card-body py-3">
-                <div class="text-muted small">Present</div>
-                <div class="fs-4 fw-bold text-success">{{ $attendanceStats['present'] }}</div>
-            </div>
-        </div>
-    </div>
-    <div class="col-6 col-lg-3">
-        <div class="card shadow-sm text-center border-danger">
-            <div class="card-body py-3">
-                <div class="text-muted small">Absent</div>
-                <div class="fs-4 fw-bold text-danger">{{ $attendanceStats['absent'] }}</div>
-            </div>
-        </div>
-    </div>
-    <div class="col-6 col-lg-3">
-        <div class="card shadow-sm text-center border-warning">
-            <div class="card-body py-3">
-                <div class="text-muted small">Leave</div>
-                <div class="fs-4 fw-bold text-warning">{{ $attendanceStats['leave'] }}</div>
-            </div>
-        </div>
-    </div>
 </div>
 
 <div class="card shadow-sm">
@@ -66,26 +30,28 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse($attendanceHistory as $record)
-                        <tr>
-                            <td>{{ $loop->iteration }}</td>
-                            <td>{{ \Illuminate\Support\Carbon::parse($record->attendance_date)->format('d M Y') }}</td>
-                            <td>
-                                @if($record->attendance_status === 'present')
-                                    <span class="badge bg-success">Present</span>
-                                @elseif($record->attendance_status === 'absent')
-                                    <span class="badge bg-danger">Absent</span>
-                                @else
-                                    <span class="badge bg-warning text-dark">Leave</span>
-                                @endif
-                            </td>
-                            <td class="text-muted">{{ $record->attendance_note ?? '—' }}</td>
-                        </tr>
-                    @empty
+                    @if(!empty($attendanceHistory) && $attendanceHistory->count() > 0)
+                        @foreach($attendanceHistory as $key => $record)
+                            <tr>
+                                <td>{{ $key + 1 }}</td>
+                                <td>{{ \Illuminate\Support\Carbon::parse($record->attendance_date)->format('d M Y') }}</td>
+                                <td>
+                                    @if($record->attendance_status === 'present')
+                                        <span class="badge bg-success">Present</span>
+                                    @elseif($record->attendance_status === 'absent')
+                                        <span class="badge bg-danger">Absent</span>
+                                    @else
+                                        <span class="badge bg-warning text-dark">Leave</span>
+                                    @endif
+                                </td>
+                                <td class="text-muted">{{ $record->attendance_note ?? '—' }}</td>
+                            </tr>
+                        @endforeach
+                        @else
                         <tr>
                             <td colspan="4" class="text-center text-muted py-4">No attendance records for this student</td>
                         </tr>
-                    @endforelse
+                    @endif
                 </tbody>
             </table>
         </div>

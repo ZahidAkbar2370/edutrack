@@ -12,33 +12,14 @@ use Illuminate\Support\Facades\DB;
 
 class AttendanceController extends Controller
 {
-    private function classesForSchool(string $schoolId)
-    {
-        return SchoolClass::where('school_id', $schoolId)
-            ->orderBy('class_name')
-            ->get();
-    }
-
-    private function sectionsForSchool(string $schoolId)
-    {
-        return Section::with('schoolClass')
-            ->where('school_id', $schoolId)
-            ->orderBy('section_name')
-            ->get();
-    }
-
     public function index(Request $request)
     {
-        $schoolId = Auth::user()->school_id;
-        if (! $schoolId) {
-            return redirect('home')->with('error', 'No school is assigned to this user.');
-        }
-        $filterClasses = $this->classesForSchool($schoolId);
-        $filterSections = $this->sectionsForSchool($schoolId);
+        $filterClasses = loginSchoolActiveClasses();
+        $filterSections = loginSchoolActiveSections();
 
         $attendanceGroups = Attendance::query()
-            ->whereHas('student', fn ($query) => $query->active())
-            ->where('school_id', $schoolId)
+            ->whereHas('student', fn ($query) => $query->where('school_id', Auth::user()->school_id)->where('status', 'active'))
+            ->where('school_id', Auth::user()->school_id)
             ->when($request->filled('class_id'), fn ($query) => $query->where('class_id', $request->class_id))
             ->when($request->filled('section_id'), fn ($query) => $query->where('section_id', $request->section_id))
             ->when($request->filled('date'), fn ($query) => $query->whereDate('attendance_date', $request->date))
@@ -73,63 +54,49 @@ class AttendanceController extends Controller
 
     public function create()
     {
-        $schoolId = Auth::user()->school_id;
-        if (! $schoolId) {
-            return redirect('home')->with('error', 'No school is assigned to this user.');
-        }
-        $classes = $this->classesForSchool($schoolId);
-        $sections = $this->sectionsForSchool($schoolId);
+        $classes = loginSchoolActiveClasses();
+        $sections = loginSchoolActiveSections();
 
         return view('attendance.create', compact('classes', 'sections'));
     }
 
-    public function studentsList(Request $request)
-    {
-        $schoolId = Auth::user()->school_id;
-        if (! $schoolId) {
-            return response()->json(['message' => 'No school is assigned to this user.'], 422);
-        }
+    // public function studentsList(Request $request)
+    // {
+    //     $schoolId = Auth::user()->school_id;
+    //     if (! $schoolId) {
+    //         return response()->json(['message' => 'No school is assigned to this user.'], 422);
+    //     }
 
-        $request->validate([
-            'class_id' => 'required|exists:classes,id',
-            'section_id' => 'required|exists:sections,id',
-        ]);
+    //     $request->validate([
+    //         'class_id' => 'required|exists:classes,id',
+    //         'section_id' => 'required|exists:sections,id',
+    //     ]);
 
-        if (! $this->validClassAndSection($schoolId, $request->class_id, $request->section_id)) {
-            return response()->json(['message' => 'Invalid class or section'], 422);
-        }
+    //     if (! $this->validClassAndSection($schoolId, $request->class_id, $request->section_id)) {
+    //         return response()->json(['message' => 'Invalid class or section'], 422);
+    //     }
 
-        $students = Student::where('school_id', $schoolId)
-            ->active()
-            ->where('class_id', $request->class_id)
-            ->where('section_id', $request->section_id)
-            ->orderBy('student_name')
-            ->get(['id', 'student_name', 'student_roll_number']);
+    //     $students = Student::where('school_id', $schoolId)
+    //         ->active()
+    //         ->where('class_id', $request->class_id)
+    //         ->where('section_id', $request->section_id)
+    //         ->orderBy('student_name')
+    //         ->get(['id', 'student_name', 'student_roll_number']);
 
-        return response()->json($students);
-    }
+    //     return response()->json($students);
+    // }
 
     public function store(Request $request)
     {
-        $schoolId = Auth::user()->school_id;
-
         $request->validate([
             'class_id' => 'required|exists:classes,id',
             'section_id' => 'required|exists:sections,id',
             'attendance_date' => 'required|date',
             'students' => 'required|array|min:1',
-            'students.*' => 'required|in:present,absent',
+            'students.*' => 'required|in:present,absent,leave',
         ]);
 
-        if (! $schoolId) {
-            return redirect('attendance/create')->with('error', 'No school is assigned to this user.');
-        }
-
-        if (! $this->validClassAndSection($schoolId, $request->class_id, $request->section_id)) {
-            return redirect('attendance/create')->with('error', 'Invalid class or section selected for this school.');
-        }
-
-        $exists = Attendance::where('school_id', $schoolId)
+        $exists = Attendance::where('school_id', Auth::user()->school_id)
             ->where('class_id', $request->class_id)
             ->where('section_id', $request->section_id)
             ->whereDate('attendance_date', $request->attendance_date)
@@ -140,8 +107,8 @@ class AttendanceController extends Controller
         }
 
         $studentIds = array_keys($request->students);
-        $validCount = Student::where('school_id', $schoolId)
-            ->active()
+        $validCount = Student::where('school_id', Auth::user()->school_id)
+            ->where('status', 'active')
             ->where('class_id', $request->class_id)
             ->where('section_id', $request->section_id)
             ->whereIn('id', $studentIds)
@@ -151,10 +118,11 @@ class AttendanceController extends Controller
             return redirect('attendance/create')->with('error', 'Invalid student list for selected class and section.');
         }
 
-        DB::transaction(function () use ($request, $schoolId) {
+        DB::transaction(function () use ($request) {
             foreach ($request->students as $studentId => $status) {
                 Attendance::create([
-                    'school_id' => $schoolId,
+                    'user_id' => Auth::user()->id,
+                    'school_id' => Auth::user()->school_id,
                     'class_id' => $request->class_id,
                     'section_id' => $request->section_id,
                     'student_id' => $studentId,
@@ -175,14 +143,9 @@ class AttendanceController extends Controller
             'attendance_date' => 'required|date',
         ]);
 
-        $schoolId = Auth::user()->school_id;
-        if (! $schoolId) {
-            return redirect('attendance')->with('error', 'No school is assigned to this user.');
-        }
-
         $attendances = Attendance::with('student')
-            ->whereHas('student', fn ($query) => $query->active())
-            ->where('school_id', $schoolId)
+            ->whereHas('student', fn ($query) => $query->where('school_id', Auth::user()->school_id)->where('status', 'active'))
+            ->where('school_id', Auth::user()->school_id)
             ->where('class_id', $request->class_id)
             ->where('section_id', $request->section_id)
             ->whereDate('attendance_date', $request->attendance_date)

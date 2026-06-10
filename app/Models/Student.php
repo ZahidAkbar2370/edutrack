@@ -6,32 +6,16 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 
 class Student extends Model
 {
     use HasFactory, HasUuids, SoftDeletes;
 
-    /** Public path when no profile image is uploaded */
-    public const DEFAULT_PHOTO = 'images/default-student-profile.png';
-
-    public const STATUS_ACTIVE = 'active';
-
-    public const STATUS_COMPLETED = 'completed';
-
-    public const STATUS_BANNED = 'banned';
-
-    public const STATUS_INACTIVE = 'inactive';
-
-    public const STATUSES = [
-        self::STATUS_ACTIVE,
-        self::STATUS_COMPLETED,
-        self::STATUS_BANNED,
-        self::STATUS_INACTIVE,
-    ];
-
     protected $table = 'students';
 
     protected $fillable = [
+        "user_id",
         'school_id',
         'class_id',
         'section_id',
@@ -42,10 +26,6 @@ class Student extends Model
         'student_roll_number',
         'student_admission_date',
         'status',
-    ];
-
-    protected $attributes = [
-        'status' => self::STATUS_ACTIVE,
     ];
 
     public function school()
@@ -78,38 +58,15 @@ class Student extends Model
         return $this->hasMany(DailyTest::class, 'student_id', 'id');
     }
 
-    public function scopeActive($query)
+
+    public static function generateRollNumber()
     {
-        return $query->where('status', self::STATUS_ACTIVE);
-    }
+        $lastStudent = Student::withTrashed()->where('school_id', Auth::user()->school_id)->orderBy('created_at', 'desc')->first();
 
-    // When student is soft-deleted, soft-delete related records too
-    protected static function booted(): void
-    {
-        static::deleting(function (Student $student) {
-            if ($student->isForceDeleting()) {
-                $student->attendances()->withTrashed()->forceDelete();
-                $student->dailyTests()->withTrashed()->forceDelete();
-                ParentModel::withTrashed()->where('student_id', $student->id)->forceDelete();
-
-                return;
-            }
-
-            $student->attendances()->delete();
-            $student->dailyTests()->delete();
-            $student->parent()->delete();
-        });
-    }
-
-    // Full URL for profile image (uploaded or default placeholder)
-    public function getPhotoUrlAttribute(): string
-    {
-        $path = $this->student_photo ?: self::DEFAULT_PHOTO;
-
-        if (str_starts_with($path, 'http')) {
-            return $path;
+        if ($lastStudent) {
+            return $lastStudent->student_roll_number + 1;
         }
 
-        return asset($path);
+        return 1;
     }
 }

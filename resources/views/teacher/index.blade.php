@@ -4,16 +4,29 @@
 
 @section('content')
 
-@include('adminlayout.setting_menu')
-
 <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-4">
     <div>
         <h1 class="h3 mb-1 fw-bold">Teachers</h1>
         <p class="text-muted mb-0">All registered teachers</p>
     </div>
-    <a href="{{ url('teacher/create') }}" class="btn btn-primary">
-        <i class="bi bi-plus-lg me-1"></i> Add Teacher
+
+    <div class="d-flex flex-wrap gap-2">
+
+
+    <a href="#" class="btn btn-outline-secondary">
+        <i class="bi bi-upload me-1"></i> Import CSV
     </a>
+
+    <a href="#" class="btn btn-outline-success">
+        <i class="bi bi-download me-1"></i> Export CSV
+    </a>
+
+        <a href="{{ url('teacher/create') }}" class="btn btn-primary">
+            <i class="bi bi-plus-lg me-1"></i> Add Teacher
+        </a>
+    </div>
+    
+    
 </div>
 
 @if(session('success'))

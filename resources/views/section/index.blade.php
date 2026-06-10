@@ -4,16 +4,11 @@
 
 @section('content')
 
-@include('adminlayout.setting_menu')
-
 <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-4">
     <div>
         <h1 class="h3 mb-1 fw-bold">Sections</h1>
         <p class="text-muted mb-0">All sections by class</p>
     </div>
-    <a href="{{ url('section/create') }}" class="btn btn-primary">
-        <i class="bi bi-plus-lg me-1"></i> Add Section
-    </a>
 </div>
 
 @if(session('success'))
@@ -36,35 +31,34 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse($sections as $section)
+                    @if(!empty($sections))
+                    @foreach($sections as $key => $section)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <td class="fw-medium">{{ $section->schoolClass->class_name ?? 'N/A' }}</td>
                             <td>{{ $section->section_name }}</td>
                             <td class="text-center">
                                 <div class="btn-group btn-group-sm">
-                                    <a href="{{ url('section/show/' . $section->id) }}" class="btn btn-outline-secondary" title="View">
-                                        <i class="bi bi-eye"></i>
-                                    </a>
-                                    <a href="{{ url('section/edit/' . $section->id) }}" class="btn btn-outline-primary" title="Edit">
-                                        <i class="bi bi-pencil"></i>
-                                    </a>
-                                    <form action="{{ url('section/delete/' . $section->id) }}" method="POST" class="d-inline"
-                                          onsubmit="return confirm('Are you sure you want to delete this section?');">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-outline-danger" title="Delete">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </form>
+
+                                <form class="publication-status-form">
+    @csrf
+
+    <div class="form-check form-switch">
+        <input
+            class="form-check-input publication-status-toggle"
+            type="checkbox"
+            data-section-id="{{ $section->id }}"
+            data-publication-status="{{ $section->publication_status == 'active' ? 'inactive' : 'active' }}"
+            {{ $section->publication_status == 'active' ? 'checked' : '' }}
+        >
+    </div>
+</form>
+
                                 </div>
                             </td>
                         </tr>
-                    @empty
-                        <tr>
-                            <td colspan="5" class="text-center text-muted py-4">No sections found</td>
-                        </tr>
-                    @endforelse
+                    @endforeach
+                    @endif
                 </tbody>
             </table>
         </div>

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->boolean('allowed_attendance')->default(false);
             $table->boolean('allowed_daily_test')->default(false);
             $table->boolean('allowed_student_card')->default(false);
+            $table->boolean('allowed_fee_management')->default(false);
             $table->boolean('allowed_whatsapp_message')->default(false);
             $table->boolean('allowed_whatsapp_announcement')->default(false);
             $table->timestamps();

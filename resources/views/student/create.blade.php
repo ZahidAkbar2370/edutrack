@@ -9,9 +9,6 @@
         <h1 class="h3 mb-1 fw-bold">Register Student</h1>
         <p class="text-muted mb-0">Add student and parent information</p>
     </div>
-    <!-- <a href="{{ url('student') }}" class="btn btn-outline-secondary">
-        <i class="bi bi-arrow-left me-1"></i> Back to List
-    </a> -->
 </div>
 
 @if(session('error'))
@@ -59,7 +56,7 @@
                             <div class="text-danger small">{{ $message }}</div>
                         @enderror
                         <div class="mt-2">
-                            <img id="student_photo_preview" src="{{ asset(\App\Models\Student::DEFAULT_PHOTO) }}" alt="Preview" class="rounded border" style="width:120px;height:120px;object-fit:cover;">
+                            <img id="student_photo_preview" src="{{ asset('images/default-student-profile.png') }}" alt="Preview" class="rounded border" style="width:120px;height:120px;object-fit:cover;">
                         </div>
                     </div>
 
@@ -77,11 +74,13 @@
                         <label for="class_id" class="form-label">Class <span class="text-danger">*</span></label>
                         <select name="class_id" id="class_id" class="form-select" required>
                             <option value="">Select Class</option>
+                            @if(!empty($classes))
                             @foreach($classes as $class)
                                 <option value="{{ $class->id }}" {{ old('class_id') == $class->id ? 'selected' : '' }}>
-                                    {{ $class->class_name }}
-                                </option>
-                            @endforeach
+                                        {{ $class->class_name }}
+                                    </option>
+                                @endforeach
+                            @endif
                         </select>
                         @error('class_id')
                             <div class="text-danger small">{{ $message }}</div>
@@ -91,12 +90,14 @@
                         <label for="section_id" class="form-label">Section <span class="text-danger">*</span></label>
                         <select name="section_id" id="section_id" class="form-select" required>
                             <option value="">Select Section</option>
+                            @if(!empty($sections))
                             @foreach($sections as $section)
                                 <option value="{{ $section->id }}" data-class-id="{{ $section->class_id }}"
                                     {{ old('section_id') == $section->id ? 'selected' : '' }}>
                                     {{ $section->section_name }} ({{ $section->schoolClass->class_name ?? '' }})
                                 </option>
                             @endforeach
+                            @endif
                         </select>
                         @error('section_id')
                             <div class="text-danger small">{{ $message }}</div>
@@ -119,11 +120,19 @@
                     <div class="mb-0">
                         <label for="status" class="form-label">Status <span class="text-danger">*</span></label>
                         <select name="status" id="status" class="form-select" required>
-                            @foreach($statuses as $statusOption)
-                                <option value="{{ $statusOption }}" {{ old('status', 'active') === $statusOption ? 'selected' : '' }}>
-                                    {{ ucfirst($statusOption) }}
+                            <option value="" disabled selected>Select Status</option>
+                                <option value="active" {{ old('status') === 'active' ? 'selected' : '' }}>
+                                    Active
                                 </option>
-                            @endforeach
+                                <option value="inactive" {{ old('status') === 'inactive' ? 'selected' : '' }}>
+                                    Inactive
+                                </option>
+                                <option value="completed" {{ old('status') === 'completed' ? 'selected' : '' }}>
+                                    Completed
+                                </option>
+                                <option value="banned" {{ old('status') === 'banned' ? 'selected' : '' }}>
+                                    Banned
+                                </option>
                         </select>
                         @error('status')
                             <div class="text-danger small">{{ $message }}</div>
@@ -161,8 +170,8 @@
                         @enderror
                     </div>
                     <div class="mb-0">
-                        <label for="parent_address" class="form-label">Parent Address</label>
-                        <textarea name="parent_address" id="parent_address" class="form-control" rows="3">{{ old('parent_address') }}</textarea>
+                        <label for="parent_address" class="form-label">Address</label>
+                        <textarea name="parent_address" id="parent_address" class="form-control" rows="3" placeholder="Enter Address">{{ old('parent_address') }}</textarea>
                         @error('parent_address')
                             <div class="text-danger small">{{ $message }}</div>
                         @enderror
@@ -180,52 +189,3 @@
 </form>
 
 @endsection
-
-@push('scripts')
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var classSelect = document.getElementById('class_id');
-        var sectionSelect = document.getElementById('section_id');
-        if (!classSelect || !sectionSelect) return;
-
-        var allOptions = Array.from(sectionSelect.querySelectorAll('option[data-class-id]'));
-
-        function filterSections() {
-            var classId = classSelect.value;
-            var currentValue = sectionSelect.value;
-
-            sectionSelect.innerHTML = '<option value="">Select Section</option>';
-
-            if (!classId) return;
-
-            allOptions.forEach(function (opt) {
-                if (opt.getAttribute('data-class-id') === classId) {
-                    sectionSelect.appendChild(opt.cloneNode(true));
-                }
-            });
-
-            if (currentValue && sectionSelect.querySelector('option[value="' + currentValue + '"]')) {
-                sectionSelect.value = currentValue;
-            }
-        }
-
-        classSelect.addEventListener('change', filterSections);
-        filterSections();
-
-        var photoInput = document.getElementById('student_photo');
-        var photoPreview = document.getElementById('student_photo_preview');
-        var defaultPhoto = '{{ asset(\App\Models\Student::DEFAULT_PHOTO) }}';
-
-        if (photoInput && photoPreview) {
-            photoInput.addEventListener('change', function () {
-                var file = photoInput.files[0];
-                if (!file) {
-                    photoPreview.src = defaultPhoto;
-                    return;
-                }
-                photoPreview.src = URL.createObjectURL(file);
-            });
-        }
-    });
-</script>
-@endpush

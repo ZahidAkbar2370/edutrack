@@ -10,6 +10,9 @@
         <p class="text-muted mb-0">All registered students</p>
     </div>
     <div class="d-flex flex-wrap gap-2">
+        <a href="{{ url('student/trash') }}" class="btn btn-outline-danger">
+            <i class="bi bi-trash me-1"></i> Trash Students
+        </a>
         <a href="{{ url('student/export-csv') }}{{ ($q = http_build_query(array_filter(request()->only(['class_id', 'section_id', 'name', 'status'])))) ? '?' . $q : '' }}" class="btn btn-outline-success">
             <i class="bi bi-download me-1"></i> Export CSV
         </a>
@@ -25,6 +28,8 @@
     </div>
 </div>
 
+
+
 @if(session('success'))
     <div class="alert alert-success">{{ session('success') }}</div>
 @endif
@@ -34,6 +39,9 @@
 @if(session('warning'))
     <div class="alert alert-warning">{{ session('warning') }}</div>
 @endif
+
+
+
 @if(session('import_errors'))
     <div class="alert alert-warning">
         <ul class="mb-0 small">
@@ -44,6 +52,8 @@
     </div>
 @endif
 
+
+
 <div class="card shadow-sm mb-3">
     <div class="card-header bg-light">
         <h2 class="h6 mb-0 fw-semibold"><i class="bi bi-funnel me-1"></i> Filter Students</h2>
@@ -53,31 +63,36 @@
 
         <div class="col-md-3">
                 <label for="name" class="form-label">Name / Roll No</label>
-                <input type="text" name="name" id="name" class="form-control" placeholder="Search by name or roll number"
-                    value="{{ $filters['name'] ?? '' }}">
+                <input type="text" name="name_roll_number" id="name_roll_number" class="form-control" placeholder="Search by name or roll number"
+                    value="{{ $filters['name_roll_number'] ?? '' }}">
             </div>
 
             <div class="col-md-2">
                 <label for="class_id" class="form-label">Class</label>
                 <select name="class_id" id="class_id" class="form-select">
                     <option value="">All Classes</option>
-                    @foreach($classes as $class)
-                        <option value="{{ $class->id }}" {{ ($filters['class_id'] ?? '') == $class->id ? 'selected' : '' }}>
-                            {{ $class->class_name }}
-                        </option>
-                    @endforeach
+                    @if(!empty($classes))
+                        @foreach($classes as $class)
+                            <option value="{{ $class->id }}">
+                                    {{ $class->class_name }}
+                            </option>
+                        @endforeach
+                    @endif
                 </select>
             </div>
+
             <div class="col-md-2">
                 <label for="section_id" class="form-label">Section</label>
                 <select name="section_id" id="section_id" class="form-select">
                     <option value="">All Sections</option>
-                    @foreach($sections as $section)
-                        <option value="{{ $section->id }}" data-class-id="{{ $section->class_id }}"
-                            {{ ($filters['section_id'] ?? '') == $section->id ? 'selected' : '' }}>
-                            {{ $section->section_name }} ({{ $section->schoolClass->class_name ?? '' }})
-                        </option>
-                    @endforeach
+                    @if(!empty($sections))
+                        @foreach($sections as $section)
+                            <option value="{{ $section->id }}" data-class-id="{{ $section->class_id }}"
+                                >
+                                {{ $section->section_name }} ({{ $section->schoolClass->class_name ?? '' }})
+                            </option>
+                        @endforeach
+                    @endif
                 </select>
             </div>
 
@@ -85,11 +100,10 @@
                 <label for="status" class="form-label">Status</label>
                 <select name="status" id="status" class="form-select">
                     <option value="">All Statuses</option>
-                    @foreach($statuses as $statusOption)
-                        <option value="{{ $statusOption }}" {{ ($filters['status'] ?? '') === $statusOption ? 'selected' : '' }}>
-                            {{ ucfirst($statusOption) }}
-                        </option>
-                    @endforeach
+                    <option value="active">Active</option>
+                    <option value="completed">Completed</option>
+                    <option value="banned">Banned</option>
+                    <option value="inactive">Inactive</option>
                 </select>
             </div>
             <div class="col-md-2 d-flex gap-2">
@@ -120,9 +134,10 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse($students as $student)
+                    @if(!empty($students) && $students->count() > 0)
+                    @foreach($students as $key => $student)
                         <tr>
-                            <td>{{ $loop->iteration }}</td>
+                            <td>{{ $key + 1 }}</td>
                             <td class="fw-medium">
                                 <span class="fw-medium">{{ $student->student_name }}</span> <br>
                                 <span class="text-muted small">(Roll No: {{ $student->student_roll_number ?? '—' }})</span>
@@ -138,39 +153,37 @@
                                 <span class="fw-medium">{{ $student->student_per_month_fee ?? '--' }}</span>
                             </td>
                             <td>
-                            <form action="{{ url('student/status/' . $student->id) }}" method="POST" class="d-flex gap-1 align-items-center">
-                                    @csrf
-                                    <select name="status" class="form-select form-select-sm   @if($student->status == 'active') bg-success @elseif($student->status == 'completed') bg-warning @elseif($student->status == 'banned') bg-danger @elseif($student->status == 'inactive') bg-secondary  @endif text-white" style="width:110px;" onchange="this.form.submit()">
-                                        @foreach($statuses as $statusOption)
-                                            <option value="{{ $statusOption }}" {{ $student->status === $statusOption ? 'selected' : '' }}>
-                                                {{ ucfirst($statusOption) }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </form>
+
+                            <span class="text-uppercase badge @if($student->status == 'active') bg-success @elseif($student->status == 'completed') bg-warning @elseif($student->status == 'banned') bg-danger @elseif($student->status == 'inactive') bg-secondary  @endif text-white">{{ $student->status }}</span>
+
+                                <!-- <form action="{{ url('student/status/' . $student->id) }}" method="POST" class="d-flex gap-1 align-items-center">
+                                        @csrf
+                                        <select name="status" class="form-select form-select-sm   @if($student->status == 'active') bg-success @elseif($student->status == 'completed') bg-warning @elseif($student->status == 'banned') bg-danger @elseif($student->status == 'inactive') bg-secondary  @endif text-white" style="width:110px;" onchange="this.form.submit()">
+                                            <option value="" disabled selected>Select Status</option>
+                                            <option value="active" {{ $student->status === 'active' ? 'selected' : '' }}>Active</option>
+                                            <option value="completed" {{ $student->status === 'completed' ? 'selected' : '' }}>Completed</option>
+                                            <option value="banned" {{ $student->status === 'banned' ? 'selected' : '' }}>Banned</option>
+                                            <option value="inactive" {{ $student->status === 'inactive' ? 'selected' : '' }}>Inactive</option>
+                                        </select>
+                                    </form> -->
                             </td>
                             <td class="text-center">
                                 <div class="d-flex flex-column align-items-center gap-1">
                                
                                 <div class="btn-group btn-group-sm">
-                                    <a href="{{ url('student/card/' . $student->id) }}" class="btn btn-outline-success" title="ID Card">
-                                        <i class="bi bi-person-badge"></i>
-                                    </a>
                                     <a href="{{ url('student/show/' . $student->id) }}" class="btn btn-outline-secondary" title="View">
                                         <i class="bi bi-eye"></i>
-                                    </a>
-                                    <a href="{{ url('student/edit/' . $student->id) }}" class="btn btn-outline-primary" title="Edit">
-                                        <i class="bi bi-pencil"></i>
                                     </a>
                                 </div>
                                 </div>
                             </td>
                         </tr>
-                    @empty
-                        <tr>
-                            <td colspan="6" class="text-center text-muted py-4">No students found</td>
-                        </tr>
-                    @endforelse
+                    @endforeach
+                    @else
+                    <tr>
+                        <td colspan="7" class="text-center">No data found</td>
+                    </tr>
+                    @endif
                 </tbody>
             </table>
         </div>

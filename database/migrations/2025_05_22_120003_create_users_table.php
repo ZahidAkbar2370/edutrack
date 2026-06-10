@@ -17,7 +17,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('membership_expiry_date');
-            $table->enum('role', ['super-admin', 'school-admin', 'priciple', 'teacher', 'student', 'parent'])->default('student');
+            $table->enum('role', ['super-admin', 'school-admin', 'priciple', 'teacher', 'student', 'parent', 'accountant', 'attendance-officer'])->default('student');
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();

@@ -13,6 +13,7 @@ return new class extends Migration
             $table->foreignUuid('school_id')->constrained('schools')->cascadeOnDelete();
             $table->foreignUuid('class_id')->constrained('classes')->cascadeOnDelete();
             $table->string('section_name');
+            $table->enum('publication_status', ['active', 'inactive'])->default('active');
             $table->timestamps();
             $table->softDeletes();
         });

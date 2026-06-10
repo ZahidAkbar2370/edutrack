@@ -58,7 +58,7 @@
             </li> -->
             <li class="nav-item">
                 <a class="nav-link px-2" href="{{ url('logout') }}" title="Logout" onclick="return confirm('Are you sure you want to logout?')">
-                    <i class="bi bi-box-arrow-right fs-4 text-dark"></i>
+                    <i class="bi bi-box-arrow-right fs-4 text-danger"></i>
                 </a>
             </li>
         </ul>

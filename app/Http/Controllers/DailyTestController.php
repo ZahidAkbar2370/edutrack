@@ -14,48 +14,29 @@ use Illuminate\Support\Facades\DB;
 
 class DailyTestController extends Controller
 {
-    private function classesForSchool(string $schoolId)
-    {
-        return SchoolClass::where('school_id', $schoolId)
-            ->orderBy('class_name')
-            ->get();
-    }
-
-    private function sectionsForSchool(string $schoolId)
-    {
-        return Section::with('schoolClass')
-            ->where('school_id', $schoolId)
-            ->orderBy('section_name')
-            ->get();
-    }
 
     public function index(Request $request)
     {
-        $schoolId = Auth::user()->school_id;
-        if (! $schoolId) {
-            return redirect('home')->with('error', 'No school is assigned to this user.');
-        }
+        $filterClasses = loginSchoolActiveClasses();
+        $filterSections = loginSchoolActiveSections();
 
-        $filterClasses = $this->classesForSchool($schoolId);
-        $filterSections = $this->sectionsForSchool($schoolId);
-
-        $filterTeachers = Teacher::where('school_id', $schoolId)
+        $filterTeachers = Teacher::where('school_id', Auth::user()->school_id)
             ->orderBy('teacher_name')
             ->get();
 
-        $filterSubjects = Subject::where('school_id', $schoolId)
+        $filterSubjects = Subject::where('school_id', Auth::user()->school_id)
             ->orderBy('subject_name')
             ->get();
 
         $testGroups = DailyTest::query()
-            ->whereHas('student', fn ($query) => $query->active())
-            ->where('school_id', $schoolId)
+            ->whereHas('student', fn ($query) => $query->where('school_id', Auth::user()->school_id)->where('status', 'active'))
+            ->where('school_id', Auth::user()->school_id)
             ->when($request->filled('class_id'), fn ($query) => $query->where('class_id', $request->class_id))
             ->when($request->filled('section_id'), fn ($query) => $query->where('section_id', $request->section_id))
             ->when($request->filled('subject'), fn ($query) => $query->where('subject', $request->subject))
             ->when($request->filled('date'), fn ($query) => $query->whereDate('daily_test_date', $request->date))
-            ->when($request->filled('teacher_name'), function ($query) use ($request, $schoolId) {
-                $teacherIds = Teacher::where('school_id', $schoolId)
+            ->when($request->filled('teacher_name'), function ($query) use ($request) {
+                $teacherIds = Teacher::where('school_id', Auth::user()->school_id)
                     ->where('teacher_name', $request->teacher_name)
                     ->pluck('id');
                 $query->whereIn('teacher_id', $teacherIds);
@@ -92,18 +73,14 @@ class DailyTestController extends Controller
 
     public function create()
     {
-        $schoolId = Auth::user()->school_id;
-        if (! $schoolId) {
-            return redirect('home')->with('error', 'No school is assigned to this user.');
-        }
-        $classes = $this->classesForSchool($schoolId);
-        $sections = $this->sectionsForSchool($schoolId);
+        $classes = loginSchoolActiveClasses();
+        $sections = loginSchoolActiveSections();
 
-        $subjects = Subject::where('school_id', $schoolId)
+        $subjects = Subject::where('school_id', Auth::user()->school_id)
             ->orderBy('subject_name')
             ->get();
 
-        $teachers = Teacher::where('school_id', $schoolId)
+        $teachers = Teacher::where('school_id', Auth::user()->school_id)
             ->orderBy('teacher_name')
             ->get();
 

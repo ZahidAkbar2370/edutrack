@@ -16,6 +16,7 @@ class Section extends Model
         'school_id',
         'class_id',
         'section_name',
+        'publication_status',
     ];
 
     public function school()

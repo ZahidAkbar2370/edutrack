@@ -9,9 +9,6 @@
         <h1 class="h3 mb-1 fw-bold">Promote Class</h1>
         <p class="text-muted mb-0">Move all students from one class & section to the next (e.g. One A → Two A)</p>
     </div>
-    <a href="{{ url('student') }}" class="btn btn-outline-secondary">
-        <i class="bi bi-arrow-left me-1"></i> Back to Students
-    </a>
 </div>
 
 @if(session('success'))
@@ -35,11 +32,13 @@
                         <label for="from_class_id" class="form-label">Class <span class="text-danger">*</span></label>
                         <select name="from_class_id" id="from_class_id" class="form-select" required>
                             <option value="">Select Class</option>
+                            @if(!empty($classes))
                             @foreach($classes as $class)
                                 <option value="{{ $class->id }}" {{ old('from_class_id') == $class->id ? 'selected' : '' }}>
                                     {{ $class->class_name }}
                                 </option>
                             @endforeach
+                            @endif
                         </select>
                         @error('from_class_id')
                             <div class="text-danger small">{{ $message }}</div>
@@ -49,12 +48,14 @@
                         <label for="from_section_id" class="form-label">Section <span class="text-danger">*</span></label>
                         <select name="from_section_id" id="from_section_id" class="form-select" required>
                             <option value="">Select Section</option>
+                            @if(!empty($sections))
                             @foreach($sections as $section)
                                 <option value="{{ $section->id }}" data-class-id="{{ $section->class_id }}"
                                     {{ old('from_section_id') == $section->id ? 'selected' : '' }}>
                                     {{ $section->section_name }} ({{ $section->schoolClass->class_name ?? '' }})
                                 </option>
                             @endforeach
+                            @endif
                         </select>
                         @error('from_section_id')
                             <div class="text-danger small">{{ $message }}</div>
@@ -75,11 +76,13 @@
                         <label for="to_class_id" class="form-label">Class <span class="text-danger">*</span></label>
                         <select name="to_class_id" id="to_class_id" class="form-select" required>
                             <option value="">Select Class</option>
+                            @if(!empty($classes))
                             @foreach($classes as $class)
                                 <option value="{{ $class->id }}" {{ old('to_class_id') == $class->id ? 'selected' : '' }}>
                                     {{ $class->class_name }}
                                 </option>
                             @endforeach
+                            @endif
                         </select>
                         @error('to_class_id')
                             <div class="text-danger small">{{ $message }}</div>
@@ -89,12 +92,14 @@
                         <label for="to_section_id" class="form-label">Section <span class="text-danger">*</span></label>
                         <select name="to_section_id" id="to_section_id" class="form-select" required>
                             <option value="">Select Section</option>
+                            @if(!empty($sections))
                             @foreach($sections as $section)
                                 <option value="{{ $section->id }}" data-class-id="{{ $section->class_id }}"
                                     {{ old('to_section_id') == $section->id ? 'selected' : '' }}>
                                     {{ $section->section_name }} ({{ $section->schoolClass->class_name ?? '' }})
                                 </option>
                             @endforeach
+                            @endif
                         </select>
                         @error('to_section_id')
                             <div class="text-danger small">{{ $message }}</div>
@@ -106,11 +111,11 @@
     </div>
 
     <div class="d-flex justify-content-end gap-2 mt-3">
-        <a href="{{ url('student') }}" class="btn btn-outline-secondary">Cancel</a>
         <button type="submit" class="btn btn-primary" id="promote-btn"
                 onclick="return confirm('Move all students from the selected class & section to the new class & section?');">
             <i class="bi bi-arrow-up-circle me-1"></i> Promote Students
         </button>
+        <a href="{{ url('student') }}" class="btn btn-outline-danger">Discard</a>
     </div>
 </form>
 

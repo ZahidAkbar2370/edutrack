@@ -14,8 +14,8 @@
     <div>
         <h1 class="h3 mb-1 fw-bold">Attendance Detail</h1>
         <p class="text-muted mb-0">
-            <span class="fw-medium">{{ $schoolClass->class_name ?? 'N/A' }}</span> - <span class="text-muted small">({{ $section->section_name ?? 'N/A' }})</span>
-            · {{ $attendanceDate ? \Illuminate\Support\Carbon::parse($attendanceDate)->format('d M Y') : '' }}
+            <code><span class="fw-medium">{{ $schoolClass->class_name ?? 'N/A' }}</span> - ({{ $section->section_name ?? 'N/A' }})
+            · {{ $attendanceDate ? \Illuminate\Support\Carbon::parse($attendanceDate)->format('d M Y') : '' }}</code>
         </p>
     </div>
 

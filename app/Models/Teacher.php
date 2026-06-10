@@ -19,6 +19,7 @@ class Teacher extends Model
         'teacher_phone_no',
         'teacher_photo',
         'teacher_address',
+        'publication_status',
     ];
 
     public function school()
