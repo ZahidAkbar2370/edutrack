@@ -26,10 +26,11 @@
             </button>
             <div class="collapse navbar-collapse" id="navMenu">
                 <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-1">
-                    <li class="nav-item"><a class="nav-link" href="#features">Features</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#how-it-works">How It Works</a></li>
+                    <li class="nav-item active"><a class="nav-link" href="#home">Home</a></li>
+                    <!-- <li class="nav-item"><a class="nav-link" href="#features">Features</a></li> -->
+                    <!-- <li class="nav-item"><a class="nav-link" href="#how-it-works">How It Works</a></li>
                     <li class="nav-item"><a class="nav-link" href="#schools">Schools</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li> -->
                     <li class="nav-item ms-lg-2">
                         <a href="{{ route('login') }}" class="btn btn-login">
                             <i class="bi bi-box-arrow-in-right me-1"></i> Login
@@ -51,8 +52,8 @@
                     <p class="hero-lead">
                         EduTrack connects multiple schools on a single powerful system — manage students, attendance, daily tests, teachers, and memberships from one secure admin panel.
                     </p>
-                    <a href="{{ route('login') }}" class="btn btn-login btn-lg px-4">
-                        <i class="bi bi-box-arrow-in-right me-2"></i>School Login
+                    <a href="{{ route('register') }}" class="btn btn-login btn-lg px-4">
+                        <i class="bi bi-box-arrow-in-right me-2"></i>School Registration
                     </a>
                     <div class="hero-stats">
                         <div class="hero-stat">
@@ -205,7 +206,7 @@
                         <span class="school-pill"><i class="bi bi-check-circle-fill text-success"></i> Centralized reporting</span>
                         <span class="school-pill"><i class="bi bi-check-circle-fill text-success"></i> Easy onboarding</span>
                     </div>
-                    <a href="{{ route('login') }}" class="btn btn-login btn-lg">
+                    <a href="{{ route('register') }}" class="btn btn-login btn-lg">
                         <i class="bi bi-box-arrow-in-right me-2"></i>Connect Your School
                     </a>
                 </div>
@@ -243,6 +244,13 @@
                             <div>
                                 <div class="fw-semibold">Phone</div>
                                 <a href="tel:+923081312527" class="text-muted text-decoration-none">+92 308 1312527</a>
+                            </div>
+                        </div>
+                        <div class="contact-info-item">
+                            <i class="bi bi-whatsapp"></i>
+                            <div>
+                                <div class="fw-semibold">WhatsApp</div>
+                                <a href="https://wa.me/923081312527" class="text-muted text-decoration-none">+92 308 1312527</a>
                             </div>
                         </div>
                         <div class="contact-info-item mb-0">

@@ -21,7 +21,12 @@
 
     <div class="d-flex flex-wrap gap-2">
 
-        <a href="{{ url('attendance/export-to-csv/' . $classId . '/' . $sectionId . '/' . $attendanceDate) }}" class="btn btn-outline-success">
+        <a href="{{ url('attendance/export-to-csv/' . $classId . '/' . $sectionId . '/' . $attendanceDate) }}" class="btn btn-outline-success" data-confirm-action
+                    data-confirm-title="Export Attendance to Excel"
+                    data-confirm-message="Are you sure you want to export to CSV?"
+                    data-confirm-yes="Yes, Export"
+                    data-confirm-yes-class="btn-success"
+        >
             <i class="bi bi-download me-1"></i> Export To CSV
         </a>
 
@@ -29,7 +34,12 @@
             <i class="bi bi-pencil-square me-1"></i> Edit Attendance
         </a>
 
-        <a href="#" onclick="return confirm('we are working on it... this feature will be available soon...')" class="btn btn-outline-danger">
+        <a href="#" class="btn btn-outline-danger" data-confirm-action
+                    data-confirm-title="Report via Whatsapp"
+                    data-confirm-message="We are working on it... this feature will be available soon..."
+                    data-confirm-yes="Yes, Report"
+                    data-confirm-yes-class="btn-danger"
+        >
             <i class="bi bi-whatsapp me-1"></i> Report via Whatsapp
         </a>
 

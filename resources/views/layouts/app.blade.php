@@ -37,6 +37,7 @@
     </div>
 
     @include('common.confirm_alert_model')
-    @include('common.javascript')
+    @include('common.confirm_alert_javascript')
+    
 </body>
 </html>

@@ -13,7 +13,12 @@
         <a href="{{ url('student/trash') }}" class="btn btn-outline-danger">
             <i class="bi bi-trash me-1"></i> Trash Students
         </a>
-        <a href="{{ url('student/export-csv') }}{{ ($q = http_build_query(array_filter(request()->only(['class_id', 'section_id', 'name', 'status'])))) ? '?' . $q : '' }}" class="btn btn-outline-success">
+        <a href="{{ url('student/export-csv') }}{{ ($q = http_build_query(array_filter(request()->only(['class_id', 'section_id', 'name', 'status'])))) ? '?' . $q : '' }}" class="btn btn-outline-success" 
+                   data-confirm-action
+                    data-confirm-title="Export Students to Excel"
+                    data-confirm-message="Are you sure you want to export to CSV?"
+                    data-confirm-yes="Yes, Export"
+                    data-confirm-yes-class="btn-success">
             <i class="bi bi-download me-1"></i> Export CSV
         </a>
         <a href="{{ url('student/import') }}" class="btn btn-outline-secondary">

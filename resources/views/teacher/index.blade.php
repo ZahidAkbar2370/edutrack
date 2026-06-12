@@ -17,7 +17,12 @@
         <i class="bi bi-upload me-1"></i> Import CSV
     </a>
 
-    <a href="#" class="btn btn-outline-success">
+    <a href="#" class="btn btn-outline-success" data-confirm-action
+                    data-confirm-title="Export Teachers to Excel"
+                    data-confirm-message="Are you sure you want to export to CSV?"
+                    data-confirm-yes="Yes, Export"
+                    data-confirm-yes-class="btn-success"
+        >
         <i class="bi bi-download me-1"></i> Export CSV
     </a>
 
@@ -66,7 +71,13 @@
                                         <i class="bi bi-pencil"></i>
                                     </a>
                                     <form action="{{ url('teacher/delete/' . $teacher->id) }}" method="POST" class="d-inline"
-                                          onsubmit="return confirm('Are you sure you want to delete this teacher?');">
+                                    data-confirm-action
+                    data-confirm-title="Delete Teacher"
+                    data-confirm-message="Are you sure you want to delete this teacher?"
+                    data-confirm-yes="Yes, Delete"
+                    data-confirm-yes-class="btn-danger"    
+                                    
+                                    >
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-outline-danger" title="Delete">

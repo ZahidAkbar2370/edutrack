@@ -182,7 +182,13 @@
     </div>
 
     <div class="d-flex justify-content-end gap-2 mt-3">
-        <button type="submit" class="btn btn-primary" onclick="return confirm('Are you sure you want to register this student?')">
+        <button type="submit" class="btn btn-primary" 
+        data-confirm-action
+                    data-confirm-title="Register Student"
+                    data-confirm-message="Are you sure you want to register this student?"
+                    data-confirm-yes="Yes, Register"
+                    data-confirm-yes-class="btn-primary"
+        >
             <i class="bi bi-person-plus me-1"></i> Register Student
         </button>
     </div>

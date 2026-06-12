@@ -72,7 +72,13 @@
                             @enderror
                         </div>
 
-                        <button type="submit" class="btn btn-et-primary w-100 py-2">
+                        <button type="submit" class="btn btn-et-primary w-100 py-2"
+                        data-confirm-action
+                        data-confirm-title="Send Reset Link"
+                        data-confirm-message="Are you sure you want to send a reset link to your email ? (View Inbox or Spam Folder)"
+                        data-confirm-yes="Yes, Send"
+                        data-confirm-yes-class="btn-primary"
+                        >
                             <i class="bi bi-send me-1"></i> Send Reset Link
                         </button>
                     </form>

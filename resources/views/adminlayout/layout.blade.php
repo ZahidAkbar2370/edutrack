@@ -57,7 +57,13 @@
                 </a>
             </li> -->
             <li class="nav-item">
-                <a class="nav-link px-2" href="{{ url('logout') }}" title="Logout" onclick="return confirm('Are you sure you want to logout?')">
+                <a class="nav-link px-2" href="{{ url('logout') }}" title="Logout" 
+                data-confirm-action
+                    data-confirm-title="Logout"
+                    data-confirm-message="Are you sure you want to logout?"
+                    data-confirm-yes="Yes, Logout"
+                    data-confirm-yes-class="btn-danger"
+        >
                     <i class="bi bi-box-arrow-right fs-4 text-danger"></i>
                 </a>
             </li>
@@ -77,6 +83,9 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="{{ asset('Admin/js/main.js') }}"></script>
 <script src="{{ asset('js/table-pagination.js') }}"></script>
+
+@include('common.confirm_alert_model')
+@include('common.confirm_alert_javascript')
 @stack('scripts')
 
 </body>

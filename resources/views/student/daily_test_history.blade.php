@@ -14,7 +14,13 @@
 
     <div class="d-flex flex-wrap justify-content-end gap-2">
 
-        <a href="{{ url('student/' . $student->id . '/export-daily-test-history-csv') }}" class="btn btn-outline-success btn-sm">
+        <a href="{{ url('student/' . $student->id . '/export-daily-test-history-csv') }}" class="btn btn-outline-success btn-sm"
+        data-confirm-action
+                    data-confirm-title="Export Daily Test History to Excel"
+                    data-confirm-message="Are you sure you want to export to CSV?"
+                    data-confirm-yes="Yes, Export"
+                    data-confirm-yes-class="btn-success"
+        >
             <i class="bi bi-download me-1"></i> Export to CSV
         </a>
 

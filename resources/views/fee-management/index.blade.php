@@ -11,7 +11,12 @@
     </div>
 
     <div class="d-flex flex-wrap gap-2">
-        <a href="#" onclick="return confirm('we are working on it... this feature will be available soon...')" class="btn btn-outline-danger">
+        <a href="#" class="btn btn-outline-danger" data-confirm-action
+                    data-confirm-title="Unpaid Alert via Whatsapp"
+                    data-confirm-message="We are working on it... this feature will be available soon..."
+                    data-confirm-yes="Yes, Alert"
+                    data-confirm-yes-class="btn-danger"
+        >
             <i class="bi bi-whatsapp me-1"></i> Unpaid Alert via Whatsapp
         </a>
     </div>

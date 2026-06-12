@@ -1,18 +1,22 @@
-<!-- Save Changes Confirm Modal -->
-
-<div class="modal fade" id="saveChangesConfirmModal" tabindex="-1" aria-hidden="true">
+{{-- Global confirm modal --}}
+<div class="modal fade" id="confirmActionModal" tabindex="-1" aria-labelledby="confirmActionModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title"> <i class="bi bi-exclamation-triangle me-2 text-warning"></i> Confirm Save</h5>
-                <button type="button" class="btn-close" id="saveChangesConfirmCloseBtn" data-bs-dismiss="modal"></button>
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header border-0 pb-0">
+                <i class="bi bi-exclamation-triangle me-2 text-danger"></i>
+            <h5 class="modal-title fw-semibold" id="confirmActionModalLabel">Confirm Action</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-                Are you sure you want to save changes?
+            <div class="modal-body pt-2">
+                <i class="bi bi-warning"></i><p class="mb-0 text-muted" id="confirmActionModalMessage">Are you sure?</p>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="saveChangesConfirmYesBtn">Yes, Save Changes</button>
-                <button type="button" class="btn btn-outline-danger" id="saveChangesConfirmCancelBtn" data-bs-dismiss="modal">Cancel</button>
+            <div class="modal-footer border-0 pt-0">
+                <button type="button" class="btn btn-outline-danger" id="confirmActionModalNo" data-bs-dismiss="modal">
+                    No
+                </button>
+                <button type="button" class="btn btn-success" id="confirmActionModalYes">
+                    Yes
+                </button>
             </div>
         </div>
     </div>

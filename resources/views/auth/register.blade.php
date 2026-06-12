@@ -139,7 +139,13 @@
                                 Already have an account?
                                 <a href="{{ route('login') }}" class="fw-semibold">Login here</a>
                             </p>
-                            <button type="submit" class="btn btn-et-primary px-4">
+                            <button type="submit" class="btn btn-et-primary px-4"
+                            data-confirm-action
+                            data-confirm-title="Register School"
+                            data-confirm-message="Are you sure you want to register this school?"
+                            data-confirm-yes="Yes, Register"
+                            data-confirm-yes-class="btn-primary"
+                            >
                                 <i class="bi bi-building-add me-1"></i> Register School
                             </button>
                         </div>

@@ -53,11 +53,16 @@
         <a href="{{ url('student/edit/' . $student->id) }}" class="btn btn-outline-info btn-sm">
             <i class="bi bi-pencil me-1"></i> Edit
         </a>
-        <form action="{{ url('student/delete/' . $student->id) }}" method="POST"
-            onsubmit="return confirm('Are you sure you want to delete this student?');">
+        <form action="{{ url('student/delete/' . $student->id) }}" method="POST">
             @csrf
             @method('DELETE')
-            <button type="submit" class="btn btn-outline-danger btn-sm">
+            <button type="submit"
+                    class="btn btn-outline-danger btn-sm"
+                    data-confirm-action
+                    data-confirm-title="Delete Student"
+                    data-confirm-message="Are you sure you want to delete this student?"
+                    data-confirm-yes="Yes, Delete"
+                    data-confirm-yes-class="btn-danger">
                 <i class="bi bi-trash me-1"></i> Delete
             </button>
         </form>

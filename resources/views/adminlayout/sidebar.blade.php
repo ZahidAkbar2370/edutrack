@@ -129,7 +129,12 @@
 </div>
 
 <hr class=" border-opacity-25">
-<a class="nav-link text-danger" href="{{ url('logout') }}" onclick="return confirm('Are you sure you want to logout?')">
+<a class="nav-link text-danger" href="{{ url('logout') }}" data-confirm-action
+                    data-confirm-title="Logout"
+                    data-confirm-message="Are you sure you want to logout?"
+                    data-confirm-yes="Yes, Logout"
+                    data-confirm-yes-class="btn-danger"
+        >
             <i class="bi bi-box-arrow-right me-2"></i> Logout
         </a>
 

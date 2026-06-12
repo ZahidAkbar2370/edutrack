@@ -60,7 +60,13 @@
     </div>
 
     <div class="d-flex justify-content-end gap-2 mt-3">
-        <button type="submit" class="btn btn-primary" onclick="return confirm('Are you sure you want to save this teacher?')">
+        <button type="submit" class="btn btn-primary" 
+        data-confirm-action
+                    data-confirm-title="Save Teacher"
+                    data-confirm-message="Are you sure you want to save this teacher?"
+                    data-confirm-yes="Yes, Save"
+                    data-confirm-yes-class="btn-primary"
+        >
             <i class="bi bi-check-lg me-1"></i> Save Teacher
         </button>
     </div>

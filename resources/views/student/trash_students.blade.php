@@ -62,7 +62,11 @@
                                 <div class="d-flex flex-column align-items-center gap-1">
                                
                                 <div class="btn-group btn-group-sm">
-                                    <a href="{{ url('student/restore-trash-student/' . $student->id) }}" class="btn btn-outline-danger" title="Restore" onclick="return confirm('Are you sure you want to restore / recover this student?')">
+                                    <a href="{{ url('student/restore-trash-student/' . $student->id) }}" class="btn btn-outline-danger" title="Restore" data-confirm-action
+                    data-confirm-title="Restore Student"
+                    data-confirm-message="Are you sure you want to restore / recover this student?"
+                    data-confirm-yes="Yes, Restore"
+                    data-confirm-yes-class="btn-success">
                                         <i class="bi bi-arrow-counterclockwise"></i>
                                     </a>
                                 </div>
