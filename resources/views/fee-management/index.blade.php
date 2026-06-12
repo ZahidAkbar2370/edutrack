@@ -11,8 +11,8 @@
     </div>
 
     <div class="d-flex flex-wrap gap-2">
-        <a href="#" onclick="return confirm('we are working on it... this feature will be available soon...')" class="btn btn-success">
-            <i class="bi bi-whatsapp me-1"></i> Send Whatsapp Alert to Unpaid Students
+        <a href="#" onclick="return confirm('we are working on it... this feature will be available soon...')" class="btn btn-outline-danger">
+            <i class="bi bi-whatsapp me-1"></i> Unpaid Alert via Whatsapp
         </a>
     </div>
 </div>
@@ -27,6 +27,7 @@
 <div class="card shadow-sm mb-4">
     <div class="card-body">
         <form method="GET" action="{{ url('fee-management') }}" class="row g-3 align-items-end">
+            
             <div class="col-sm-6 col-md-4 col-lg-3">
                 <label for="fee_month" class="form-label">Fee Month</label>
                 <input type="month" name="fee_month" id="fee_month" class="form-control"
@@ -57,6 +58,7 @@
                         <th class="text-center">Total Students</th>
                         <th class="text-center">Paid</th>
                         <th class="text-center">Unpaid</th>
+                        <th class="text-center">Remaining</th>
                         <th class="text-center">Actions</th>
                     </tr>
                 </thead>
@@ -71,6 +73,9 @@
                             </td>
                             <td class="text-center">
                                 <span class="badge bg-danger">{{ $row->unpaid_count }}</span>
+                            </td>
+                            <td class="text-center">
+                                <span class="badge bg-warning">0</span>
                             </td>
                             <td class="text-center">
                                 <a href="{{ url('fee-management/show/' . $row->class->id . '?fee_month=' . $feeMonth) }}"

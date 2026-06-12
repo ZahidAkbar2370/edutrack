@@ -64,7 +64,7 @@
         <div class="col-md-3">
                 <label for="name" class="form-label">Name / Roll No</label>
                 <input type="text" name="name_roll_number" id="name_roll_number" class="form-control" placeholder="Search by name or roll number"
-                    value="{{ $filters['name_roll_number'] ?? '' }}">
+                    value="{{ isset($_GET['name_roll_number']) ? $_GET['name_roll_number'] : '' }}">
             </div>
 
             <div class="col-md-2">
@@ -73,7 +73,7 @@
                     <option value="">All Classes</option>
                     @if(!empty($classes))
                         @foreach($classes as $class)
-                            <option value="{{ $class->id }}">
+                            <option value="{{ $class->id }}" {{ isset($_GET['class_id']) && $_GET['class_id'] == $class->id ? 'selected' : '' }}>
                                     {{ $class->class_name }}
                             </option>
                         @endforeach
@@ -87,7 +87,7 @@
                     <option value="">All Sections</option>
                     @if(!empty($sections))
                         @foreach($sections as $section)
-                            <option value="{{ $section->id }}" data-class-id="{{ $section->class_id }}"
+                            <option value="{{ $section->id }}" data-class-id="{{ $section->class_id }}" {{ isset($_GET['section_id']) && $_GET['section_id'] == $section->id ? 'selected' : '' }}
                                 >
                                 {{ $section->section_name }} ({{ $section->schoolClass->class_name ?? '' }})
                             </option>
@@ -100,10 +100,10 @@
                 <label for="status" class="form-label">Status</label>
                 <select name="status" id="status" class="form-select">
                     <option value="">All Statuses</option>
-                    <option value="active">Active</option>
-                    <option value="completed">Completed</option>
-                    <option value="banned">Banned</option>
-                    <option value="inactive">Inactive</option>
+                    <option value="active" {{ isset($_GET['status']) && $_GET['status'] == 'active' ? 'selected' : '' }}>Active</option>
+                    <option value="completed" {{ isset($_GET['status']) && $_GET['status'] == 'completed' ? 'selected' : '' }}>Completed</option>
+                    <option value="banned" {{ isset($_GET['status']) && $_GET['status'] == 'banned' ? 'selected' : '' }}>Banned</option>
+                    <option value="inactive" {{ isset($_GET['status']) && $_GET['status'] == 'inactive' ? 'selected' : '' }}>Inactive</option>
                 </select>
             </div>
             <div class="col-md-2 d-flex gap-2">
@@ -172,7 +172,7 @@
                                
                                 <div class="btn-group btn-group-sm">
                                     <a href="{{ url('student/show/' . $student->id) }}" class="btn btn-outline-secondary" title="View">
-                                        <i class="bi bi-eye"></i>
+                                        <i class="bi bi-eye"></i> View Detail
                                     </a>
                                 </div>
                                 </div>

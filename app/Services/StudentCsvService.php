@@ -14,31 +14,27 @@ use Illuminate\Support\Facades\DB;
 class StudentCsvService
 {
     public const HEADERS = [
-        'student_name',
-        'class_name',
-        'section_name',
-        'student_roll_number',
-        'student_email',
-        'student_phone_no',
-        'student_admission_date',
-        'parent_name',
-        'parent_phone_no',
-        'parent_email',
-        'parent_address',
-        'status',
+        'Student Name',
+        'Student Email',
+        'Student Phone Number',
+        'Class Name',
+        'Section Name',
+        'Admission Date',
+        'Parent Name',
+        'Parent Phone Number',
+        'Parent Email',
+        'Address',
+        'Monthly Fee',
     ];
 
-    /** Columns that may be omitted from import files */
-    public const OPTIONAL_HEADERS = ['status'];
-
     /** Build student query with same filters as the list page */
-    public function filteredQuery(?string $schoolId, Request $request)
+    public function filteredQuery($schoolId, Request $request)
     {
         return Student::with('schoolClass', 'section', 'parent')
             ->when($schoolId, fn ($query) => $query->where('school_id', $schoolId))
             ->when($request->filled('class_id'), fn ($query) => $query->where('class_id', $request->class_id))
             ->when($request->filled('section_id'), fn ($query) => $query->where('section_id', $request->section_id))
-            ->when($request->filled('name'), function ($query) use ($request) {
+            ->when($request->filled('name_roll_number'), function ($query) use ($request) {
                 $name = '%' . $request->name . '%';
                 $query->where(function ($q) use ($name) {
                     $q->where('student_name', 'like', $name)
@@ -54,11 +50,10 @@ class StudentCsvService
     {
         return [
             $student->student_name,
-            $student->schoolClass->class_name ?? '',
-            $student->section->section_name ?? '',
-            $student->student_roll_number ?? '',
             $student->student_email ?? '',
             $student->student_phone_no ?? '',
+            $student->schoolClass->class_name ?? '',
+            $student->section->section_name ?? '',
             $student->student_admission_date
                 ? Carbon::parse($student->student_admission_date)->format('Y-m-d')
                 : '',
@@ -66,7 +61,7 @@ class StudentCsvService
             $student->parent->parent_phone_no ?? '',
             $student->parent->parent_email ?? '',
             $student->parent->parent_address ?? '',
-            $student->status ?? Student::STATUS_ACTIVE,
+            $student->student_per_month_fee ?? '0',
         ];
     }
 

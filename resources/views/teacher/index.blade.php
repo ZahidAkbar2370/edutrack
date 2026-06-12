@@ -62,9 +62,6 @@
                             </td>
                             <td class="text-center">
                                 <div class="btn-group btn-group-sm">
-                                    <a href="{{ url('teacher/show/' . $teacher->id) }}" class="btn btn-outline-secondary" title="View">
-                                        <i class="bi bi-eye"></i>
-                                    </a>
                                     <a href="{{ url('teacher/edit/' . $teacher->id) }}" class="btn btn-outline-primary" title="Edit">
                                         <i class="bi bi-pencil"></i>
                                     </a>

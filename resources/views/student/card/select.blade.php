@@ -14,8 +14,8 @@
         <button type="button" id="btnDownloadPng" class="btn btn-primary">
             <i class="bi bi-download me-1"></i> Download PNG
         </button>
-        <a href="{{ url('student') }}" class="btn btn-outline-secondary btn-sm">
-            <i class="bi bi-arrow-left me-1"></i> Back
+        <a href="{{ url('student/show/' . $student->id) }}" class="btn btn-outline-secondary btn-sm">
+            <i class="bi bi-arrow-left me-1"></i> Back to Student Detail
         </a>
     </div>
 </div>

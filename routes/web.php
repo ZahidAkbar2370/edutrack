@@ -127,6 +127,22 @@ Route::group(['middleware' => ['auth', 'school-admin', 'verified']], function ()
         Route::get('trash', [StudentController::class, 'trashStudents']);
         Route::get('restore-trash-student/{studentId}', [StudentController::class, 'restoreTrashStudent']);
 
+        // Student Documents
+        Route::get('documents/{id}', [StudentController::class, 'documents']);
+        Route::post('documents/{id}', [StudentController::class, 'storeDocument']);
+
+        // Student Fee History
+        Route::get('{id}/fee-history', [StudentController::class, 'feeHistory']);
+
+        // Student Attendance History
+        Route::get('{id}/export-attendance-history-csv', [StudentController::class, 'exportAttendanceHistoryCsv']);
+
+        // Student Daily Test History
+        Route::get('{id}/export-daily-test-history-csv', [StudentController::class, 'exportDailyTestHistoryCsv']);
+
+        // Student fee history export to csv
+        Route::get('{id}/export-fee-history-csv', [StudentController::class, 'exportFeeHistoryCsv']);
+
         // Student ID card — pick design and download PNG
         Route::get('card/{id}', [StudentCardController::class, 'select']);
         Route::get('{id}/attendance-history', [StudentController::class, 'attendanceHistory']);
@@ -145,6 +161,9 @@ Route::group(['middleware' => ['auth', 'school-admin', 'verified']], function ()
         Route::post('store', [AttendanceController::class, 'store']);
         Route::get('show', [AttendanceController::class, 'show'])->name('attendance.show');
         Route::post('update', [AttendanceController::class, 'update']);
+        Route::get('edit/{classId}/{sectionId}/{attendanceDate}', [AttendanceController::class, 'edit'])->name('attendance.edit');
+
+        Route::get('export-to-csv/{classId}/{sectionId}/{attendanceDate}', [AttendanceController::class, 'exportToCsv'])->name('attendance.export-to-csv');
     });
 
     // Daily test routes

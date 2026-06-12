@@ -9,6 +9,13 @@
         <h1 class="h3 mb-1 fw-bold">Edit Student</h1>
         <p class="text-muted mb-0">Update student and parent information</p>
     </div>
+
+    <div class="d-flex flex-wrap gap-2">
+        <a href="{{ url('student/show/' . $student->id) }}" class="btn btn-outline-secondary btn-sm">
+            <i class="bi bi-arrow-left me-1"></i> Back to Student Detail
+        </a>
+    </div>
+    
 </div>
 
 @if(session('error'))

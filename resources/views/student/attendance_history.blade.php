@@ -12,9 +12,17 @@
             -> {{ $student->schoolClass->class_name ?? 'N/A' }} -> {{ $student->section->section_name ?? 'N/A' }} </code>
         </p>
     </div>
-    <a href="{{ url('student/show/' . $student->id) }}" class="btn btn-outline-secondary btn-sm">
-        <i class="bi bi-arrow-left me-1"></i> Back to Student
+
+    <div class="d-flex flex-wrap justify-content-end gap-2">
+
+        <a href="{{ url('student/' . $student->id . '/export-attendance-history-csv') }}" class="btn btn-outline-success btn-sm">
+            <i class="bi bi-download me-1"></i> Export to CSV
+        </a>
+
+        <a href="{{ url('student/show/' . $student->id) }}" class="btn btn-outline-secondary btn-sm">
+        <i class="bi bi-arrow-left me-1"></i> Back to Student Detail
     </a>
+    </div>
 </div>
 
 <div class="card shadow-sm">

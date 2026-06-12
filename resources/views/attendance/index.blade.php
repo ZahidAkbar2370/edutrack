@@ -31,36 +31,40 @@
                 <label for="class_id" class="form-label">Class</label>
                 <select name="class_id" id="class_id" class="form-select">
                     <option value="">All Classes</option>
-                    @foreach($filterClasses as $class)
-                        <option value="{{ $class->id }}" {{ ($filters['class_id'] ?? '') == $class->id ? 'selected' : '' }}>
-                            {{ $class->class_name }}
-                        </option>
-                    @endforeach
+                    @if(!empty($classes))
+                    @foreach($classes as $class)
+                        <option value="{{ $class->id }}" {{ isset($_GET['class_id']) && $_GET['class_id'] == $class->id ? 'selected' : '' }}>
+                                {{ $class->class_name }}
+                            </option>
+                        @endforeach
+                    @endif
                 </select>
             </div>
             <div class="col-md-3 col-lg-2">
                 <label for="section_id" class="form-label">Section</label>
                 <select name="section_id" id="section_id" class="form-select">
                     <option value="">All Sections</option>
-                    @foreach($filterSections as $section)
+                    @if(!empty($sections))
+                    @foreach($sections as $section)
                         <option value="{{ $section->id }}" data-class-id="{{ $section->class_id }}"
-                            {{ ($filters['section_id'] ?? '') == $section->id ? 'selected' : '' }}>
+                            {{ isset($_GET['section_id']) && $_GET['section_id'] == $section->id ? 'selected' : '' }}>
                             {{ $section->section_name }} ({{ $section->schoolClass->class_name ?? '' }})
                         </option>
-                    @endforeach
+                        @endforeach
+                    @endif
                 </select>
             </div>
             <div class="col-md-3 col-lg-2">
                 <label for="date" class="form-label">Specific Date</label>
-                <input type="date" name="date" id="date" class="form-control" value="{{ $filters['date'] ?? '' }}">
+                <input type="date" name="date" id="date" class="form-control" value="{{ isset($_GET['date']) ? $_GET['date'] : '' }}">
             </div>
             <div class="col-md-3 col-lg-2">
                 <label for="date_from" class="form-label">Date From</label>
-                <input type="date" name="date_from" id="date_from" class="form-control" value="{{ $filters['date_from'] ?? '' }}">
+                <input type="date" name="date_from" id="date_from" class="form-control" value="{{ isset($_GET['date_from']) ? $_GET['date_from'] : '' }}">
             </div>
             <div class="col-md-3 col-lg-2">
                 <label for="date_to" class="form-label">Date To</label>
-                <input type="date" name="date_to" id="date_to" class="form-control" value="{{ $filters['date_to'] ?? '' }}">
+                <input type="date" name="date_to" id="date_to" class="form-control" value="{{ isset($_GET['date_to']) ? $_GET['date_to'] : '' }}">
             </div>
             <div class="col-md-12 col-lg-2 d-flex gap-2">
                 <button type="submit" class="btn btn-primary flex-grow-1">
@@ -92,32 +96,34 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse($attendanceGroups as $group)
-                        <tr>
-                            <td>{{ $loop->iteration }}</td>
-                            <td class="fw-medium">
-                                <span class="fw-medium">{{ $classes[$group->class_id]->class_name ?? 'N/A' }}</span> - <span class="text-muted small">({{ $sections[$group->section_id]->section_name ?? 'N/A' }})</span>
-                            </td>
-                            <td class="text-center">{{ $group->total_students }}</td>
-                            <td class="text-center text-success fw-semibold">{{ $group->present_count }}</td>
-                            <td class="text-center text-danger fw-semibold">{{ $group->absent_count }}</td>
-                            <td class="text-center text-warning fw-semibold">{{ $group->leave_count }}</td>
-                            <td>{{ \Illuminate\Support\Carbon::parse($group->attendance_date)->format('d M Y') }}</td>
-                            <td class="text-center">
-                                <a href="{{ route('attendance.show', [
-                                    'class_id' => $group->class_id,
-                                    'section_id' => $group->section_id,
-                                    'attendance_date' => $group->attendance_date,
-                                ]) }}" class="btn btn-sm btn-outline-secondary" title="View">
-                                    <i class="bi bi-eye"></i> View
-                                </a>
-                            </td>
-                        </tr>
-                    @empty
+                    @if(!empty($attendanceGroups))
+                        @foreach($attendanceGroups as $key => $group)
+                            <tr>
+                                <td>{{ $key + 1 }}</td>
+                                <td class="fw-medium">
+                                    <span class="fw-medium">{{ $group->schoolClass->class_name ?? 'N/A' }}</span> - <span class="text-muted small">({{ $group->section->section_name ?? 'N/A' }})</span>
+                                </td>
+                                <td class="text-center">{{ $group->total_students }}</td>
+                                <td class="text-center text-success fw-semibold">{{ $group->present_count }}</td>
+                                <td class="text-center text-danger fw-semibold">{{ $group->absent_count }}</td>
+                                <td class="text-center text-warning fw-semibold">{{ $group->leave_count }}</td>
+                                <td>{{ \Illuminate\Support\Carbon::parse($group->attendance_date)->format('d M Y') }}</td>
+                                <td class="text-center">
+                                    <a href="{{ route('attendance.show', [
+                                        'class_id' => $group->class_id,
+                                        'section_id' => $group->section_id,
+                                        'attendance_date' => $group->attendance_date,
+                                    ]) }}" class="btn btn-sm btn-outline-secondary" title="View">
+                                        <i class="bi bi-eye"></i> View
+                                    </a>
+                                </td>
+                            </tr>
+                        @endforeach
+                    @else
                         <tr>
                             <td colspan="8" class="text-center text-muted py-4">No attendance records found</td>
                         </tr>
-                    @endforelse
+                    @endif
                 </tbody>
             </table>
         </div>

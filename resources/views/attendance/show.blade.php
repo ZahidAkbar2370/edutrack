@@ -20,19 +20,29 @@
     </div>
 
     <div class="d-flex flex-wrap gap-2">
-        <a href="#" onclick="return confirm('we are working on it... this feature will be available soon...')" class="btn btn-success">
-            <i class="bi bi-whatsapp me-1"></i> Send Attendance Report to Parents via Whatsapp
+
+        <a href="{{ url('attendance/export-to-csv/' . $classId . '/' . $sectionId . '/' . $attendanceDate) }}" class="btn btn-outline-success">
+            <i class="bi bi-download me-1"></i> Export To CSV
         </a>
+
+        <a href="{{ url('attendance/edit/' . $classId . '/' . $sectionId . '/' . $attendanceDate) }}" class="btn btn-outline-primary">
+            <i class="bi bi-pencil-square me-1"></i> Edit Attendance
+        </a>
+
+        <a href="#" onclick="return confirm('we are working on it... this feature will be available soon...')" class="btn btn-outline-danger">
+            <i class="bi bi-whatsapp me-1"></i> Report via Whatsapp
+        </a>
+
     </div>
 </div>
 
-@if(session('success'))
-    <div class="alert alert-success">{{ session('success') }}</div>
-@endif
+    @if(session('success'))
+        <div class="alert alert-success">{{ session('success') }}</div>
+    @endif
 
-@if($attendances->isEmpty())
-    <div class="alert alert-warning">No attendance records found.</div>
-@else
+    @if($attendances->isEmpty())
+        <div class="alert alert-warning">No attendance records found.</div>
+    @else
 
 
 <form action="{{ url('attendance/update') }}" method="POST">
@@ -44,7 +54,7 @@
     <div class="card shadow-sm">
         <div class="card-header bg-light d-flex justify-content-between align-items-center">
             <h2 class="h6 mb-0 fw-semibold">Students</h2>
-            <span class="small text-muted">{{ $attendances->count() }} student(s)</span>
+            <span class="small text-muted">{{ $attendances->count() }} Student(s)</span>
         </div>
         <div class="card-body p-0">
             <div class="table-responsive">
@@ -53,12 +63,13 @@
                         <tr>
                             <th>#</th>
                             <th>Student Name</th>
-                            <th>Status</th>
-                            <th class="text-center" style="min-width: 220px;">Mark Attendance</th>
+                            <th>Attendance Status</th>
+                            <th>Whatsapp Alert Status</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($attendances as $key => $attendance)
+
                             @php
                                 $status = $attendance->attendance_status;
                                 $rowClass = match($status) {
@@ -68,30 +79,16 @@
                                     default => 'secondary',
                                 };
                             @endphp
+
                             <tr class="attendance-row" data-student-id="{{ $attendance->student_id }}">
                                 <td>{{ $key + 1 }}</td>
                                 <td class="fw-medium">
                                     <a href="{{ url('student/show/' . $attendance->student_id) }}" target="_blank" class="fw-medium">{{ $attendance->student->student_name ?? 'N/A' }}</a> <br>
                                     <span class="text-muted small">(Roll No: {{ $attendance->student->student_roll_number ?? '—' }})</span>
                                 </td>
-                                <td class="status-text text-capitalize fw-semibold"> <span class="p-2 rounded-pill bg-{{ $rowClass }}">{{ $status }}</span> </td>
-                                <td class="text-center">
-                                    <div class="btn-group btn-group-sm attendance-status-group" role="group">
-                                        <input type="radio" class="btn-check status-radio" name="students[{{ $attendance->student_id }}]"
-                                               id="present-{{ $attendance->student_id }}" value="present"
-                                               {{ $status === 'present' ? 'checked' : '' }}>
-                                        <label class="btn btn-outline-success" for="present-{{ $attendance->student_id }}">Present</label>
-
-                                        <input type="radio" class="btn-check status-radio" name="students[{{ $attendance->student_id }}]"
-                                               id="absent-{{ $attendance->student_id }}" value="absent"
-                                               {{ $status === 'absent' ? 'checked' : '' }}>
-                                        <label class="btn btn-outline-danger" for="absent-{{ $attendance->student_id }}">Absent</label>
-
-                                        <input type="radio" class="btn-check status-radio" name="students[{{ $attendance->student_id }}]"
-                                               id="leave-{{ $attendance->student_id }}" value="leave"
-                                               {{ $status === 'leave' ? 'checked' : '' }}>
-                                        <label class="btn btn-outline-warning" for="leave-{{ $attendance->student_id }}">Leave</label>
-                                    </div>
+                                <td class="status-text text-capitalize fw-semibold"> <span class="p-2 bg-{{ $rowClass }} text-white">{{ $status }}</span> </td>
+                                <td>
+                                    <span class="p-2 bg-warning text-white">Pending</span>
                                 </td>
                             </tr>
                         @endforeach
@@ -100,39 +97,7 @@
             </div>
         </div>
     </div>
-
-    <div class="d-flex justify-content-end gap-2 mt-3">
-        <button type="submit" class="btn btn-primary" onclick="return confirm('Are you sure you want to update attendance?')">
-            <i class="bi bi-check-lg me-1"></i> Update Attendance
-        </button>
-    </div>
 </form>
 @endif
 
 @endsection
-
-@push('scripts')
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var statusMap = {
-            present: { row: 'table-success', text: 'present' },
-            absent: { row: 'table-danger', text: 'absent' },
-            leave: { row: 'table-warning', text: 'leave' }
-        };
-
-        document.querySelectorAll('.attendance-row').forEach(function (row) {
-            row.querySelectorAll('.status-radio').forEach(function (radio) {
-                radio.addEventListener('change', function () {
-                    if (!this.checked) return;
-                    var status = this.value;
-                    row.classList.remove('table-success', 'table-danger', 'table-warning');
-                    if (statusMap[status]) {
-                        row.classList.add(statusMap[status].row);
-                        row.querySelector('.status-text').textContent = statusMap[status].text;
-                    }
-                });
-            });
-        });
-    });
-</script>
-@endpush

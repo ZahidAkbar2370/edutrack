@@ -13,7 +13,7 @@ class SectionController extends Controller
     {
         $sections = Section::with('schoolClass', 'school')
             ->where('school_id', Auth::user()->school_id)
-            ->orderBy('created_at', 'desc')
+            ->orderBy('section_name', 'asc')
             ->get();
 
         return view('section.index', compact('sections'));

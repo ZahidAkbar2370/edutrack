@@ -11,9 +11,17 @@
         <code><span class="fw-medium">{{ $student->student_name }}</span> -> (Roll # {{ $student->student_roll_number ?? '—' }})
             -> {{ $student->schoolClass->class_name ?? 'N/A' }} -> {{ $student->section->section_name ?? 'N/A' }} </code>
     </div>
-    <a href="{{ url('student/show/' . $student->id) }}" class="btn btn-outline-secondary btn-sm">
-        <i class="bi bi-arrow-left me-1"></i> Back to Student
-    </a>
+
+    <div class="d-flex flex-wrap justify-content-end gap-2">
+
+        <a href="{{ url('student/' . $student->id . '/export-daily-test-history-csv') }}" class="btn btn-outline-success btn-sm">
+            <i class="bi bi-download me-1"></i> Export to CSV
+        </a>
+
+        <a href="{{ url('student/show/' . $student->id) }}" class="btn btn-outline-secondary btn-sm">
+            <i class="bi bi-arrow-left me-1"></i> Back to Student Detail
+        </a>
+    </div>
 </div>
 
 

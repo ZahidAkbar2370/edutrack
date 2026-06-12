@@ -10,6 +10,12 @@
         <h1 class="h3 mb-1 fw-bold">Trash Students</h1>
         <p class="text-muted mb-0">All deleted students</p>
     </div>
+
+    <div class="d-flex gap-2">
+        <a href="{{ url('student') }}" class="btn btn-outline-secondary btn-sm">
+            <i class="bi bi-arrow-left me-1"></i> Back to List
+        </a>
+    </div>
 </div>
 
 @if(session('success'))
