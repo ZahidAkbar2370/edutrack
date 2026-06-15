@@ -41,7 +41,7 @@ class FeeManagementController extends Controller
     private function classStatsForMonth(string $schoolId, string $feeMonth)
     {
         $classes = SchoolClass::where('school_id', $schoolId)
-            ->orderBy('class_name')
+            ->where('publication_status', 'active')
             ->get();
 
         $studentsByClass = Student::where('school_id', $schoolId)

@@ -103,8 +103,7 @@ class DailyTestController extends Controller
             return response()->json(['message' => 'Invalid class or section'], 422);
         }
 
-        $students = Student::where('school_id', $schoolId)
-            ->active()
+        $students = Student::where('school_id', $schoolId)->where('status', 'active')
             ->where('class_id', $request->class_id)
             ->where('section_id', $request->section_id)
             ->orderBy('student_name')
@@ -165,7 +164,7 @@ class DailyTestController extends Controller
 
         $studentIds = array_keys($request->students);
         $validCount = Student::where('school_id', $schoolId)
-            ->active()
+        ->where('status', 'active')
             ->where('class_id', $request->class_id)
             ->where('section_id', $request->section_id)
             ->whereIn('id', $studentIds)
@@ -216,7 +215,7 @@ class DailyTestController extends Controller
         }
 
         $dailyTests = DailyTest::with('student', 'teacher')
-            ->whereHas('student', fn ($query) => $query->active())
+            ->whereHas('student', fn ($query) => $query->where('status', 'active'))
             ->where('school_id', $schoolId)
             ->where('class_id', $request->class_id)
             ->where('section_id', $request->section_id)

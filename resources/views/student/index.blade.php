@@ -15,8 +15,8 @@
         </a>
         <a href="{{ url('student/export-csv') }}{{ ($q = http_build_query(array_filter(request()->only(['class_id', 'section_id', 'name', 'status'])))) ? '?' . $q : '' }}" class="btn btn-outline-success" 
                    data-confirm-action
-                    data-confirm-title="Export Students to Excel"
-                    data-confirm-message="Are you sure you want to export to CSV?"
+                   data-confirm-message="Are you sure you want to export to CSV?"
+                   data-confirm-title="Export Students to Excel"
                     data-confirm-yes="Yes, Export"
                     data-confirm-yes-class="btn-success">
             <i class="bi bi-download me-1"></i> Export CSV
@@ -39,9 +39,12 @@
     <div class="alert alert-success">{{ session('success') }}</div>
 @endif
 @if(session('error'))
-    <div class="alert alert-danger">{{ session('error') }}</div>
+<div class="alert alert-danger">
+        <i class="bi bi-exclamation-triangle-fill"></i>
+        {{ session('error') }}</div>
 @endif
 @if(session('warning'))
+<i class="bi bi-exclamation-triangle-fill"></i>
     <div class="alert alert-warning">{{ session('warning') }}</div>
 @endif
 

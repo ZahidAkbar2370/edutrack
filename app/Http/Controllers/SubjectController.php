@@ -18,6 +18,21 @@ class SubjectController extends Controller
         return view('subject.index', compact('subjects'));
     }
 
+    public function updatePublicationStatus(Request $request)
+    {
+        $request->validate([
+            'subject_id' => 'required|exists:subjects,id',
+            'publication_status' => 'required|in:active,inactive',
+        ]);
+        
+        $subject = Subject::find($request->subject_id);
+        $subject->update([
+            'publication_status' => $request->publication_status,
+        ]);
+
+        return redirect('subject')->with('success', 'Subject Publication Status Updated Successfully!');
+    }
+
     // public function create()
     // {
     //     return view('subject.create');

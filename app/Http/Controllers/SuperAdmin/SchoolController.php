@@ -3,12 +3,16 @@
 namespace App\Http\Controllers\SuperAdmin;
 
 use App\Http\Controllers\Controller;
+use App\Models\DailyTest;
 use Illuminate\Http\Request;
 use App\Models\Membership;
 use App\Models\School;
+use App\Models\Student;
+use App\Models\Teacher;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Transaction;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class SchoolController extends Controller
@@ -144,5 +148,19 @@ class SchoolController extends Controller
             }
             return redirect('schools')->with('error', 'School not found');
         });
+    }
+
+    function updateMembership($schoolId) {
+        return view('superadmin.school.upgrade_membership');
+    }
+
+    function transactionHistory($schoolId) {
+        $transactionHistory = Transaction::where('school_id', $schoolId)->orderBy('created_at', 'desc')->get();
+
+        return view('superadmin.school.transaction_history', compact('transactionHistory'));
+    }
+
+    function changePassword($schoolId){
+        return view('superadmin.school.change_username_password');
     }
 }

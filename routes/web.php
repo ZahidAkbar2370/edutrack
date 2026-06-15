@@ -27,7 +27,7 @@ Route::get('/', function () {
     return view('landing');
 })->name('landing');
 
-Route::middleware(['auth', 'verified'])->get('/dashboard', function () {
+Route::middleware(['auth', 'verified', 'membership-plan'])->get('/dashboard', function () {
     return match (Auth::user()->role) {
         'school-admin' => app(DashboardController::class)->index(),
         'super-admin' => redirect('membership'),
@@ -52,8 +52,9 @@ Route::group(['middleware' => ['auth', 'super-admin', 'verified']], function () 
         Route::get('edit/{id}', [MembershipController::class, 'edit']);
         Route::post('update/{id}', [MembershipController::class, 'update']);
         Route::delete('delete/{id}', [MembershipController::class, 'destroy']);
-    });
 
+    });
+    
     // School routes
     Route::prefix('school')->group(function () {
         Route::get('/', [SchoolController::class, 'index']);
@@ -63,6 +64,10 @@ Route::group(['middleware' => ['auth', 'super-admin', 'verified']], function () 
         Route::get('edit/{id}', [SchoolController::class, 'edit']);
         Route::post('update/{id}', [SchoolController::class, 'update']);
         Route::delete('delete/{id}', [SchoolController::class, 'destroy']);
+
+        Route::get('upgrade-membership/{id}', [SchoolController::class, 'updateMembership']);
+        Route::get('transaction-history/{id}', [SchoolController::class, 'transactionHistory']);
+        Route::get('change-password/{id}', [SchoolController::class, 'changePassword']);
     });
 });
 
@@ -72,7 +77,7 @@ Route::group(['middleware' => ['auth', 'super-admin', 'verified']], function () 
 |--------------------------------------------------------------------------
 */
 
-Route::group(['middleware' => ['auth', 'school-admin', 'verified']], function () {
+Route::group(['middleware' => ['auth', 'school-admin', 'verified', 'membership-plan']], function () {
 
     // Ajax routes
     Route::prefix('ajax')->group(function () {
@@ -103,12 +108,19 @@ Route::group(['middleware' => ['auth', 'school-admin', 'verified']], function ()
     // Teacher routes
     Route::prefix('teacher')->group(function () {
         Route::get('/', [TeacherController::class, 'index']);
-        Route::get('create', [TeacherController::class, 'create']);
-        Route::post('store', [TeacherController::class, 'store']);
+
+        Route::middleware('teacher-limit')->group(function () {
+            Route::get('create', [TeacherController::class, 'create']);
+            Route::post('store', [TeacherController::class, 'store']);
+        });
+
         Route::get('show/{id}', [TeacherController::class, 'show']);
         Route::get('edit/{id}', [TeacherController::class, 'edit']);
         Route::post('update/{id}', [TeacherController::class, 'update']);
         Route::delete('delete/{id}', [TeacherController::class, 'destroy']);
+
+        // Teacher export to csv
+        Route::get('export-csv', [TeacherController::class, 'exportTeacherCsv']);
     });
 
     // Student routes
@@ -121,11 +133,14 @@ Route::group(['middleware' => ['auth', 'school-admin', 'verified']], function ()
         Route::get('import', [StudentController::class, 'importForm']);
         Route::get('import-template', [StudentController::class, 'importTemplate']);
         Route::post('import', [StudentController::class, 'importStore']);
-        Route::get('create', [StudentController::class, 'create']);
-        Route::post('store', [StudentController::class, 'store']);
 
         Route::get('trash', [StudentController::class, 'trashStudents']);
-        Route::get('restore-trash-student/{studentId}', [StudentController::class, 'restoreTrashStudent']);
+        Route::middleware('student-limit')->group(function () {
+        Route::get('create', [StudentController::class, 'create']);
+            Route::post('store', [StudentController::class, 'store']);
+
+            Route::get('restore-trash-student/{studentId}', [StudentController::class, 'restoreTrashStudent']);
+        });
 
         // Student Documents
         Route::get('documents/{id}', [StudentController::class, 'documents']);
@@ -142,9 +157,11 @@ Route::group(['middleware' => ['auth', 'school-admin', 'verified']], function ()
 
         // Student fee history export to csv
         Route::get('{id}/export-fee-history-csv', [StudentController::class, 'exportFeeHistoryCsv']);
-
+        
         // Student ID card — pick design and download PNG
-        Route::get('card/{id}', [StudentCardController::class, 'select']);
+        Route::middleware('student-card')->group(function () {
+            Route::get('card/{id}', [StudentCardController::class, 'select']);
+        });
         Route::get('{id}/attendance-history', [StudentController::class, 'attendanceHistory']);
         Route::get('{id}/daily-test-history', [StudentController::class, 'dailyTestHistory']);
         Route::get('show/{id}', [StudentController::class, 'show']);
@@ -154,7 +171,7 @@ Route::group(['middleware' => ['auth', 'school-admin', 'verified']], function ()
     });
 
     // Attendance routes
-    Route::prefix('attendance')->group(function () {
+    Route::prefix('attendance')->middleware('attendance')->group(function () {
         Route::get('/', [AttendanceController::class, 'index'])->name('attendance.index');
         Route::get('create', [AttendanceController::class, 'create']);
         Route::get('students-list', [AttendanceController::class, 'studentsList']);
@@ -167,7 +184,7 @@ Route::group(['middleware' => ['auth', 'school-admin', 'verified']], function ()
     });
 
     // Daily test routes
-    Route::prefix('daily-test')->group(function () {
+    Route::prefix('daily-test')->middleware('daily-test')->group(function () {
         Route::get('/', [DailyTestController::class, 'index'])->name('daily-test.index');
         Route::get('create', [DailyTestController::class, 'create']);
         Route::get('students-list', [DailyTestController::class, 'studentsList']);

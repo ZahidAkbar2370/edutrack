@@ -13,7 +13,7 @@ class DatabaseSeeder extends Seeder
         User::create([
             'name' => 'Super Admin',
             'email' => 'edutrack@softwebies.com',
-            'password' => Hash::make('12345678'),
+            'password' => Hash::make('123123123'),
             'email_verified_at' => now(),
             'role' => 'super-admin',
             'membership_expiry_date' => now()->addYear(),

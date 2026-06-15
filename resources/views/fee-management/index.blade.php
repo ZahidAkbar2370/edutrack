@@ -11,6 +11,7 @@
     </div>
 
     <div class="d-flex flex-wrap gap-2">
+
         <a href="#" class="btn btn-outline-danger" data-confirm-action
                     data-confirm-title="Unpaid Alert via Whatsapp"
                     data-confirm-message="We are working on it... this feature will be available soon..."
@@ -68,7 +69,8 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse($classStats as $row)
+                    @if(!empty($classStats) && $classStats->count() > 0)
+                        @foreach($classStats as $row)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <td class="fw-medium">{{ $row->class->class_name }}</td>
@@ -89,11 +91,12 @@
                                 </a>
                             </td>
                         </tr>
-                    @empty
+                    @endforeach
+                    @else
                         <tr>
-                            <td colspan="6" class="text-center text-muted py-4">No classes found</td>
+                            <td colspan="6" class="text-center text-muted py-4">No data found</td>
                         </tr>
-                    @endforelse
+                    @endif
                 </tbody>
             </table>
         </div>

@@ -1,0 +1,22 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
+class ContactFormMessage extends Model
+{
+    use HasUuids, SoftDeletes, HasFactory;
+
+    protected $table = 'contact_form_messages';
+
+    protected $fillable = [
+        'name',
+        'email',
+        'phone',
+        'message',
+    ];
+}

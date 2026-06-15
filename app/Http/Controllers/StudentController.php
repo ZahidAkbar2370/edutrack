@@ -424,6 +424,10 @@ class StudentController extends Controller
         $students = $csv->filteredQuery(Auth::user()->school_id, $request)->get();
         $filename = 'students-' . date('Y-m-d-His') . '.csv';
 
+        if(empty($students) || $students->count() == 0) {
+            return redirect()->back()->with('error', 'No students records found');
+        }
+
         return response()->streamDownload(function () use ($csv, $students) {
             $out = fopen('php://output', 'w');
             fprintf($out, chr(0xEF) . chr(0xBB) . chr(0xBF));
@@ -445,6 +449,10 @@ class StudentController extends Controller
             ->orderBy('created_at')
             ->get();
 
+            if(empty($attendances) || $attendances->count() == 0) {
+                return redirect()->back()->with('error', 'No attendance history records found');
+            }
+
         return response()->streamDownload(function () use ($attendances) {
             $csv = fopen('php://output', 'w');
             fputcsv($csv, ['Sr No.', 'Student Name', 'Roll Number', 'Date', 'Status']);
@@ -464,6 +472,10 @@ class StudentController extends Controller
             ->where('student_id', $studentId)
             ->orderBy('created_at')
             ->get();
+        
+            if(empty($dailyTests) || $dailyTests->count() == 0) {
+                return redirect()->back()->with('error', 'No daily test history records found');
+            }
 
         return response()->streamDownload(function () use ($dailyTests) {
             $csv = fopen('php://output', 'w');
@@ -486,6 +498,10 @@ class StudentController extends Controller
             ->where('student_id', $studentId)
             ->orderBy('created_at')
             ->get();
+        
+            if(empty($feeHistory) || $feeHistory->count() == 0) {
+                return redirect()->back()->with('error', 'No fee history records found');
+            }
 
         return response()->streamDownload(function () use ($feeHistory) {
             $csv = fopen('php://output', 'w');

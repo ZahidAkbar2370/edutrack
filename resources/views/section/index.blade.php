@@ -27,6 +27,7 @@
                         <th>#</th>
                         <th>Class Name</th>
                         <th>Section Name</th>
+                        <th>Publication Status</th>
                         <th class="text-center">Actions</th>
                     </tr>
                 </thead>
@@ -37,24 +38,20 @@
                             <td>{{ $loop->iteration }}</td>
                             <td class="fw-medium">{{ $section->schoolClass->class_name ?? 'N/A' }}</td>
                             <td>{{ $section->section_name }}</td>
+                            <td class="fw-medium"><span class="badge bg-{{ $section->publication_status == 'active' ? 'success' : 'danger' }} text-uppercase">{{ $section->publication_status == 'active' ? 'Active' : 'Inactive' }}</span></td>
                             <td class="text-center">
-                                <div class="btn-group btn-group-sm">
-
-                                <form class="publication-status-form">
-    @csrf
-
-    <div class="form-check form-switch">
-        <input
-            class="form-check-input publication-status-toggle"
-            type="checkbox"
-            data-section-id="{{ $section->id }}"
-            data-publication-status="{{ $section->publication_status == 'active' ? 'inactive' : 'active' }}"
-            {{ $section->publication_status == 'active' ? 'checked' : '' }}
-        >
-    </div>
-</form>
-
-                                </div>
+                            <form action="{{ url('section/update-publication-status') }}" method="POST" class="d-inline needs-validation" data-confirm-action
+                    data-confirm-title="Update Publication Status"
+                    data-confirm-message="Are you sure you want to update the publication status of this section?"
+                    data-confirm-yes="Yes, Update"
+                    data-confirm-yes-class="btn-primary"
+                >
+                                        @csrf
+                                        @method('POST')
+                                        <input type="hidden" name="section_id" value="{{ $section->id }}">
+                                        <input type="hidden" name="publication_status" value="{{ $section->publication_status == 'active' ? 'inactive' : 'active' }}">
+                                            <input class="btn btn-{{ $section->publication_status == 'active' ? 'danger' : 'success' }} btn-sm text-uppercase" type="submit" value="{{ $section->publication_status == 'active' ? 'Make Inactive' : 'Make Active' }}" title="{{ $section->publication_status == 'inactive' ? 'Make Active' : 'Make Inactive' }}" style="width: 130px;">
+                                    </form>
                             </td>
                         </tr>
                     @endforeach

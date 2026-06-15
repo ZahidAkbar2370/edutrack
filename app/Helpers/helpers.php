@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Auth;
 // login school all (active and inactive) classes
 if(!function_exists('loginSchoolAllClasses')){
     function loginSchoolAllClasses(){
-        $schoolClasses = SchoolClass::where('school_id', Auth::user()->school_id)->orderBy('created_at', 'desc')->get();
+        $schoolClasses = SchoolClass::where('school_id', Auth::user()->school_id)->get();
 
         return $schoolClasses;
     }
@@ -21,7 +21,7 @@ if(!function_exists('loginSchoolAllClasses')){
 // login school active classes
 if(!function_exists('loginSchoolActiveClasses')){
     function loginSchoolActiveClasses(){
-        $schoolClasses = SchoolClass::where('school_id', Auth::user()->school_id)->where('publication_status', 'active')->orderBy('created_at', 'desc')->get();
+        $schoolClasses = SchoolClass::where('school_id', Auth::user()->school_id)->where('publication_status', 'active')->get();
 
         return $schoolClasses;
     }
@@ -38,7 +38,7 @@ if(!function_exists('loginSchoolActiveClasses')){
 // login school all (active and inactive) sections
 if(!function_exists('loginSchoolAllSections')){
     function loginSchoolAllSections(){
-        $sections = Section::where('school_id', Auth::user()->school_id)->orderBy('created_at', 'desc')->get();
+        $sections = Section::where('school_id', Auth::user()->school_id)->get();
 
         return $sections;
     }
@@ -47,7 +47,7 @@ if(!function_exists('loginSchoolAllSections')){
 // login school active sections
 if(!function_exists('loginSchoolActiveSections')){
     function loginSchoolActiveSections(){
-        $sections = Section::where('school_id', Auth::user()->school_id)->where('publication_status', 'active')->orderBy('created_at', 'desc')->get();
+        $sections = Section::where('school_id', Auth::user()->school_id)->where('publication_status', 'active')->get();
 
         return $sections;
     }
@@ -56,7 +56,7 @@ if(!function_exists('loginSchoolActiveSections')){
 // login school active sections by class_id
 if(!function_exists('loginSchoolActiveSectionsByClassId')){
     function loginSchoolActiveSectionsByClassId($classId){
-        $sections = Section::where('school_id', Auth::user()->school_id)->where('publication_status', 'active')->where('class_id', $classId)->orderBy('created_at', 'desc')->get();
+        $sections = Section::where('school_id', Auth::user()->school_id)->where('publication_status', 'active')->where('class_id', $classId)->get();
 
         return $sections;
     }

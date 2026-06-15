@@ -9,6 +9,36 @@
     <p class="text-muted mb-0">Overview of your school</p>
 </div>
 
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
+    @if(session('error'))
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            {{ session('error') }}
+            <!-- <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button> -->
+        </div>
+    @endif
+
+
+    @php
+       $membership = \App\Models\Membership::find(Auth::user()->membership_id);
+    @endphp
+    @if(!empty($membership) && $membership->membership_name == 'Free Trail')
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+    <i class="bi bi-exclamation-triangle-fill"></i>
+    You are currently using the free trial version of the system.
+    This trial will expire on
+    <strong>{{ \Carbon\Carbon::parse(Auth::user()->membership_expiry_date)->format('Y-m-d') }}</strong>.
+    Please upgrade to continue using all features.
+</div>
+    @endif
+
+
 <h2 class="h6 text-uppercase text-muted fw-semibold mb-3">Students</h2>
 <div class="row g-3 mb-4">
     <div class="col-sm-6 col-xl-4 col-xxl">

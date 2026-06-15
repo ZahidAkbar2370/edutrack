@@ -197,6 +197,11 @@ class AttendanceController extends Controller
             ->orderBy('created_at')
             ->get();
 
+
+            if(empty($attendances) || $attendances->count() == 0) {
+                return redirect()->back()->with('error', 'No attendance history records found');
+            }
+
         $schoolClass = SchoolClass::find($classId);
         $section = Section::find($sectionId);
 

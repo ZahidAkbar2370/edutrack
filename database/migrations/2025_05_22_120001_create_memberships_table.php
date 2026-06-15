@@ -12,8 +12,8 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->string('membership_name');
             $table->string('membership_price')->default('0');
-            $table->unsignedInteger('students_limit')->nullable(); // null = unlimited
-            $table->unsignedInteger('teachers_limit')->nullable(); // null = unlimited
+            $table->string('students_limit')->nullable(); // null = unlimited
+            $table->string('teachers_limit')->nullable(); // null = unlimited
             $table->boolean('allowed_attendance')->default(false);
             $table->boolean('allowed_daily_test')->default(false);
             $table->boolean('allowed_student_card')->default(false);

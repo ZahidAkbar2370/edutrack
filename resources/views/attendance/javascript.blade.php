@@ -23,7 +23,7 @@ $(document).ready(function () {
         }
 
         $.ajax({
-            url: '/ajax/sections/' + classId,
+            url: "{{ url('ajax/sections/') }}" + '/' + classId,
             type: 'GET',
             success: function (response) {
 
@@ -65,7 +65,7 @@ $(document).ready(function () {
         $('#students-table').addClass('d-none');
 
         $.ajax({
-            url: '/ajax/students/' + classId + '/' + sectionId,
+            url: "{{ url('ajax/students/') }}" + '/' + classId + '/' + sectionId,
             type: 'GET',
                 success: function (response) {
 

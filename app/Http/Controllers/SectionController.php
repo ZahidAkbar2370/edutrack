@@ -19,6 +19,22 @@ class SectionController extends Controller
         return view('section.index', compact('sections'));
     }
 
+    public function updatePublicationStatus(Request $request)
+    {
+        $request->validate([
+            'section_id' => 'required|exists:sections,id',
+            'publication_status' => 'required|in:active,inactive',
+        ]);
+        
+        
+        $section = Section::find($request->section_id);
+        $section->update([
+            'publication_status' => $request->publication_status,
+        ]);
+
+        return redirect('section')->with('success', 'Section Publication Status Updated Successfully!');
+    }
+
     // public function create()
     // {
     //     $schoolId = Auth::user()->school_id;

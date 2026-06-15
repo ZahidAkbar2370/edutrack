@@ -105,4 +105,28 @@ class TeacherController extends Controller
 
         return redirect('teacher')->with('error', 'Teacher not found');
     }
+
+    // export teacher records to CSV by teacher id
+    public function exportTeacherCsv()
+    {
+        $teachers = Teacher::with('school')
+            ->where('school_id', Auth::user()->school_id)
+            ->orderBy('created_at')
+            ->get();
+
+        if(empty($teachers) || $teachers->count() == 0) {
+            return redirect()->back()->with('error', 'No teacher records found');
+        }
+
+        return response()->streamDownload(function () use ($teachers) {
+            $csv = fopen('php://output', 'w');
+            fputcsv($csv, ['Sr No.', 'Teacher Name', 'Teacher Email', 'Teacher Phone No', 'Teacher Address']);
+            if(!empty($teachers) && $teachers->count() > 0) {
+                foreach ($teachers as $key => $teacher) {
+                    fputcsv($csv, [$key + 1, $teacher->teacher_name, $teacher->teacher_email, $teacher->teacher_phone_no, $teacher->teacher_address]);
+                }
+            }
+            fclose($csv);
+        }, 'Teacher_Records.csv');
+    }
 }

@@ -13,11 +13,11 @@
     <div class="d-flex flex-wrap gap-2">
 
 
-    <a href="#" class="btn btn-outline-secondary">
+    <!-- <a href="#" class="btn btn-outline-secondary">
         <i class="bi bi-upload me-1"></i> Import CSV
-    </a>
+    </a> -->
 
-    <a href="#" class="btn btn-outline-success" data-confirm-action
+    <a href="{{ url('teacher/export-csv') }}" class="btn btn-outline-success" data-confirm-action
                     data-confirm-title="Export Teachers to Excel"
                     data-confirm-message="Are you sure you want to export to CSV?"
                     data-confirm-yes="Yes, Export"
@@ -38,7 +38,10 @@
     <div class="alert alert-success">{{ session('success') }}</div>
 @endif
 @if(session('error'))
-    <div class="alert alert-danger">{{ session('error') }}</div>
+
+    <div class="alert alert-danger">
+    <i class="bi bi-exclamation-triangle-fill"></i>    
+    {{ session('error') }}</div>
 @endif
 
 <div class="card shadow-sm">

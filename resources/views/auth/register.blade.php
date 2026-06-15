@@ -82,7 +82,7 @@
                                             <label for="school_email" class="form-label">School Email <span class="text-danger">*</span></label>
                                             <div class="input-group">
                                                 <span class="input-group-text"><i class="bi bi-envelope"></i></span>
-                                                <input type="email" name="school_email" id="school_email" class="form-control @error('school_email') is-invalid @enderror" value="{{ old('school_email') }}" placeholder="school@example.com" required>
+                                                <input type="email" name="school_email" id="school_email" class="form-control @error('school_email') is-invalid @enderror bg-secondary text-white" value="{{ old('school_email') }}" placeholder="school@example.com" required readonly>
                                             </div>
                                             @error('school_email')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
                                         </div>
@@ -91,7 +91,7 @@
                                             <label for="city" class="form-label">City <span class="text-danger">*</span></label>
                                             <div class="input-group">
                                                 <span class="input-group-text"><i class="bi bi-geo-alt"></i></span>
-                                                <input type="text" name="city" id="city" class="form-control @error('city') is-invalid @enderror" value="{{ old('city') }}" placeholder="e.g. Lahore" required>
+                                                <input type="text" name="city" id="city" class="form-control @error('city') is-invalid @enderror" value="{{ old('city') }}" placeholder="e.g. Layyah" required>
                                             </div>
                                             @error('city')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
                                         </div>
@@ -155,4 +155,19 @@
         </div>
     </div>
 </div>
+
+<script>
+document.getElementById('school_name').addEventListener('input', function () {
+    let name = this.value;
+
+    let email = name
+        .toLowerCase()
+        .replace(/[^a-z0-9\s]/g, '')   // remove special chars
+        .trim()
+        .replace(/\s+/g, '')           // remove spaces
+        + '@edutrack.softwebies.com';
+
+    document.getElementById('school_email').value = email;
+});
+</script>
 @endsection

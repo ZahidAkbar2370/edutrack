@@ -12,10 +12,10 @@
 </div>
 
 @if(session('success'))
-    <div class="alert alert-success">{{ session('success') }}</div>
+<div class="alert alert-success">{{ session('success') }}</div>
 @endif
 @if(session('error'))
-    <div class="alert alert-danger">{{ session('error') }}</div>
+<div class="alert alert-danger">{{ session('error') }}</div>
 @endif
 
 <div class="card shadow-sm">
@@ -33,40 +33,46 @@
                 <tbody>
                     @if(!empty($classes))
                     @foreach($classes as $key => $class)
-                        <tr>
-                            <td>{{ $key + 1 }}</td>
-                            <td class="fw-medium">{{ $class->class_name }}</td>
-                            <td class="fw-medium"><span class="badge bg-{{ $class->publication_status == 'active' ? 'success' : 'danger' }}" id="class_publication_status_{{ $class->id }}" data-class-id="{{ $class->id }}">{{ $class->publication_status == 'active' ? 'Active' : 'Inactive' }}</span></td>
-                            <td class="text-center">
-                                <div class="btn-group btn-group-sm">
+                    <tr>
+                        <td>{{ $key + 1 }}</td>
+                        <td class="fw-medium">{{ $class->class_name }}</td>
+                        <td class="fw-medium"><span class="badge bg-{{ $class->publication_status == 'active' ? 'success' : 'danger' }} text-uppercase">{{ $class->publication_status == 'active' ? 'Active' : 'Inactive' }}</span></td>
+                        <td class="text-center">
+                            <div class="btn-group btn-group-sm">
 
-                                    <!-- <form action="{{ url('class/update-publication-status') }}" method="POST" class="d-inline needs-validation">
+                                <form action="{{ url('class/update-publication-status') }}" method="POST" class="d-inline needs-validation" data-confirm-action
+                    data-confirm-title="Update Publication Status"
+                    data-confirm-message="Are you sure you want to update the publication status of this class?"
+                    data-confirm-yes="Yes, Update"
+                    data-confirm-yes-class="btn-primary"
+                >
                                         @csrf
                                         @method('POST')
                                         <input type="hidden" name="class_id" value="{{ $class->id }}">
                                         <input type="hidden" name="publication_status" value="{{ $class->publication_status == 'active' ? 'inactive' : 'active' }}">
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input" type="checkbox" id="class_publication_status_toggle" name="publication_status" value="active" {{ $class->publication_status == 'active' ? 'checked' : '' }} title="{{ $class->publication_status == 'inactive' ? 'Make Active' : 'Make Inactive' }}">
-                                        </div>
-                                    </form> -->
+                                            <input class="btn btn-{{ $class->publication_status == 'active' ? 'danger' : 'success' }} btn-sm text-uppercase" type="submit" value="{{ $class->publication_status == 'active' ? 'Make Inactive' : 'Make Active' }}" title="{{ $class->publication_status == 'inactive' ? 'Make Active' : 'Make Inactive' }}" style="width: 130px;">
+                                    </form>
 
-                                    <form class="publication-status-form">
-    @csrf
+                                <!-- <form method="POST" action="{{ URL::to('class/update-publication-status') }}" class="publication-status-form">
+                                    @csrf
 
-    <div class="form-check form-switch">
-        <input
-            class="form-check-input publication-status-toggle"
-            type="checkbox"
-            data-class-id="{{ $class->id }}"
-            data-publication-status="{{ $class->publication_status == 'active' ? 'inactive' : 'active' }}"
-            {{ $class->publication_status == 'active' ? 'checked' : '' }}
-        >
-    </div>
-</form>
+                                    <input type="hidden" name="class_id" value="{{ $class->id }}">
+                                    <input type="hidden" name="publication_status" value="{{ $class->publication_status == 'active' ? 'inactive' : 'active' }}">
 
-                                </div>
-                            </td>
-                        </tr>
+                                    <div class="form-check form-switch">
+                                        <input
+                                            class="form-check-input" id="publication-status-toggle"
+                                            type="checkbox"
+
+                                            
+
+                                            {{ $class->publication_status == 'active' ? 'checked' : '' }}>
+                                    </div>
+                                </form> -->
+
+                            </div>
+                        </td>
+                    </tr>
                     @endforeach
                     @endif
                 </tbody>

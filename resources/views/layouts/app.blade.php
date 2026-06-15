@@ -23,15 +23,15 @@
 <body>
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
-            <div class="container">
-                <a class="navbar-brand" href="{{ url('/login') }}">
-                    {{ config('app.name', 'Laravel') }}
+            <div class="container ">
+                <a class="navbar-brand" href="{{ url('/') }}">
+                <img src="{{ asset('Admin/images/logo.png') }}" alt="EduTrack" width="300" height="80" class="rounded bg-white p-1">
                 </a>
 
             </div>
         </nav>
 
-        <main class="py-4">
+        <main class="py-0">
             @yield('content')
         </main>
     </div>

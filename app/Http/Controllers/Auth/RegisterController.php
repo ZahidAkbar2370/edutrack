@@ -104,30 +104,53 @@ class RegisterController extends Controller
 
         $classes = ['LKG', 'UKG', 'Nursery', 'Play Group', 'Prep', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine Computer', 'Nine Biology', 'Nine Arts' , 'Ten Computer', 'Ten Biology', 'Ten Arts' , 'Eleven ICS', 'Eleven Medical', 'Eleven Non-Medical ', 'Eleven FA', 'Eleven Diploma', 'Twelve ICS', 'Twelve Biology', 'Twelve Non-Medical', 'Twelve FA', 'Twelve Diploma'];
         foreach($classes as $class){
+            $publication_status = 'active';
+
+            if($class == 'Nine Computer' || $class == 'Nine Biology' || $class == 'Nine Arts' || $class == 'Ten Computer' || $class == 'Ten Biology' || $class == 'Ten Arts' || $class == 'Eleven ICS' || $class == 'Eleven Medical' || $class == 'Eleven Non-Medical' || $class == 'Eleven FA' || $class == 'Eleven Diploma' || $class == 'Twelve ICS' || $class == 'Twelve Biology' || $class == 'Twelve Non-Medical' || $class == 'Twelve FA' || $class == 'Twelve Diploma'){
+                $publication_status = 'inactive';
+            }
+
             $class = SchoolClass::create([
                 'school_id' => $school->id,
                 'class_name' => $class,
+                'publication_status' => $publication_status,
             ]);
 
             $sections = ['A', 'B', 'C', 'D'];
+            
             foreach($sections as $section){
+                $publication_status = 'active';
+
+                if($section == 'B' || $section == 'C' || $section == 'D' ){
+                    $publication_status = 'inactive';
+                }
+
                 Section::create([
                     'school_id' => $school->id,
                     'class_id' => $class->id,
                     'section_name' => $section,
+                    'publication_status' => $publication_status,
                 ]);
             }
         }
 
         $subjects = [
             'English','Urdu','Mathematics','General Mathematics','Islamiyat','Pakistan Studies','General Knowledge','General Science','Social Studies','Physics','Chemistry','Biology','Computer','Computer Science','Education','Economics','Principles of Accounting','Principles of Commerce','Business Mathematics','Drawing',
-            'Hindi','Social Studies','General Science','Computer Science','History','Geography','Economics','Political Science','Philosophy','Religion','Art','Music','Dance','Sports','Other'
+            'Social Studies','General Science','Computer Science','History','Geography','Economics','Political Science','Philosophy','Religion','Art','Music','Dance','Sports','Other'
         ];
 
         foreach($subjects as $subject){
+            $publication_status = 'active';
+
+            if($subject == 'English' || $subject == 'Urdu' || $subject == 'Mathematics' || $subject == 'Islamiyat' || $subject == 'Pakistan Studies' ||  $subject == 'General Science' || $subject == 'Social Studies' || $subject == 'Physics' || $subject == 'Chemistry' || $subject == 'Biology' || $subject == 'Computer' || $subject == 'Computer Science' || $subject == 'Education' || $subject == 'Economics' || $subject == 'Principles of Accounting' || $subject == 'Principles of Commerce' || $subject == 'Business Mathematics')
+            {
+                $publication_status = 'inactive';
+            }
+
             Subject::create([
                 'school_id' => $school->id,
                 'subject_name' => $subject,
+                'publication_status' => $publication_status,
             ]);
         }
 

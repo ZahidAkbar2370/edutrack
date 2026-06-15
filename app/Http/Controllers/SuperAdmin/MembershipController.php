@@ -11,7 +11,7 @@ class MembershipController extends Controller
 
     public function index(Request $request)
     {
-        $memberships = Membership::query()->orderBy('membership_name')->get();
+        $memberships = Membership::orderBy('created_at', 'desc')->get();
 
         return view('superadmin.membership.index', compact('memberships'));
     }
@@ -61,7 +61,7 @@ class MembershipController extends Controller
         if ($membership) {
             $membership->update($request->all());
 
-            return redirect('memberships')->with('success', 'Membership updated successfully');
+            return redirect()->back()->with('success', 'Membership updated successfully');
         }
 
         return redirect('memberships')->with('error', 'Membership not found');

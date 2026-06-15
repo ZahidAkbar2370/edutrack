@@ -18,17 +18,18 @@
     <nav class="navbar navbar-expand-lg landing-nav fixed-top" id="mainNav">
         <div class="container">
             <a class="landing-brand" href="{{ url('/') }}">
-                <span class="landing-brand-icon"><i class="bi bi-mortarboard-fill"></i></span>
-                EduTrack
+                <!-- <span class="landing-brand-icon"><i class="bi bi-mortarboard-fill"></i></span> -->
+                <img src="{{ asset('Admin/images/icon-logo.png') }}" alt="EduTrack" width="50" height="50" class="rounded bg-white p-1"> EduTrack
             </a>
             <button class="navbar-toggler border-0 text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
                 <i class="bi bi-list fs-3"></i>
             </button>
             <div class="collapse navbar-collapse" id="navMenu">
                 <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-1">
-                    <li class="nav-item active"><a class="nav-link" href="#home">Home</a></li>
-                    <!-- <li class="nav-item"><a class="nav-link" href="#features">Features</a></li> -->
-                    <!-- <li class="nav-item"><a class="nav-link" href="#how-it-works">How It Works</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
+                    <!-- <li class="nav-item"><a class="nav-link" href="#features">Features</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#plans">Plans</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#how-it-works">How It Works</a></li>
                     <li class="nav-item"><a class="nav-link" href="#schools">Schools</a></li>
                     <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li> -->
                     <li class="nav-item ms-lg-2">
@@ -135,8 +136,153 @@
         </div>
     </section>
 
+    <!-- Plans / Membership -->
+    <section class="section-padding bg-light-section" id="plans">
+        <div class="container">
+            <div class="text-center">
+                <h2 class="section-title">Choose Your Plan</h2>
+                <p class="section-subtitle">Flexible membership plans for schools of every size. Pick the plan that fits your needs.</p>
+            </div>
+
+            @php
+                $plans = [
+                    [
+                        'name' => 'Basic',
+                        'price' => '1,000',
+                        'validity' => '1 Month',
+                        'students' => 'Up to 100 Students',
+                        'teachers' => 'Up to 10 Teachers',
+                        'featured' => false,
+                        'features' => [
+                            ['label' => 'Student & Teacher Management', 'enabled' => true],
+                            ['label' => 'Student Card', 'enabled' => true],
+                            ['label' => 'Class & Section Management', 'enabled' => true],
+                            ['label' => 'Attendance Management', 'enabled' => true],
+                            ['label' => 'Daily Test & Marks Management', 'enabled' => false],
+                            ['label' => 'Fee Management', 'enabled' => false],
+                            ['label' => 'WhatsApp Alerts', 'enabled' => false],
+                            ['label' => 'Custom Domains & Hosting', 'enabled' => false],
+                            ['label' => '24/7 Support', 'enabled' => true],
+                            ['label' => 'Refund Policy', 'enabled' => false],
+                        ],
+                    ],
+                    [
+                        'name' => 'Standard',
+                        'price' => '1,800',
+                        'validity' => '1 Month',
+                        'students' => 'Up to 250 Students',
+                        'teachers' => 'Up to 25 Teachers',
+                        'featured' => false,
+                        'features' => [
+                            ['label' => 'Student & Teacher Management', 'enabled' => true],
+                            ['label' => 'Student Card', 'enabled' => true],
+                            ['label' => 'Class & Section Management', 'enabled' => true],
+                            ['label' => 'Attendance Management', 'enabled' => true],
+                            ['label' => 'Daily Test & Marks Management', 'enabled' => true],
+                            ['label' => 'Fee Management', 'enabled' => false],
+                            ['label' => 'WhatsApp Alerts', 'enabled' => false],
+                            ['label' => 'Custom Domains & Hosting', 'enabled' => false],
+                            ['label' => '24/7 Support', 'enabled' => true],
+                            ['label' => 'Refund Policy', 'enabled' => false],
+                        ],
+                    ],
+                    [
+                        'name' => 'Premium',
+                        'price' => '3000',
+                        'validity' => '1 Month',
+                        'students' => 'Up to 500 Students',
+                        'teachers' => 'Up to 50 Teachers',
+                        'featured' => true,
+                        'features' => [
+                            ['label' => 'Student & Teacher Management', 'enabled' => true],
+                            ['label' => 'Student Card', 'enabled' => true],
+                            ['label' => 'Class & Section Management', 'enabled' => true],
+                            ['label' => 'Attendance Management', 'enabled' => true],
+                            ['label' => 'Daily Test & Marks Management', 'enabled' => true],
+                            ['label' => 'Fee Management', 'enabled' => true],
+                            ['label' => 'WhatsApp Alerts', 'enabled' => false],
+                            ['label' => 'Custom Domains & Hosting', 'enabled' => false],
+                            ['label' => '24/7 Support', 'enabled' => true],
+                            ['label' => 'Refund Policy', 'enabled' => false],
+                        ],
+                    ],
+                    [
+                        'name' => 'Diamond',
+                        'price' => '5500',
+                        'validity' => '1 Month',
+                        'students' => 'Unlimited Students',
+                        'teachers' => 'Unlimited Teachers',
+                        'featured' => false,
+                        'features' => [
+                            ['label' => 'Student Management', 'enabled' => true],
+                            ['label' => 'Student Card', 'enabled' => true],
+                            ['label' => 'Class & Section Management', 'enabled' => true],
+                            ['label' => 'Attendance Management', 'enabled' => true],
+                            ['label' => 'Daily Test Records', 'enabled' => true],
+                            ['label' => 'Fee Management', 'enabled' => true],
+                            ['label' => 'WhatsApp Alerts', 'enabled' => true],
+                            ['label' => 'Custom Domains & Hosting', 'enabled' => true],
+                            ['label' => '24/7 Support', 'enabled' => true],
+                            ['label' => 'Refund Policy', 'enabled' => true],
+                        ],
+                    ],
+                ];
+            @endphp
+
+            <div class="row g-4 justify-content-center">
+                @foreach($plans as $plan)
+                    <div class="col-md-6 col-lg-3">
+                        <div class="plan-card h-100 {{ $plan['featured'] ? 'plan-card-featured' : '' }}">
+                            @if($plan['featured'])
+                                <span class="plan-badge">Most Popular</span>
+                            @endif
+
+                            <div class="plan-card-header text-center">
+                                <h3 class="plan-name">{{ $plan['name'] }}</h3>
+                                <div class="plan-price">
+                                    <span class="plan-currency">Rs</span>
+                                    <span class="plan-amount">{{ $plan['price'] }}</span>
+                                </div>
+                                <div class="plan-validity">
+                                    <i class="bi bi-calendar-check me-1"></i>
+                                    Valid for {{ $plan['validity'] }}
+                                </div>
+                            </div>
+
+                            <div class="plan-card-body">
+                                <ul class="plan-limits list-unstyled mb-3">
+                                    <li><i class="bi bi-people-fill me-2 text-primary"></i>{{ $plan['students'] }}</li>
+                                    <li><i class="bi bi-person-badge-fill me-2 text-primary"></i>{{ $plan['teachers'] }}</li>
+                                </ul>
+
+                                <ul class="plan-features list-unstyled mb-0">
+                                    @foreach($plan['features'] as $feature)
+                                        <li class="plan-feature {{ $feature['enabled'] ? 'enabled' : 'disabled' }}">
+                                            @if($feature['enabled'])
+                                                <i class="bi bi-check-circle-fill"></i>
+                                            @else
+                                                <i class="bi bi-x-circle-fill"></i>
+                                            @endif
+                                            <span>{{ $feature['label'] }}</span>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </div>
+
+                            <div class="plan-card-footer text-center">
+                                <a href="{{ route('register') }}" class="btn {{ $plan['featured'] ? 'btn-login' : 'btn-outline-plan' }} w-100">
+                                    Get Started
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    </section>
+
     <!-- How it works -->
-    <section class="section-padding bg-light-section" id="how-it-works">
+    <section class="section-padding" id="how-it-works">
         <div class="container">
             <div class="text-center">
                 <h2 class="section-title">How EduTrack Works</h2>
@@ -301,14 +447,19 @@
             <div class="row align-items-center">
                 <div class="col-md-6 mb-3 mb-md-0">
                     <a href="{{ url('/') }}" class="landing-brand d-inline-flex">
-                        <span class="landing-brand-icon"><i class="bi bi-mortarboard-fill"></i></span>
-                        EduTrack
+                        <!-- <span class="landing-brand-icon"><i class="bi bi-mortarboard-fill"></i></span>
+                        EduTrack -->
+
+                        <img src="{{ asset('Admin/images/logo.png') }}" alt="EduTrack" width="300" height="100" class="rounded bg-white p-1">
+                        
                     </a>
                     <p class="mt-2 mb-0 small">Smart school management for modern education.</p>
                 </div>
                 <div class="col-md-6 text-md-end">
                     <a href="{{ route('login') }}" class="me-3">Login</a>
-                    <a href="#contact">Contact</a>
+                    <a href="#plans" class="me-3">Plans</a>
+                    <a href="#" class="me-3">Privacy</a>
+                    <a href="#">Terms and Condition</a>
                     <p class="mt-2 mb-0 small">&copy; {{ date('Y') }} EduTrack. All rights reserved.</p>
                 </div>
             </div>

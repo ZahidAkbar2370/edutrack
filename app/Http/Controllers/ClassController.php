@@ -12,7 +12,7 @@ class ClassController extends Controller
     {
         $classes = SchoolClass::with('school')
             ->where('school_id', Auth::user()->school_id)
-            ->orderBy('created_at', 'desc')
+            ->orderBy('created_at', 'asc')
             ->get();
 
         return view('class.index', compact('classes'));
@@ -26,16 +26,11 @@ class ClassController extends Controller
         ]);
 
         $class = SchoolClass::find($request->class_id);
+        $class->update([
+            'publication_status' => $request->publication_status,
+        ]);
 
-        if ($class) {
-            $class->update([
-                'publication_status' => $request->publication_status,
-            ]);
-
-            return redirect('class')->with('success', 'Class publication status updated successfully!');
-        }
-
-        return redirect('class')->with('error', 'Class not found');
+        return redirect('class')->with('success', 'Class Publication Status Updated Successfully!');
     }
 
     // public function create()

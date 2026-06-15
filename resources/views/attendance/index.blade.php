@@ -96,7 +96,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @if(!empty($attendanceGroups))
+                    @if(!empty($attendanceGroups) && $attendanceGroups->count() > 0)
                         @foreach($attendanceGroups as $key => $group)
                             <tr>
                                 <td>{{ $key + 1 }}</td>

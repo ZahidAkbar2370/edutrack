@@ -23,6 +23,7 @@
     }   
 </style>
 
+
 <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-4">
     <div>
         <h1 class="h3 mb-1 fw-bold">Student Detail</h1>
@@ -73,6 +74,14 @@
     </div>
     @endif
 </div>
+
+@if(session('error'))
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+    <i class="bi bi-exclamation-triangle-fill"></i> 
+        {{ session('error') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+@endif
 
 @if(!$student)
 <div class="alert alert-danger">Student not found</div>

@@ -10,9 +10,6 @@
         <h1 class="h3 mb-1 fw-bold">Membership Plans</h1>
         <p class="text-muted mb-0">Compare pricing, limits, and features across all plans</p>
     </div>
-    <a href="{{ url('membership/create') }}" class="btn btn-primary">
-        <i class="bi bi-plus-lg me-1"></i> Add Plan
-    </a>
 </div>
 {{-- Feature comparison table --}}
 <div class="card shadow-sm">
@@ -31,11 +28,12 @@
                             <th>Price</th>
                             <th>Students Limit</th>
                             <th>Teachers Limit</th>
+                            <th>Student Card</th>
                             <th>Attendance</th>
                             <th>Daily Test</th>
-                            <th>Student Card</th>
-                            <th>WhatsApp Message</th>
-                            <th>WhatsApp Announcement</th>
+                            <th>Fee Management</th>
+                            <th>WhatsApp Alert</th>
+                            <!-- <th>WhatsApp Announcement</th> -->
                             <th>Actions</th>
                         </tr>
 
@@ -63,19 +61,19 @@
                                         <span>{!! $membership->teachers_limit == null ? $iconUnlimited : $membership->teachers_limit !!}</span>
                                     </td>
                                     <td class="text-center">
+                                        <span>{!! $membership->allowed_student_card == true ? $iconAllowed : $iconNotAllowed !!}</span>
+                                    </td>
+                                    <td class="text-center">
                                         <span>{!! $membership->allowed_attendance == true ? $iconAllowed : $iconNotAllowed !!}</span>
                                     </td>
                                     <td class="text-center">
                                         <span>{!! $membership->allowed_daily_test == true ? $iconAllowed : $iconNotAllowed !!}</span>
                                     </td>
                                     <td class="text-center">
-                                        <span>{!! $membership->allowed_student_card == true ? $iconAllowed : $iconNotAllowed !!}</span>
+                                        <span>{!! $membership->allowed_fee_management == true ? $iconAllowed : $iconNotAllowed !!}</span>
                                     </td>
                                     <td class="text-center">
                                         <span>{!! $membership->allowed_whatsapp_message == true ? $iconAllowed : $iconNotAllowed !!}</span>
-                                    </td>
-                                    <td class="text-center">
-                                        <span>{!! $membership->allowed_whatsapp_announcement == true ? $iconAllowed : $iconNotAllowed !!}</span>
                                     </td>
 
                                     <td class="text-center">

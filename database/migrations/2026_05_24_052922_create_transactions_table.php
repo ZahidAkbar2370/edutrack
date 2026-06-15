@@ -13,12 +13,16 @@ return new class extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->uuid('id')->primary();
+            $table->foreignUuid('user_id')->nullable()->constrained('schools')->cascadeOnDelete();
             $table->foreignUuid('school_id')->constrained('schools')->cascadeOnDelete();
 
-            $table->enum('transaction_purpose', ['membership', 'other'])->default('other');
-            $table->foreignUuid('membership_id')->nullable()->constrained('memberships')->nullOnDelete();
+            $table->enum('transaction_purpose', ['membership_renew', 'membership_upgrade', 'membership_downgrade', 'domain_hosting', 'other'])->default('other');
+            $table->string('transaction_prove_image')->nullable();
 
-            $table->unsignedInteger('transaction_amount')->default(0);
+            $table->foreignUuid('membership_id')->nullable()->constrained('memberships')->nullOnDelete();
+            $table->string('membership_expire_date')->nullable();
+
+            $table->string('transaction_amount')->default(0);
 
             $table->string('transaction_note')->nullable();
             $table->timestamps();

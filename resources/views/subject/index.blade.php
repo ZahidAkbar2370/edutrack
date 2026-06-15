@@ -26,6 +26,7 @@
                     <tr>
                         <th>#</th>
                         <th>Subject Name</th>
+                        <th>Publication Status</th>
                         <th class="text-center">Actions</th>
                     </tr>
                 </thead>
@@ -35,22 +36,23 @@
                         <tr>
                             <td>{{ $key + 1 }}</td>
                             <td class="fw-medium">{{ $subject->subject_name }}</td>
+                            <td class="fw-medium"><span class="badge bg-{{ $subject->publication_status == 'active' ? 'success' : 'danger' }} text-uppercase">{{ $subject->publication_status == 'active' ? 'Active' : 'Inactive' }}</span></td>
                             <td class="text-center">
-                                <div class="btn-group btn-group-sm">
-                                <form class="publication-status-form">
-    @csrf
+                                
+                            <form action="{{ url('subject/update-publication-status') }}" method="POST" class="d-inline needs-validation" data-confirm-action
+                    data-confirm-title="Update Publication Status"
+                    data-confirm-message="Are you sure you want to update the publication status of this subject?"
+                    data-confirm-yes="Yes, Update"
+                    data-confirm-yes-class="btn-primary"
+                >
+                                        @csrf
+                                        @method('POST')
+                                        <input type="hidden" name="subject_id" value="{{ $subject->id }}">
+                                        <input type="hidden" name="publication_status" value="{{ $subject->publication_status == 'active' ? 'inactive' : 'active' }}">
+                                            <input class="btn btn-{{ $subject->publication_status == 'active' ? 'danger' : 'success' }} btn-sm text-uppercase" style="width: 130px;" type="submit" value="{{ $subject->publication_status == 'active' ? 'Make Inactive' : 'Make Active' }}" title="{{ $subject->publication_status == 'inactive' ? 'Make Active' : 'Make Inactive' }}">
+                                    </form>
 
-    <div class="form-check form-switch">
-        <input
-            class="form-check-input publication-status-toggle"
-            type="checkbox"
-            data-subject-id="{{ $subject->id }}"
-            data-publication-status="{{ $subject->publication_status == 'active' ? 'inactive' : 'active' }}"
-            {{ $subject->publication_status == 'active' ? 'checked' : '' }}
-        >
-    </div>
-</form>
-                                </div>
+
                             </td>
                         </tr>
                     @endforeach

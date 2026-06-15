@@ -3,7 +3,7 @@
     let selectedStatus = null;
     let selectedCheckbox = null;
 
-$(document).on('change', '.publication-status-toggle', function (e) {
+$(document).on('change', '#publication-status-toggle', function (e) {
 
     selectedCheckbox = $(this);
 

@@ -14,6 +14,13 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'super-admin' => \App\Http\Middleware\SuperAdminMiddleware::class,
             'school-admin' => \App\Http\Middleware\SchoolAdminMiddleware::class,
+            'attendance' => \App\Http\Middleware\AttendanceMiddleware::class,
+            'daily-test' => \App\Http\Middleware\DailyTestMiddleware::class,
+            'student-card' => \App\Http\Middleware\StudentCardMiddleware::class,
+            'teacher-limit' => \App\Http\Middleware\TeacherLimitMiddleware::class,
+            'student-limit' => \App\Http\Middleware\StudentLimitMiddleware::class,
+            'fee-management' => \App\Http\Middleware\FeeManagementMiddleware::class,
+            'membership-plan' => \App\Http\Middleware\MembershipPlanMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

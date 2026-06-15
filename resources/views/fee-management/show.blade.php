@@ -13,9 +13,23 @@
         <h1 class="h3 mb-1 fw-bold">{{ $schoolClass->class_name }} — Fee Collection</h1>
         <p class="text-muted mb-0">{{ $monthLabel }}</p>
     </div>
+
+    <div class="d-flex flex-wrap gap-2">
+        <a href="#" class="btn btn-outline-success" data-confirm-action
+                        data-confirm-title="Export Unpaid Students to Excel"
+                        data-confirm-message="Are you sure you want to export unpaid students to Excel?"
+                        data-confirm-yes="Yes, Export"
+                        data-confirm-yes-class="btn-success"
+            >
+                <i class="bi bi-download me-1"></i> Export Unpaid Students to CSV
+            </a>
+
     <a href="{{ url('fee-management?fee_month=' . $feeMonth) }}" class="btn btn-outline-secondary">
-        <i class="bi bi-arrow-left me-1"></i> Back to Classes
+        <i class="bi bi-arrow-left me-1"></i> Back to List
     </a>
+
+    </div>
+    
 </div>
 
 @if(session('success'))
