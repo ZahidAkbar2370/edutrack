@@ -82,7 +82,7 @@ class StudentController extends Controller
                 'student_name' => $request->student_name,
                 'student_email' => $request->student_email,
                 'student_phone_no' => $request->student_phone_no,
-                'student_photo' => 'admin/images/student/profiles/default-student-profile.png',
+                'student_photo' => 'Admin/images/student/profiles/default.png',
                 'student_roll_number' => Student::generateRollNumber(),
                 'student_admission_date' => $request->student_admission_date,
                 'status' => $request->status,

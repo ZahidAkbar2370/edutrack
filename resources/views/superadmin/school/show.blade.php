@@ -24,50 +24,47 @@
 </style>
 
 
+@if(session('success'))
+<div class="alert alert-success">{{ session('success') }}</div>
+@endif
+@if(session('error'))
+<div class="alert alert-danger">{{ session('error') }}</div>
+@endif
+
 <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-4">
     <div>
         <h1 class="h3 mb-1 fw-bold">School Detail</h1>
-        <p class="text-muted mb-0">School, Principal, User Login, Membership information</p>
+        <p class="text-muted mb-0">School and principal information</p>
     </div>
+    
 
-    @if($school)
+
+
+ 
     <div class="d-flex flex-wrap justify-content-end gap-2">
 
-        <a href="{{ url('/school/transaction-history/' . $school->id) }}" class="btn btn-outline-dark btn-sm">
-            <i class="bi bi-cash-coin me-1"></i> Transaction History
-        </a>
-        
-        <a href="{{ url('school/upgrade-membership/' . $school->id) }}" class="btn btn-outline-success btn-sm">
-            <i class="bi bi-layers me-1"></i> Membership
+        <a href="{{ url('school/upgrade-membership/' . $school->id) }}" class="btn btn-outline-secondary btn-sm btnPurple">
+            <i class="bi bi-arrow-up-circle me-1"></i> Upgrade Membership
         </a>
 
-        <a href="{{ url('school/change-password/' . $school->id) }}" class="btn btn-outline-primary btn-sm">
-            <i class="bi bi-lock me-1"></i> Change Password
+
+        <a href="{{ url('school/transaction-history/' . $school->id) }}" class="btn btn-outline-dark btn-sm">
+            <i class="bi bi-cash-coin me-1"></i>Transaction History
         </a>
 
-        <a href="{{ url('school/edit/' . $school->id) }}" class="btn btn-outline-info btn-sm">
-            <i class="bi bi-pencil me-1"></i> Edit
+        <a href="{{ url('school/change-password/' . $school->id) }}" class="btn btn-outline-danger btn-sm">
+            <i class="bi bi-lock-fill me-1"></i> Change Password
         </a>
 
-        <!-- <form action="{{ url('school/delete/' . $school->id) }}" method="POST">
-            @csrf
-            @method('DELETE')
-            <button type="submit"
-                    class="btn btn-outline-danger btn-sm"
-                    data-confirm-action
-                    data-confirm-title="Delete School"
-                    data-confirm-message="Are you sure you want to delete this Student?"
-                    data-confirm-yes="Yes, Delete"
-                    data-confirm-yes-class="btn-danger">
-                <i class="bi bi-trash me-1"></i> Delete
-            </button>
-        </form> -->
+        <a href="{{ url('school/edit/' . $school->id) }}" class="btn btn-outline-primary btn-sm">
+            <i class="bi bi-pencil-square me-1"></i> Edit
+        </a>
 
-        <!-- <a href="{{ url('school') }}" class="btn btn-outline-secondary btn-sm">
+        <a href="{{ url('school') }}" class="btn btn-outline-secondary btn-sm">
             <i class="bi bi-arrow-left me-1"></i> Back to List
-        </a> -->
+        </a>
     </div>
-    @endif
+
 </div>
 
 @if(session('error'))
@@ -78,60 +75,35 @@
     </div>
 @endif
 
-@if(!empty($school))
+@if(!$school)
 <div class="alert alert-danger">School not found</div>
 @else
 <div class="row g-3">
     <div class="col-lg-4">
         <div class="card shadow-sm h-100">
             <div class="card-header bg-light">
-                <h2 class="h6 mb-0 fw-semibold">Personal Information</h2>
+                <h2 class="h6 mb-0 fw-semibold">School Information</h2>
             </div>
             <div class="card-body">
                 <div class="text-center mb-3">
-                <a href="{{ asset($student->student_photo) }}" target="_blank"><img src="{{ asset($student->student_photo) }}" alt="{{ $student->student_name }} Profile Image" class="rounded border" style="width:140px;height:140px;object-fit:cover;"></a>    
+                <!-- <a href="{{ asset($school->school_logo) ?? asset('Admin/images/school/logo/default.png') }}" target="_blank"><img src="{{ asset($school->school_logo) ?? asset('Admin/images/school/logo/default.png') }}" alt="{{ $school->school_name }} Logo" class="rounded border" style="width:140px;height:140px;object-fit:cover;"></a>     -->
                 
+
+                <a href="{{ asset('Admin/images/school/logo/default.png') }}" target="_blank"><img src="{{ asset('Admin/images/school/logo/default.png') }}" alt="{{ $school->school_name }} Logo" class="rounded border" style="width:140px;height:140px;object-fit:cover;"></a>
+
                 </div>
                 <dl class="row mb-0">
-                    <dt class="col-sm-4 text-muted">Roll Number</dt>
-                    <dd class="col-sm-8">{{ $student->student_roll_number ?? '—' }}</dd>
-                    <dt class="col-sm-4 text-muted">Name</dt>
-                    <dd class="col-sm-8 fw-medium">{{ $student->student_name }}</dd>
-                    <dt class="col-sm-4 text-muted">Email</dt>
-                    <dd class="col-sm-8">{{ $student->student_email ?? '—' }}</dd>
-                    <dt class="col-sm-4 text-muted">Phone</dt>
-                    <dd class="col-sm-8">{{ $student->student_phone_no ?? '—' }}</dd>
-                    <dt class="col-sm-4 text-muted">Status</dt>
-                    <dd class="col-sm-8">
-                        <span class="badge bg-{{ $student->status == 'active' ? 'success' : ($student->status == 'completed' ? 'warning' : ($student->status == 'banned' ? 'danger' : 'secondary')) }}">
-                            {{ ucfirst($student->status) }}
-                        </span>
-                    </dd>
-                </dl>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-lg-4">
-        <div class="card shadow-sm h-100">
-            <div class="card-header bg-light">
-                <h2 class="h6 mb-0 fw-semibold">Parent Information</h2>
-            </div>
-            <div class="card-body">
-                @if($student->parent)
-                <dl class="row mb-0">
-                    <dt class="col-sm-4 text-muted">Name</dt>
-                    <dd class="col-sm-8 fw-medium">{{ $student->parent->parent_name }}</dd>
-                    <dt class="col-sm-4 text-muted">Phone</dt>
-                    <dd class="col-sm-8">{{ $student->parent->parent_phone_no }}</dd>
-                    <dt class="col-sm-4 text-muted">Email</dt>
-                    <dd class="col-sm-8">{{ $student->parent->parent_email ?? '—' }}</dd>
+                    <dt class="col-sm-4 text-muted">School Name</dt>
+                    <dd class="col-sm-8">{{ $school->school_name ?? '—' }}</dd>
+                    <dt class="col-sm-4 text-muted">School Email</dt>
+                    <dd class="col-sm-8">{{ $school->school_email ?? '—' }}</dd>
+                    <dt class="col-sm-4 text-muted">School Phone</dt>
+                    <dd class="col-sm-8">{{ $school->school_phone_no ?? '—' }}</dd>
+                    <dt class="col-sm-4 text-muted">City</dt>
+                    <dd class="col-sm-8">{{ $school->city ?? '—' }}</dd>
                     <dt class="col-sm-4 text-muted">Address</dt>
-                    <dd class="col-sm-8">{{ $student->parent->parent_address ?? '—' }}</dd>
+                    <dd class="col-sm-8">{{ $school->address ?? '—' }}</dd>
                 </dl>
-                @else
-                <p class="text-muted mb-0">No parent record found</p>
-                @endif
             </div>
         </div>
     </div>
@@ -139,95 +111,39 @@
     <div class="col-lg-4">
         <div class="card shadow-sm h-100">
             <div class="card-header bg-light">
-                <h2 class="h6 mb-0 fw-semibold">Class & Section</h2>
+                <h2 class="h6 mb-0 fw-semibold">Principal Information</h2>
             </div>
             <div class="card-body">
                 <dl class="row mb-0">
-                    <dt class="col-sm-4 text-muted">Class</dt>
-                    <dd class="col-sm-8">{{ $student->schoolClass->class_name ?? 'N/A' }}</dd>
-                    <dt class="col-sm-4 text-muted">Section</dt>
-                    <dd class="col-sm-8">{{ $student->section->section_name ?? 'N/A' }}</dd>
-                    <dt class="col-sm-4 text-muted">Admission</dt>
-                    <dd class="col-sm-8">
-                        {{ $student->student_admission_date ? \Illuminate\Support\Carbon::parse($student->student_admission_date)->format('d M Y') : '—' }}
-                    </dd>
-                    <dt class="col-sm-4 text-muted">Monthly Fee</dt>
-                    <dd class="col-sm-8">{{ $student->student_per_month_fee ?? 'N/A' }}</dd>
+                    <dt class="col-sm-4 text-muted">Principle Name</dt>
+                    <dd class="col-sm-8">{{ $school->priciple_name ?? '—' }}</dd>
+                    <dt class="col-sm-4 text-muted">Principle Email</dt>
+                    <dd class="col-sm-8">{{ $school->priciple_email ?? '—' }}</dd>
+                    <dt class="col-sm-4 text-muted">Principle Phone</dt>
+                    <dd class="col-sm-8">{{ $school->priciple_phone_no ?? '—' }}</dd>
                 </dl>
             </div>
         </div>
     </div>
-</div>
 
-{{-- Attendance summary --}}
-<div class="card shadow-sm mt-4">
-    <div class="card-header bg-light d-flex justify-content-between align-items-center flex-wrap gap-2">
-        <h2 class="h6 mb-0 fw-semibold">Attendance Summary</h2>
-        <a href="{{ url('student/' . $student->id . '/attendance-history') }}" class="text-decoration-none small">
-            View history <i class="bi bi-arrow-right"></i>
-        </a>
-    </div>
-    <div class="card-body">
-        <div class="row g-3">
-            <div class="col-6 col-lg-3">
-                <div class="border rounded p-3 text-center h-100">
-                    <div class="text-muted small">Total Records</div>
-                    <div class="fs-4 fw-bold">{{ $attendanceStats['total'] }}</div>
-                </div>
+    <div class="col-lg-4">
+        <div class="card shadow-sm h-100">
+            <div class="card-header bg-light">
+                <h2 class="h6 mb-0 fw-semibold">Membership Information</h2>
             </div>
-            <div class="col-6 col-lg-3">
-                <div class="border rounded p-3 text-center h-100 border-success">
-                    <div class="text-muted small">Present</div>
-                    <div class="fs-4 fw-bold text-success">{{ $attendanceStats['present'] }}</div>
-                </div>
-            </div>
-            <div class="col-6 col-lg-3">
-                <div class="border rounded p-3 text-center h-100 border-danger">
-                    <div class="text-muted small">Absent</div>
-                    <div class="fs-4 fw-bold text-danger">{{ $attendanceStats['absent'] }}</div>
-                </div>
-            </div>
-            <div class="col-6 col-lg-3">
-                <div class="border rounded p-3 text-center h-100 border-warning">
-                    <div class="text-muted small">Leave</div>
-                    <div class="fs-4 fw-bold text-warning">{{ $attendanceStats['leave'] }}</div>
-                </div>
+            <div class="card-body">
+                <dl class="row mb-0">
+                    <dt class="col-sm-4 text-muted">Membership</dt>
+                    <dd class="col-sm-8">{{ $school->membership->membership_name ?? '—' }}</dd>
+                    <dt class="col-sm-4 text-muted">Expiry Date</dt>
+                    <dd class="col-sm-8">{{ $school->user->membership_expiry_date ? \Illuminate\Support\Carbon::parse($school->user->membership_expiry_date)->format('d M Y') : '—' }}</dd>
+                </dl>
             </div>
         </div>
     </div>
+
 </div>
 
-{{-- Daily test summary --}}
-<div class="card shadow-sm mt-4">
-    <div class="card-header bg-light d-flex justify-content-between align-items-center flex-wrap gap-2">
-        <h2 class="h6 mb-0 fw-semibold">Daily Test Summary</h2>
-        <a href="{{ url('student/' . $student->id . '/daily-test-history') }}" class="text-decoration-none small">
-            View history <i class="bi bi-arrow-right"></i>
-        </a>
-    </div>
-    <div class="card-body">
-        <div class="row g-3">
-            <div class="col-md-4">
-                <div class="border rounded p-3 text-center h-100">
-                    <div class="text-muted small">Total Tests</div>
-                    <div class="fs-4 fw-bold">{{ $dailyTestStats['total'] }}</div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="border rounded p-3 text-center h-100 border-success">
-                    <div class="text-muted small">Attempted (marks &gt; 0)</div>
-                    <div class="fs-4 fw-bold text-success">{{ $dailyTestStats['attempted'] }}</div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="border rounded p-3 text-center h-100 border-secondary">
-                    <div class="text-muted small">Zero Marks</div>
-                    <div class="fs-4 fw-bold text-secondary">{{ $dailyTestStats['not_attempted'] }}</div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
 @endif
 

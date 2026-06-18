@@ -28,4 +28,9 @@ class User extends Authenticatable implements MustVerifyEmail
         'password',
         'remember_token',
     ];
+
+    public function membership()
+    {
+        return $this->belongsTo(Membership::class, 'membership_id', 'id');
+    }
 }

@@ -88,6 +88,16 @@
                                         </div>
 
                                         <div class="mb-3">
+                                            <label for="school_password" class="form-label">School Password <span class="text-danger">*</span></label>
+                                            <div class="input-group">
+                                                <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                                                <input type="text" name="school_password" id="school_password" class="form-control @error('school_password') is-invalid @enderror bg-secondary text-white" value="12345678" placeholder="Password" required readonly>
+                                            </div>
+                                            @error('school_email')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
+                                        </div>
+
+
+                                        <div class="mb-3">
                                             <label for="city" class="form-label">City <span class="text-danger">*</span></label>
                                             <div class="input-group">
                                                 <span class="input-group-text"><i class="bi bi-geo-alt"></i></span>
@@ -165,7 +175,7 @@ document.getElementById('school_name').addEventListener('input', function () {
         .replace(/[^a-z0-9\s]/g, '')   // remove special chars
         .trim()
         .replace(/\s+/g, '')           // remove spaces
-        + '@edutrack.softwebies.com';
+        + '@gmail.com';
 
     document.getElementById('school_email').value = email;
 });

@@ -1,18 +1,13 @@
 @extends('adminlayout.layout')
 
-@section('title', 'School Transaction History')
+@section('title', 'Transaction History')
 
 @section('content')
 
 <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-4">
     <div>
-        <h1 class="h3 mb-1 fw-bold">School Transaction History</h1>
-        <p class="text-muted mb-0">Transaction history of {{ $school->school_name }}</p>
-    </div>
-    <div class="d-flex flex-wrap justify-content-end gap-2">
-        <a href="{{ url('school/show/' . $school->id) }}" class="btn btn-outline-secondary btn-sm">
-            <i class="bi bi-arrow-left me-1"></i> Back to School
-        </a>
+        <h1 class="h3 mb-1 fw-bold">Transaction History</h1>
+        <p class="text-muted mb-0">Your school's payment and membership transactions</p>
     </div>
 </div>
 
@@ -32,27 +27,21 @@
                         <th>#</th>
                         <th>Date</th>
                         <th>Purpose</th>
-                        <th>Membership</th>
-                        <th>Expiry Date</th>
                         <th>Amount</th>
-                        <th>Note</th>
-                        <th class="text-center">Proof</th>
+                        <th>Proof</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @if($transactionHistory->count())
-                    @foreach($transactionHistory as $key => $transaction)
+                    @if($transactions->count())
+                    @foreach($transactions as $key => $transaction)
                         <tr>
                             <td>{{ $key + 1 }}</td>
                             <td>{{ \Carbon\Carbon::parse($transaction->created_at)->format('d M Y') }}</td>
                             <td>
                                 <span class="badge bg-light text-dark border">{{ ucwords(str_replace('_', ' ', $transaction->transaction_purpose)) }}</span>
                             </td>
-                            <td class="fw-medium">{{ $transaction->membership->membership_name ?? '—' }}</td>
-                            <td>{{ $transaction->membership_expire_date ? \Carbon\Carbon::parse($transaction->membership_expire_date)->format('d M Y') : '—' }}</td>
                             <td class="fw-medium">PKR {{ number_format((int) $transaction->transaction_amount) }}</td>
-                            <td class="text-muted small">{{ $transaction->transaction_note ?? '—' }}</td>
-                            <td class="text-center">
+                            <td>
                                 @if($transaction->transaction_prove_image)
                                     <a href="{{ asset($transaction->transaction_prove_image) }}" target="_blank">
                                         <img src="{{ asset($transaction->transaction_prove_image) }}" alt="Proof" class="rounded border" style="width:42px;height:42px;object-fit:cover;">

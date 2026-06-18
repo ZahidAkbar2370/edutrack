@@ -22,7 +22,7 @@ $membership = \App\Models\Membership::find(Auth::user()->membership_id);
 
 
         @if(Auth::user()->role == 'super-admin')
-        <a class="nav-link {{ request()->is('dashboard') || request()->is('dashboard') ? 'active' : '' }}" href="{{ url('dashboard') }}">
+        <a class="nav-link {{ request()->is('admin-dashboard') || request()->is('admin-dashboard') ? 'active' : '' }}" href="{{ url('admin-dashboard') }}">
             <i class="bi bi-grid me-2"></i> Dashboard
         </a>
 
@@ -39,24 +39,10 @@ $membership = \App\Models\Membership::find(Auth::user()->membership_id);
             <i class="bi bi-chevron-down small ms-auto"></i>
         </a>
         <div class="collapse submenu {{ request()->is('school*') ? 'show' : '' }}" id="schoolSubmenu">
-            <a class="nav-link {{ request()->is('school') && ! request()->is('school/create') ? 'active' : '' }}" href="{{ url('school') }}">School List</a>
+            <a class="nav-link {{ request()->is('school*') && ! request()->is('school/create') ? 'active' : '' }}" href="{{ url('school') }}">School List</a>
             <a class="nav-link {{ request()->is('school/create') ? 'active' : '' }}" href="{{ url('/school/create') }}">Register School</a>
-            <!-- <a class="nav-link" href="#">Import</a> -->
         </div>
         @endif
-
-        <!-- <a class="nav-link {{ request()->is('class*') ? 'active' : '' }}" href="{{ url('class') }}">
-            <i class="bi bi-journal-bookmark me-2"></i> Classes
-        </a>
-
-        <a class="nav-link {{ request()->is('section*') ? 'active' : '' }}" href="{{ url('section') }}">
-            <i class="bi bi-diagram-3 me-2"></i> Sections
-        </a> -->
-
-        <!-- School : Teachers -->
-        <!-- <a class="nav-link {{ request()->is('teacher*') ? 'active' : '' }}" href="{{ url('teacher') }}">
-            <i class="bi bi-person-badge me-2"></i> Teachers
-        </a> -->
 
         @if(Auth::user()->role == 'school-admin')
 
@@ -129,7 +115,39 @@ $membership = \App\Models\Membership::find(Auth::user()->membership_id);
         </div>
 
         
+        
+        @endif
+        
         <hr class=" border-opacity-25">
+
+        @if(Auth::user()->role == 'super-admin')
+            <a class="nav-link {{ request()->is('admin-profile') ? 'active' : '' }}" href="{{ url('admin-profile') }}">
+                <i class="bi bi-person-circle me-2"></i> Profile
+            </a>
+        @endif
+
+        @if(Auth::user()->role == 'school-admin')
+            <a class="nav-link {{ request()->is('profile') ? 'active' : '' }}" href="{{ url('profile') }}">
+                <i class="bi bi-person-circle me-2"></i> Profile
+            </a>
+        @endif
+
+        <a class="nav-link {{ request()->is('change-password') ? 'active' : '' }}" href="{{ url('change-password') }}">
+            <i class="bi bi-key me-2"></i> Change Password
+        </a>
+
+        @if(Auth::user()->role == 'school-admin')
+        <a class="nav-link {{ request()->is('transaction-history') ? 'active' : '' }}" href="{{ url('transaction-history') }}">
+            <i class="bi bi-cash-coin me-2"></i> Transaction History
+        </a>
+
+        <a class="nav-link {{ request()->is('pricing') ? 'active' : '' }}" href="{{ url('pricing') }}">
+            <i class="bi bi-stars me-2"></i> Pricing Plan
+        </a>
+        @endif
+
+        <hr class=" border-opacity-25">
+
         <a class="nav-link text-danger" href="{{ url('logout') }}" data-confirm-action
             data-confirm-title="Logout"
             data-confirm-message="Are you sure you want to logout?"
@@ -137,9 +155,6 @@ $membership = \App\Models\Membership::find(Auth::user()->membership_id);
             data-confirm-yes-class="btn-danger">
             <i class="bi bi-box-arrow-right me-2"></i> Logout
         </a>
-
-        @endif
-
 
     </nav>
 

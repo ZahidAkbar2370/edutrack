@@ -64,16 +64,17 @@
 
 
                 @if($user->role != 'super-admin')
-                <li class="nav-item dropdown">
-                    <a class="nav-link position-relative px-2 dropdown-toggle"
+
+                <li class="nav-item dropdown btn btn-primary btn-sm d-none d-md-block">
+                    <a class="nav-link position-relative px-2 dropdown-toggle text-white fw-bold"
                         href="#"
                         id="notificationDropdown"
                         role="button"
                         data-bs-toggle="dropdown"
                         data-bs-auto-close="outside"
                         aria-expanded="false"
-                        title="Information">
-                        <i class="bi bi-bell fs-5 "></i>
+                        title="Membership Information">
+                        <i class="bi bi-layers fs-5 fw-bold me-1"></i> Membership
                         
                     </a>
 
@@ -150,20 +151,39 @@
                 </li>
                 @endif
 
+                <!-- <li class="nav-item d-none d-md-block btn btn-secondary btn-sm">
+                <a class="nav-link position-relative px-2 text-white fw-bold" href="{{ url('profile') }}" title="Profile">
+                    <i class="bi bi-person-circle fs-5 fw-bold me-1"></i> Profile
+                </a>
+            </li> -->
+
                 <!-- <li class="nav-item">
                 <a class="nav-link position-relative px-2" href="#" title="Messages">
                     <button class="btn btn-primary btn-sm">Expiry Date: {{ \Carbon\Carbon::parse(Auth::user()->membership_expiry_date)->format('Y-m-d') }}</button>
                 </a>
             </li> -->
 
-                <li class="nav-item">
-                    <a class="nav-link px-2" href="{{ url('logout') }}" title="Logout"
+            <li class="nav-item btn btn-danger btn-sm d-none d-md-block">
+                <a class="nav-link position-relative px-2 text-white fw-bold" href="{{ url('logout') }}" title="Logout"
+                
+                data-confirm-action
+                        data-confirm-title="Logout"
+                        data-confirm-message="Are you sure you want to logout?"
+                        data-confirm-yes="Yes, Logout"
+                        data-confirm-yes-class="btn-danger"
+                >
+                    <i class="bi bi-box-arrow-right fs-5 fw-bold me-1"></i> Logout
+                </a>
+            </li>
+
+                <li class="nav-item btn-sm d-md-none d-lg-none">
+                    <a class="nav-link px-2 fw-bold" href="{{ url('logout') }}" title="Logout"
                         data-confirm-action
                         data-confirm-title="Logout"
                         data-confirm-message="Are you sure you want to logout?"
                         data-confirm-yes="Yes, Logout"
                         data-confirm-yes-class="btn-danger">
-                        <i class="bi bi-box-arrow-right fs-4 text-danger"></i>
+                        <i class="bi bi-box-arrow-right fs-4 me-1"></i>
                     </a>
                 </li>
             </ul>

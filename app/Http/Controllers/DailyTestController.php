@@ -58,7 +58,7 @@ class DailyTestController extends Controller
 
         $filters = $request->only(['class_id', 'section_id', 'teacher_name', 'subject', 'date']);
 
-        return view('daily-test.index', compact(
+        return view('dailytest.index', compact(
             'testGroups',
             'classes',
             'sections',
@@ -84,7 +84,7 @@ class DailyTestController extends Controller
             ->orderBy('teacher_name')
             ->get();
 
-        return view('daily-test.create', compact('classes', 'sections', 'subjects', 'teachers'));
+        return view('dailytest.create', compact('classes', 'sections', 'subjects', 'teachers'));
     }
 
     public function studentsList(Request $request)
@@ -230,7 +230,7 @@ class DailyTestController extends Controller
         $section = Section::find($request->section_id);
         $totalMarks = $dailyTests->first()?->daily_test_total ?? 0;
 
-        return view('daily-test.show', compact('dailyTests', 'schoolClass', 'section', 'totalMarks'));
+        return view('dailytest.show', compact('dailyTests', 'schoolClass', 'section', 'totalMarks'));
     }
 
     public function update(Request $request)

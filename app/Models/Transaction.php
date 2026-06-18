@@ -13,10 +13,23 @@ class Transaction extends Model
     protected $table = 'transactions';
 
     protected $fillable = [
+        'user_id',
         'school_id',
         'transaction_purpose',
+        'transaction_prove_image',
         'membership_id',
+        'membership_expire_date',
         'transaction_amount',
         'transaction_note',
     ];
+
+    public function membership()
+    {
+        return $this->belongsTo(Membership::class, 'membership_id', 'id');
+    }
+
+    public function school()
+    {
+        return $this->belongsTo(School::class, 'school_id', 'id');
+    }
 }

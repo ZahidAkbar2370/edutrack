@@ -13,7 +13,10 @@ use App\Http\Controllers\SectionController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\SuperAdmin\DashboardController as SuperAdminDashboardController;
 use App\Http\Controllers\GeneralController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SuperAdmin\ProfileController as SuperAdminProfileController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -27,14 +30,6 @@ Route::get('/', function () {
     return view('landing');
 })->name('landing');
 
-Route::middleware(['auth', 'verified', 'membership-plan'])->get('/dashboard', function () {
-    return match (Auth::user()->role) {
-        'school-admin' => app(DashboardController::class)->index(),
-        'super-admin' => redirect('membership'),
-        default => redirect('home'),
-    };
-});
-
 /*
 |--------------------------------------------------------------------------
 | Super Admin routes 
@@ -42,6 +37,11 @@ Route::middleware(['auth', 'verified', 'membership-plan'])->get('/dashboard', fu
 */
 
 Route::group(['middleware' => ['auth', 'super-admin', 'verified']], function () {
+
+    Route::get('/admin-dashboard', [SuperAdminDashboardController::class, 'index']);
+
+    Route::get('/admin-profile', [SuperAdminProfileController::class, 'adminProfile']);
+    Route::post('/admin-profile', [SuperAdminProfileController::class, 'updateAdminProfile']);
 
     // Membership routes
     Route::prefix('membership')->group(function () {    
@@ -66,8 +66,10 @@ Route::group(['middleware' => ['auth', 'super-admin', 'verified']], function () 
         Route::delete('delete/{id}', [SchoolController::class, 'destroy']);
 
         Route::get('upgrade-membership/{id}', [SchoolController::class, 'updateMembership']);
+        Route::post('upgrade-membership/{id}', [SchoolController::class, 'updateMembershipStore']);
         Route::get('transaction-history/{id}', [SchoolController::class, 'transactionHistory']);
         Route::get('change-password/{id}', [SchoolController::class, 'changePassword']);
+        Route::post('change-password/{id}', [SchoolController::class, 'changePasswordStore']);
     });
 });
 
@@ -78,6 +80,8 @@ Route::group(['middleware' => ['auth', 'super-admin', 'verified']], function () 
 */
 
 Route::group(['middleware' => ['auth', 'school-admin', 'verified', 'membership-plan']], function () {
+
+    Route::get('/dashboard', [DashboardController::class, 'index']);
 
     // Ajax routes
     Route::prefix('ajax')->group(function () {
@@ -203,10 +207,21 @@ Route::group(['middleware' => ['auth', 'school-admin', 'verified', 'membership-p
         Route::post('update/{id}', [GeneralController::class, 'update']);
     });
 
+
+    // Profile routes
+    Route::get('/profile', [ProfileController::class, 'profile']);
+    Route::post('/profile', [ProfileController::class, 'updateProfile']);
+    
+    Route::get('/transaction-history', [ProfileController::class, 'transactionHistory']);
+    Route::get('/pricing', [ProfileController::class, 'pricing']);
+
 });
 
 require __DIR__.'/fee_management.php';
 
+
+Route::get('/change-password', [ProfileController::class, 'changePassword']);
+    Route::post('/change-password', [ProfileController::class, 'updatePassword']);
 Route::get('logout', function () {
     Auth::logout();
     return redirect('/login');
