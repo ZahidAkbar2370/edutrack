@@ -1,65 +1,31 @@
-@extends('layouts.app')
+@extends('frontend.layout')
+
+@section('title', 'Register')
+@section('main_class', 'auth-page auth-page-wide')
+@section('auth_page', true)
 
 @section('content')
-<style>
-    :root {
-        --et-primary: #D81B60;
-        --et-dark: #05192D;
-    }
-    .register-hero {
-        background: linear-gradient(135deg, var(--et-dark) 0%, #0a2744 100%);
-        color: #fff;
-        border-radius: 1rem 1rem 0 0;
-        padding: 2rem;
-    }
-    .register-hero .brand-icon {
-        width: 48px; height: 48px;
-        background: var(--et-primary);
-        border-radius: 12px;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.25rem;
-    }
-    .btn-et-primary {
-        background: var(--et-primary);
-        border-color: var(--et-primary);
-        color: #fff;
-    }
-    .btn-et-primary:hover {
-        background: #C2185B;
-        border-color: #C2185B;
-        color: #fff;
-    }
-    .input-group-text { background: #f8f9fc; }
-</style>
-
-<div class="container py-4">
+<div class="container">
     <div class="row justify-content-center">
         <div class="col-xl-10">
-            <div class="card border-0 shadow-lg overflow-hidden">
-                <div class="register-hero text-center text-md-start">
-                    <div class="d-flex flex-column flex-md-row align-items-center gap-3">
-                        <span class="brand-icon"><i class="bi bi-mortarboard-fill"></i></span>
-                        <div>
-                            <h1 class="h3 mb-1 fw-bold">Register Your School</h1>
-                            <p class="mb-0 opacity-75">Create your EduTrack account and start managing attendance, tests, and students.</p>
-                        </div>
-                    </div>
-                </div>
+            <div class="auth-card">
+                @include('auth.partials.card-header', [
+                    'title' => 'Register Your School',
+                    'subtitle' => 'Create your EduTrack account and start managing attendance, tests, and students.',
+                    'headerClass' => 'text-center text-md-start',
+                ])
 
-                <div class="card-body p-4">
+                <div class="auth-card-body">
                     <form method="POST" action="{{ route('register') }}" id="register-form">
                         @csrf
 
                         <div class="row g-3">
-                            {{-- School Information --}}
                             <div class="col-lg-6">
-                                <div class="card h-100 shadow-sm">
-                                    <div class="card-header bg-light">
-                                        <h2 class="h6 mb-0 fw-semibold"><i class="bi bi-building me-1"></i> School Information</h2>
+                                <div class="auth-panel">
+                                    <div class="auth-panel-header">
+                                        <h2><i class="bi bi-building me-1"></i> School Information</h2>
                                     </div>
-                                    <div class="card-body">
+                                    <div class="auth-panel-body">
                                         <div class="mb-3">
                                             <label for="school_name" class="form-label">School Name <span class="text-danger">*</span></label>
                                             <div class="input-group">
@@ -90,12 +56,11 @@
                                         <div class="mb-3">
                                             <label for="school_password" class="form-label">School Password <span class="text-danger">*</span></label>
                                             <div class="input-group">
-                                                <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                                                <span class="input-group-text"><i class="bi bi-lock"></i></span>
                                                 <input type="text" name="school_password" id="school_password" class="form-control @error('school_password') is-invalid @enderror bg-secondary text-white" value="12345678" placeholder="Password" required readonly>
                                             </div>
-                                            @error('school_email')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
+                                            @error('school_password')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
                                         </div>
-
 
                                         <div class="mb-3">
                                             <label for="city" class="form-label">City <span class="text-danger">*</span></label>
@@ -115,13 +80,12 @@
                                 </div>
                             </div>
 
-                            {{-- Principal Information --}}
                             <div class="col-lg-6">
-                                <div class="card h-100 shadow-sm">
-                                    <div class="card-header bg-light">
-                                        <h2 class="h6 mb-0 fw-semibold"><i class="bi bi-person-badge me-1"></i> Principal Information</h2>
+                                <div class="auth-panel">
+                                    <div class="auth-panel-header">
+                                        <h2><i class="bi bi-person-badge me-1"></i> Principal Information</h2>
                                     </div>
-                                    <div class="card-body">
+                                    <div class="auth-panel-body">
                                         <div class="mb-3">
                                             <label for="priciple_name" class="form-label">Principal Name <span class="text-danger">*</span></label>
                                             <input type="text" name="priciple_name" id="priciple_name" class="form-control @error('priciple_name') is-invalid @enderror" value="{{ old('priciple_name') }}" placeholder="Principal full name" required>
@@ -147,15 +111,14 @@
                         <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mt-4 pt-3 border-top">
                             <p class="text-muted small mb-0">
                                 Already have an account?
-                                <a href="{{ route('login') }}" class="fw-semibold">Login here</a>
+                                <a href="{{ route('login') }}" class="auth-link">Login here</a>
                             </p>
-                            <button type="submit" class="btn btn-et-primary px-4"
-                            data-confirm-action
-                            data-confirm-title="Register School"
-                            data-confirm-message="Are you sure you want to register this school?"
-                            data-confirm-yes="Yes, Register"
-                            data-confirm-yes-class="btn-primary"
-                            >
+                            <button type="submit" class="btn btn-login px-4"
+                                data-confirm-action
+                                data-confirm-title="Register School"
+                                data-confirm-message="Are you sure you want to register this school?"
+                                data-confirm-yes="Yes, Register"
+                                data-confirm-yes-class="btn-primary">
                                 <i class="bi bi-building-add me-1"></i> Register School
                             </button>
                         </div>
@@ -172,9 +135,9 @@ document.getElementById('school_name').addEventListener('input', function () {
 
     let email = name
         .toLowerCase()
-        .replace(/[^a-z0-9\s]/g, '')   // remove special chars
+        .replace(/[^a-z0-9\s]/g, '')
         .trim()
-        .replace(/\s+/g, '')           // remove spaces
+        .replace(/\s+/g, '')
         + '@gmail.com';
 
     document.getElementById('school_email').value = email;

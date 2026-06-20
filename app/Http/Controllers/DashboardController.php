@@ -32,6 +32,6 @@ class DashboardController extends Controller
                 ->count(),
         ];
 
-        return view('dashboard.dashboard', compact('stats'));
+        return view('schooladmin.dashboard.dashboard', compact('stats'));
     }
 }

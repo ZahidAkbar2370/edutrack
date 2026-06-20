@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -21,5 +22,14 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Paginator::useBootstrapFive();
+
+        View::composer(['frontend.layout', 'frontend.pages.*', 'auth.*'], function ($view) {
+            $view->with([
+                'supportEmail' => 'edutrack.softwebies@gmail.com',
+                'supportPhone' => '+92 308 1312527',
+                'supportWhatsApp' => '923081312527',
+                'supportAddress' => 'Housing Colony 2, B Block, Layyah, Pakistan',
+            ]);
+        });
     }
 }

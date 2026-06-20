@@ -10,12 +10,12 @@ class GeneralController extends Controller
 {
     public function index()
     {
-        return view('setting.general');
+        return view('schooladmin.setting.general');
     }
 
     public function create()
     {
-        return view('setting.general.create');
+        return view('schooladmin.setting.general.create');
     }
 
     public function store(Request $request)
@@ -31,12 +31,12 @@ class GeneralController extends Controller
 
     public function show($id)
     {
-        return view('setting.general.show', compact('general'));
+        return view('schooladmin.setting.general.show', compact('general'));
     }
 
     public function edit($id)
     {
-        return view('setting.general.edit', compact('general'));
+        return view('schooladmin.setting.general.edit', compact('general'));
     }
 
     public function update(Request $request, $id)

@@ -86,7 +86,7 @@ class FeeManagementController extends Controller
         $feeMonth = $this->feeMonth($request);
         $classStats = $this->classStatsForMonth($schoolId, $feeMonth);
 
-        return view('feemanagement.index', compact('classStats', 'feeMonth'));
+        return view('schooladmin.feemanagement.index', compact('classStats', 'feeMonth'));
     }
 
     public function show(Request $request, string $classId)
@@ -112,7 +112,7 @@ class FeeManagementController extends Controller
             ->get()
             ->keyBy('student_id');
 
-        return view('feemanagement.show', compact('schoolClass', 'students', 'fees', 'feeMonth'));
+        return view('schooladmin.feemanagement.show', compact('schoolClass', 'students', 'fees', 'feeMonth'));
     }
 
     public function store(Request $request)

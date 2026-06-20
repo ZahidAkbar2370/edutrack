@@ -20,12 +20,12 @@ class TeacherController extends Controller
             ->orderBy('teacher_name')
             ->get();
 
-        return view('teacher.index', compact('teachers'));
+        return view('schooladmin.teacher.index', compact('teachers'));
     }
 
     public function create()
     {
-        return view('teacher.create');
+        return view('schooladmin.teacher.create');
     }
 
     public function store(Request $request)
@@ -58,14 +58,14 @@ class TeacherController extends Controller
     {
         $teacher = Teacher::with('school')->find($id);
 
-        return view('teacher.show', compact('teacher'));
+        return view('schooladmin.teacher.show', compact('teacher'));
     }
 
     public function edit($id)
     {
         $teacher = Teacher::find($id);
 
-        return view('teacher.edit', compact('teacher'));
+        return view('schooladmin.teacher.edit', compact('teacher'));
     }
 
     public function update(Request $request, $id)

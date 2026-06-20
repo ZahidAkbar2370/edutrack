@@ -11,7 +11,7 @@ class StudentCardController extends Controller
         $student = Student::with('school', 'schoolClass', 'section', 'parent')->findOrFail($id);
         $cardData = $this->prepareCardData($student);
 
-        return view('student.card.select', compact('student', 'cardData'));
+        return view('schooladmin.student.card.select', compact('student', 'cardData'));
     }
 
     private function prepareCardData(Student $student): array

@@ -44,7 +44,7 @@ class AttendanceController extends Controller
         ->orderByDesc('attendance_date')
         ->get();
 
-        return view('attendance.index', compact(
+        return view('schooladmin.attendance.index', compact(
             'attendanceGroups',
             'classes',
             'sections',
@@ -57,7 +57,7 @@ class AttendanceController extends Controller
         $classes = loginSchoolActiveClasses();
         $sections = loginSchoolActiveSections();
 
-        return view('attendance.create', compact('classes', 'sections'));
+        return view('schooladmin.attendance.create', compact('classes', 'sections'));
     }
 
     // Store a new attendance record
@@ -125,7 +125,7 @@ class AttendanceController extends Controller
         $schoolClass = SchoolClass::find($classId);
         $section = Section::find($sectionId);
         
-        return view('attendance.edit', compact('attendances', 'schoolClass', 'section', 'attendanceDate'));
+        return view('schooladmin.attendance.edit', compact('attendances', 'schoolClass', 'section', 'attendanceDate'));
     }
 
     // Update an existing attendance record
@@ -178,7 +178,7 @@ class AttendanceController extends Controller
         $schoolClass = SchoolClass::find($request->class_id);
         $section = Section::find($request->section_id);
 
-        return view('attendance.show', compact(
+        return view('schooladmin.attendance.show', compact(
             'attendances',
             'schoolClass',
             'section'

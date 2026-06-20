@@ -41,7 +41,7 @@ class StudentController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
-        return view('student.index', compact('students', 'classes', 'sections'));
+        return view('schooladmin.student.index', compact('students', 'classes', 'sections'));
     }
 
     // Create new student
@@ -50,7 +50,7 @@ class StudentController extends Controller
         $classes = loginSchoolActiveClasses();
         $sections = loginSchoolActiveSections();
 
-        return view('student.create', compact('classes', 'sections'));
+        return view('schooladmin.student.create', compact('classes', 'sections'));
     }
 
     // Store new student
@@ -129,7 +129,7 @@ class StudentController extends Controller
             'not_attempted' => DailyTest::where('student_id', $studentId)->where('daily_test_obtained', 0)->count(),
         ];
 
-        return view('student.show', compact('student', 'attendanceStats', 'dailyTestStats'));
+        return view('schooladmin.student.show', compact('student', 'attendanceStats', 'dailyTestStats'));
     }
 
     // Edit Selected Student by id
@@ -143,7 +143,7 @@ class StudentController extends Controller
         $classes = loginSchoolActiveClasses();
         $sections = loginSchoolActiveSections();
 
-        return view('student.edit', compact('student', 'classes', 'sections'));
+        return view('schooladmin.student.edit', compact('student', 'classes', 'sections'));
     }
 
     // Update Selected Student by id
@@ -227,7 +227,7 @@ class StudentController extends Controller
     {
         $students = Student::onlyTrashed()->where('school_id', Auth::user()->school_id)->get();
 
-        return view('student.trash_students', compact('students'));
+        return view('schooladmin.student.trash_students', compact('students'));
     }
 
     // Restore Deleted Student by id
@@ -248,7 +248,7 @@ class StudentController extends Controller
             ->orderByDesc('created_at')
             ->get();
 
-        return view('student.attendance_history', compact('student', 'attendanceHistory'));
+        return view('schooladmin.student.attendance_history', compact('student', 'attendanceHistory'));
     }
 
     // Daily Test History of Selected Student by id
@@ -261,7 +261,7 @@ class StudentController extends Controller
             ->orderByDesc('created_at')
             ->get();
 
-        return view('student.daily_test_history', compact('student', 'dailyTestHistory'));
+        return view('schooladmin.student.daily_test_history', compact('student', 'dailyTestHistory'));
     }
 
     // Fee History of Selected Student by id
@@ -271,7 +271,7 @@ class StudentController extends Controller
 
         $feeHistory = MonthlyFee::where('student_id', $studentId)->get();
 
-        return view('student.fee_history', compact('student', 'feeHistory'));
+        return view('schooladmin.student.fee_history', compact('student', 'feeHistory'));
     }
 
     // Upgrade Class Form Setup
@@ -280,7 +280,7 @@ class StudentController extends Controller
         $classes = loginSchoolActiveClasses();
         $sections = loginSchoolActiveSections();
 
-        return view('student.upgradeclass', compact('classes', 'sections'));
+        return view('schooladmin.student.upgradeclass', compact('classes', 'sections'));
     }
 
     // Upgrade Class Store by Class and Section ID
@@ -325,7 +325,7 @@ class StudentController extends Controller
         $student = Student::findOrFail($studentId);
         $documents = StudentDocument::where('student_id', $studentId)->get();
 
-        return view('student.documents', compact('student', 'documents'));
+        return view('schooladmin.student.documents', compact('student', 'documents'));
     }
 
     // Store student document by student id
@@ -357,7 +357,7 @@ class StudentController extends Controller
     // Import Form Setup
     public function importForm()
     {
-        return view('student.import');
+        return view('schooladmin.student.import');
     }
 
     // Import Template Download

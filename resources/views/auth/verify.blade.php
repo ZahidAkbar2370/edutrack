@@ -1,51 +1,20 @@
-@extends('layouts.app')
+@extends('frontend.layout')
+
+@section('title', 'Verify Email')
+@section('main_class', 'auth-page')
+@section('auth_page', true)
 
 @section('content')
-<style>
-    :root {
-        --et-primary: #D81B60;
-        --et-dark: #05192D;
-    }
-    .auth-hero {
-        background: linear-gradient(135deg, var(--et-dark) 0%, #0a2744 100%);
-        color: #fff;
-        border-radius: 1rem 1rem 0 0;
-        padding: 2rem;
-    }
-    .auth-hero .brand-icon {
-        width: 48px; height: 48px;
-        background: var(--et-primary);
-        border-radius: 12px;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.25rem;
-    }
-    .btn-et-primary {
-        background: var(--et-primary);
-        border-color: var(--et-primary);
-        color: #fff;
-    }
-    .btn-et-primary:hover {
-        background: #C2185B;
-        border-color: #C2185B;
-        color: #fff;
-    }
-    .auth-link { color: var(--et-primary); text-decoration: none; }
-    .auth-link:hover { color: #C2185B; text-decoration: underline; }
-</style>
-
-<div class="container py-5">
-    <div class="row justify-content-center align-items-center min-vh-75">
+<div class="container">
+    <div class="row justify-content-center">
         <div class="col-md-6 col-lg-5">
-            <div class="card border-0 shadow-lg overflow-hidden">
-                <div class="auth-hero text-center">
-                    <span class="brand-icon mb-3"><i class="bi bi-envelope-check-fill"></i></span>
-                    <h1 class="h3 mb-1 fw-bold">Verify Your Email</h1>
-                    <p class="mb-0 opacity-75 small">One more step before you can access EduTrack</p>
-                </div>
+            <div class="auth-card">
+                @include('auth.partials.card-header', [
+                    'title' => 'Verify Your Email',
+                    'subtitle' => 'One more step before you can access EduTrack',
+                ])
 
-                <div class="card-body p-4">
+                <div class="auth-card-body">
                     @if (session('resent'))
                         <div class="alert alert-success d-flex align-items-center gap-2 py-2 small mb-4" role="alert">
                             <i class="bi bi-check-circle-fill"></i>
@@ -77,7 +46,7 @@
 
                     <form method="POST" action="{{ route('verification.resend') }}" class="mb-3">
                         @csrf
-                        <button type="submit" class="btn btn-et-primary w-100 py-2">
+                        <button type="submit" class="btn btn-login w-100 py-2">
                             <i class="bi bi-arrow-repeat me-1"></i> Resend Verification Email
                         </button>
                     </form>

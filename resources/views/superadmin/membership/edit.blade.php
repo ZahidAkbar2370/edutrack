@@ -1,4 +1,4 @@
-@extends('adminlayout.layout')
+@extends('superadmin.layout.layout')
 
 @section('title', 'Edit Membership')
 

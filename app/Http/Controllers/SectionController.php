@@ -16,7 +16,7 @@ class SectionController extends Controller
             ->orderBy('section_name', 'asc')
             ->get();
 
-        return view('section.index', compact('sections'));
+        return view('schooladmin.section.index', compact('sections'));
     }
 
     public function updatePublicationStatus(Request $request)
@@ -43,7 +43,7 @@ class SectionController extends Controller
     //     }
     //     $classes = $this->classesForSchool($schoolId);
 
-    //     return view('section.create', compact('classes'));
+    //     return view('schooladmin.section.create', compact('classes'));
     // }
 
     // public function store(Request $request)
@@ -80,7 +80,7 @@ class SectionController extends Controller
     // {
     //     $section = Section::with('schoolClass', 'school')->find($id);
 
-    //     return view('section.show', compact('section'));
+    //     return view('schooladmin.section.show', compact('section'));
     // }
 
     // public function edit($id)
@@ -92,7 +92,7 @@ class SectionController extends Controller
     //     }
     //     $classes = $this->classesForSchool($schoolId);
 
-    //     return view('section.edit', compact('section', 'classes'));
+    //     return view('schooladmin.section.edit', compact('section', 'classes'));
     // }
 
     // public function update(Request $request, $id)

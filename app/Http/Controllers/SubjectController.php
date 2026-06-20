@@ -15,7 +15,7 @@ class SubjectController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
-        return view('subject.index', compact('subjects'));
+        return view('schooladmin.subject.index', compact('subjects'));
     }
 
     public function updatePublicationStatus(Request $request)
@@ -35,7 +35,7 @@ class SubjectController extends Controller
 
     // public function create()
     // {
-    //     return view('subject.create');
+    //     return view('schooladmin.subject.create');
     // }
 
     // public function store(Request $request)
@@ -62,14 +62,14 @@ class SubjectController extends Controller
     // {
     //     $subject = Subject::with('school')->find($id);
 
-    //     return view('subject.show', compact('subject'));
+    //     return view('schooladmin.subject.show', compact('subject'));
     // }
 
     // public function edit($id)
     // {
     //     $subject = Subject::find($id);
 
-    //     return view('subject.edit', compact('subject'));
+    //     return view('schooladmin.subject.edit', compact('subject'));
     // }
 
     // public function update(Request $request, $id)

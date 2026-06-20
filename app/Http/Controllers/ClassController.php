@@ -15,7 +15,7 @@ class ClassController extends Controller
             ->orderBy('created_at', 'asc')
             ->get();
 
-        return view('class.index', compact('classes'));
+        return view('schooladmin.class.index', compact('classes'));
     }
 
     function updatePublicationStatus(Request $request)

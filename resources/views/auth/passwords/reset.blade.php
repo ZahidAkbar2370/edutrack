@@ -1,52 +1,20 @@
-@extends('layouts.app')
+@extends('frontend.layout')
+
+@section('title', 'Reset Password')
+@section('main_class', 'auth-page')
+@section('auth_page', true)
 
 @section('content')
-<style>
-    :root {
-        --et-primary: #D81B60;
-        --et-dark: #05192D;
-    }
-    .auth-hero {
-        background: linear-gradient(135deg, var(--et-dark) 0%, #0a2744 100%);
-        color: #fff;
-        border-radius: 1rem 1rem 0 0;
-        padding: 2rem;
-    }
-    .auth-hero .brand-icon {
-        width: 48px; height: 48px;
-        background: var(--et-primary);
-        border-radius: 12px;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.25rem;
-    }
-    .btn-et-primary {
-        background: var(--et-primary);
-        border-color: var(--et-primary);
-        color: #fff;
-    }
-    .btn-et-primary:hover {
-        background: #C2185B;
-        border-color: #C2185B;
-        color: #fff;
-    }
-    .input-group-text { background: #f8f9fc; }
-    .auth-link { color: var(--et-primary); text-decoration: none; }
-    .auth-link:hover { color: #C2185B; text-decoration: underline; }
-</style>
-
-<div class="container py-5">
-    <div class="row justify-content-center align-items-center min-vh-75">
+<div class="container">
+    <div class="row justify-content-center">
         <div class="col-md-6 col-lg-5">
-            <div class="card border-0 shadow-lg overflow-hidden">
-                <div class="auth-hero text-center">
-                    <span class="brand-icon mb-3"><i class="bi bi-shield-lock-fill"></i></span>
-                    <h1 class="h3 mb-1 fw-bold">Set New Password</h1>
-                    <p class="mb-0 opacity-75 small">Choose a strong password for your account</p>
-                </div>
+            <div class="auth-card">
+                @include('auth.partials.card-header', [
+                    'title' => 'Set New Password',
+                    'subtitle' => 'Choose a strong password for your account',
+                ])
 
-                <div class="card-body p-4">
+                <div class="auth-card-body">
                     <form method="POST" action="{{ route('password.update') }}">
                         @csrf
                         <input type="hidden" name="token" value="{{ $token }}">
@@ -91,13 +59,13 @@
                             </div>
                         </div>
 
-                        <button type="submit" class="btn btn-et-primary w-100 py-2">
+                        <button type="submit" class="btn btn-login w-100 py-2">
                             <i class="bi bi-check2-circle me-1"></i> Reset Password
                         </button>
                     </form>
 
                     <div class="text-center mt-4 pt-3 border-top">
-                        <a href="{{ route('login') }}" class="auth-link small fw-semibold">
+                        <a href="{{ route('login') }}" class="auth-link small">
                             <i class="bi bi-arrow-left me-1"></i> Back to Login
                         </a>
                     </div>

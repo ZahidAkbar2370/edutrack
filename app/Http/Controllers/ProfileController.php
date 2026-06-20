@@ -16,7 +16,7 @@ class ProfileController extends Controller
     {
         $school = School::with('membership', 'user')->find(Auth::user()->school_id);
 
-        return view('profile.profile', compact('school'));
+        return view('schooladmin.profile.profile', compact('school'));
     }
 
     public function updateProfile(Request $request)
@@ -52,7 +52,7 @@ class ProfileController extends Controller
 
     public function changePassword()
     {
-        return view('profile.change_password');
+        return view('schooladmin.profile.change_password');
     }
 
     public function updatePassword(Request $request)
@@ -82,7 +82,7 @@ class ProfileController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
-        return view('profile.transaction_history', compact('transactions'));
+        return view('schooladmin.profile.transaction_history', compact('transactions'));
     }
 
     public function pricing()
@@ -90,6 +90,6 @@ class ProfileController extends Controller
         $memberships = Membership::orderBy('membership_price', 'asc')->get();
         $currentMembership = User::with('membership')->where('id', Auth::user()->id)->first();
 
-        return view('profile.pricing', compact('memberships', 'currentMembership'));
+        return view('schooladmin.profile.pricing', compact('memberships', 'currentMembership'));
     }
 }

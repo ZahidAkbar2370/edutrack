@@ -17,6 +17,7 @@ use App\Http\Controllers\SuperAdmin\DashboardController as SuperAdminDashboardCo
 use App\Http\Controllers\GeneralController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SuperAdmin\ProfileController as SuperAdminProfileController;
+use App\Http\Controllers\LegalController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -27,8 +28,11 @@ use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
     // return redirect('login');
-    return view('landing');
+    return view('frontend.pages.home');
 })->name('landing');
+
+Route::get('/privacy-policy', [LegalController::class, 'privacyPolicy'])->name('privacy-policy');
+Route::get('/terms-and-conditions', [LegalController::class, 'termsAndConditions'])->name('terms-and-conditions');
 
 /*
 |--------------------------------------------------------------------------

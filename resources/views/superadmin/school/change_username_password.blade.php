@@ -1,4 +1,4 @@
-@extends('adminlayout.layout')
+@extends('superadmin.layout.layout')
 
 @section('title', 'Change School Username & Password')
 
