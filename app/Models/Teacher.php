@@ -20,6 +20,9 @@ class Teacher extends Model
         'teacher_photo',
         'teacher_address',
         'publication_status',
+        'qualification',
+        'joining_date',
+        'salary',
     ];
 
     public function school()

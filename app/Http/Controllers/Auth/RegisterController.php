@@ -13,6 +13,7 @@ use Carbon\Carbon;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
 
 class RegisterController extends Controller
@@ -56,14 +57,14 @@ class RegisterController extends Controller
     {
         return Validator::make($data, [
             'school_name' => ['required', 'string', 'max:255'],
-            'school_email' => ['required', 'string', 'email', 'max:255', 'unique:schools'],
+            'school_email' => ['required', 'string', 'email', 'max:255'],
             'school_phone_no' => ['required', 'string', 'max:255'],
-            'city' => ['required', 'string', 'max:255'],
-            'address' => ['required', 'string', 'max:255'],
+            'city' => ['nullable', 'string', 'max:255'],
+            'address' => ['nullable', 'string', 'max:255'],
 
-            'priciple_name' => ['required', 'string', 'max:255'],
-            'priciple_phone_no' => ['nullable', 'string', 'max:255'],
-            'priciple_email' => ['nullable', 'string', 'email', 'max:255', 'unique:schools'],
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'string', 'min:8'],
         ]);
     }
 
@@ -85,76 +86,115 @@ class RegisterController extends Controller
             'school_phone_no' => $data['school_phone_no'],
             'city' => $data['city'],
             'address' => $data['address'],
-
-            'priciple_name' => $data['priciple_name'],
-            'priciple_phone_no' => $data['priciple_phone_no'],
-            'priciple_email' => $data['priciple_email'],
         ]);
 
         $user = User::create([
             'school_id' => $school->id,
             'membership_id' => $membership->id,
-            'name' => $data['school_name'],
-            'email' => $data['school_email'],
-            'password' => Hash::make("12345678"),
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => Hash::make($data['password']),
             'email_verified_at' => Carbon::now(),
             'role' => 'school-admin',
             'membership_expiry_date' => Carbon::now()->addDays(7),
         ]);
 
-        $classes = ['LKG', 'UKG', 'Nursery', 'Play Group', 'Prep', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine Computer', 'Nine Biology', 'Nine Arts' , 'Ten Computer', 'Ten Biology', 'Ten Arts' , 'Eleven ICS', 'Eleven Medical', 'Eleven Non-Medical ', 'Eleven FA', 'Eleven Diploma', 'Twelve ICS', 'Twelve Biology', 'Twelve Non-Medical', 'Twelve FA', 'Twelve Diploma'];
-        foreach($classes as $class){
-            $publication_status = 'active';
+        $classes = ['Nursery', 'Play Group', 'Prep', 'Class 1', 'Class 2', 'Class 3', 'Class 4', 'Class 5', 'Class 6', 'Class 7', 'Class 8', 'Class 9', 'Class 10', 'Class 11', 'Class 12'];
+        foreach ($classes as $key => $class) {
 
-            if($class == 'Nine Computer' || $class == 'Nine Biology' || $class == 'Nine Arts' || $class == 'Ten Computer' || $class == 'Ten Biology' || $class == 'Ten Arts' || $class == 'Eleven ICS' || $class == 'Eleven Medical' || $class == 'Eleven Non-Medical' || $class == 'Eleven FA' || $class == 'Eleven Diploma' || $class == 'Twelve ICS' || $class == 'Twelve Biology' || $class == 'Twelve Non-Medical' || $class == 'Twelve FA' || $class == 'Twelve Diploma'){
-                $publication_status = 'inactive';
-            }
 
-            $class = SchoolClass::create([
-                'school_id' => $school->id,
-                'class_name' => $class,
-                'publication_status' => $publication_status,
-            ]);
-
-            $sections = ['A', 'B', 'C', 'D'];
-            
-            foreach($sections as $section){
-                $publication_status = 'active';
-
-                if($section == 'B' || $section == 'C' || $section == 'D' ){
-                    $publication_status = 'inactive';
-                }
-
-                Section::create([
+            if ($key <= 8) {
+                $class = SchoolClass::create([
                     'school_id' => $school->id,
-                    'class_id' => $class->id,
-                    'section_name' => $section,
-                    'publication_status' => $publication_status,
+                    'class_name' => $class,
+                    'publication_status' => 'active',
                 ]);
+
+                $sections = ['A'];
+
+                foreach ($sections as $section) {
+                    Section::create([
+                        'school_id' => $school->id,
+                        'class_id' => $class->id,
+                        'section_name' => $section,
+                        'publication_status' => 'active',
+                    ]);
+                }
             }
         }
 
         $subjects = [
-            'English','Urdu','Mathematics','General Mathematics','Islamiyat','Pakistan Studies','General Knowledge','General Science','Social Studies','Physics','Chemistry','Biology','Computer','Computer Science','Education','Economics','Principles of Accounting','Principles of Commerce','Business Mathematics','Drawing',
-            'Social Studies','General Science','Computer Science','History','Geography','Economics','Political Science','Philosophy','Religion','Art','Music','Dance','Sports','Other'
+            'English',
+            'Urdu',
+            'Mathematics',
+            'General Mathematics',
+            'Islamiyat',
+            'Pakistan Studies',
+            'General Knowledge',
+            'General Science',
+            'Social Studies',
+            'Physics',
+            'Chemistry',
+            'Biology',
+            'Computer',
+            'Computer Science',
+            'Education',
+            'Economics',
+            'Principles of Accounting',
+            'Principles of Commerce',
+            'Business Mathematics',
+            'Drawing',
+            'Social Studies',
+            'General Science',
+            'Computer Science',
+            'History',
+            'Geography',
+            'Economics',
+            'Political Science',
+            'Philosophy',
+            'Religion',
+            'Art',
+            'Music',
+            'Dance',
+            'Sports',
+            'Other'
         ];
 
-        foreach($subjects as $subject){
-            $publication_status = 'active';
-
-            if($subject == 'English' || $subject == 'Urdu' || $subject == 'Mathematics' || $subject == 'Islamiyat' || $subject == 'Pakistan Studies' ||  $subject == 'General Science' || $subject == 'Social Studies' || $subject == 'Physics' || $subject == 'Chemistry' || $subject == 'Biology' || $subject == 'Computer' || $subject == 'Computer Science' || $subject == 'Education' || $subject == 'Economics' || $subject == 'Principles of Accounting' || $subject == 'Principles of Commerce' || $subject == 'Business Mathematics')
-            {
-                $publication_status = 'inactive';
-            }
-
+        foreach ($subjects as $subject) {
             Subject::create([
                 'school_id' => $school->id,
                 'subject_name' => $subject,
-                'publication_status' => $publication_status,
+                'publication_status' => 'active',
             ]);
         }
 
         // $user->sendEmailVerificationNotification();
+
+        $superAdminWhatsappAllow = true;
+        if ($superAdminWhatsappAllow) {
+            $messageBodyToSchoolAdmin = "Aslam o Alaikum, " . $user->name .
+
+                "\n\n Welcome to EduTrack - Smart School Management System" .
+
+                "\n\n *Login Details*" .
+                "\n- Email: " . $user->email .
+                "\n- Password: " . $data['password'] .
+
+                "\n\n *School Details*" .
+                "\n- School Name: " . $school->school_name .
+                "\n- School Email: " . $school->school_email .
+                "\n- School Phone No: +" . $school->school_phone_no .
+                "\n- School City: " . $school->city .
+                "\n- School Address: " . $school->address .
+
+                "\n\n *Website:* edutrack.softwebies.com" .
+                "\n *Whatsapp:* +92 320 0470584" .
+                "\n *Email:* edutrack.softwebies@gmail.com" .
+
+                "\n\n *Best Regard*, \n EduTrack Powered by SoftWebies";
+
+            sendWhatsappMessage(env('WACHAT_DEVICE_NUMBER'), $school->school_phone_no, $messageBodyToSchoolAdmin);
+        }
 
         DB::commit();
 

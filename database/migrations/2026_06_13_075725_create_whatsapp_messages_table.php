@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignUuid('student_id')->nullable()->constrained('students')->cascadeOnDelete();
             $table->foreignUuid('teacher_id')->nullable()->constrained('teachers')->cascadeOnDelete();
             $table->foreignUuid('parent_id')->nullable()->constrained('parents')->cascadeOnDelete();
-            $table->enum('message_type', ['attendance', 'daily_test', 'fee', 'other'])->default('other');
+            $table->enum('message_type', ['attendance', 'daily_test', 'fee', 'other', 'contact_form'])->default('other');
             $table->string('from_number')->nullable();
             $table->string('to_number')->nullable();
             $table->string('message');

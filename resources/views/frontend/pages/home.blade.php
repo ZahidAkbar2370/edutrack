@@ -17,9 +17,7 @@
                     <p class="hero-lead">
                         EduTrack connects multiple schools on a single powerful system — manage students, attendance, daily tests, teachers, and memberships from one secure admin panel.
                     </p>
-                    <a href="{{ route('register') }}" class="btn btn-login btn-lg px-4">
-                        <i class="bi bi-box-arrow-in-right me-2"></i>Register for Free Trail
-                    </a>
+                   
                     <div class="hero-stats">
                         <div class="hero-stat">
                             <strong>Multi-School</strong>
@@ -38,6 +36,11 @@
                             <span>Register & start in minutes</span>
                         </div>
                     </div>
+
+                    <a href="{{ route('register') }}" class="btn btn-login btn-lg px-4 mt-5">
+                        <i class="bi bi-box-arrow-in-right me-2"></i> Register Now
+                    </a>    
+
                 </div>
                 <div class="col-lg-6">
                     <div class="hero-image-wrap">

@@ -2,8 +2,10 @@
 
 use App\Models\SchoolClass;
 use App\Models\Section;
+use App\Models\WhatsappDevice;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 
 /**
  * Class Helper Functions
@@ -59,5 +61,23 @@ if(!function_exists('loginSchoolActiveSectionsByClassId')){
         $sections = Section::where('school_id', Auth::user()->school_id)->where('publication_status', 'active')->where('class_id', $classId)->get();
 
         return $sections;
+    }
+}
+
+
+// send whatsapp message
+if(!function_exists('sendWhatsappMessage')){
+    function sendWhatsappMessage($sender, $toNumber, $message){
+        $sendMessageUrl = env('WACHAT_API_URL').'/send-message';
+        $apiKey = env('WACHAT_API_KEY');
+
+        $sendMessageResponse = Http::post($sendMessageUrl, [
+            'api_key' => $apiKey,
+            'sender' => $sender,
+            'number' => $toNumber,
+            'message' => $message,
+        ]);
+
+        return $sendMessageResponse;
     }
 }

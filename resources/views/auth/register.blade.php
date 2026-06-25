@@ -9,11 +9,11 @@
     <div class="row justify-content-center">
         <div class="col-xl-10">
             <div class="auth-card">
-                @include('auth.partials.card-header', [
-                    'title' => 'Register Your School',
-                    'subtitle' => 'Create your EduTrack account and start managing attendance, tests, and students.',
-                    'headerClass' => 'text-center text-md-start',
-                ])
+
+            <div class="auth-card-header">
+                <h1 class="h3 mb-1 fw-bold">Register Your School</h1>
+                <p class="mb-0 auth-card-subtitle">Create your EduTrack account and start managing attendance, tests, and students.</p>
+            </div>
 
                 <div class="auth-card-body">
                     <form method="POST" action="{{ route('register') }}" id="register-form">
@@ -36,44 +36,45 @@
                                         </div>
 
                                         <div class="mb-3">
-                                            <label for="school_phone_no" class="form-label">School Phone <span class="text-danger">*</span></label>
-                                            <div class="input-group">
-                                                <span class="input-group-text"><i class="bi bi-telephone"></i></span>
-                                                <input type="text" name="school_phone_no" id="school_phone_no" class="form-control @error('school_phone_no') is-invalid @enderror" value="{{ old('school_phone_no') }}" placeholder="923001234567" required>
-                                            </div>
-                                            @error('school_phone_no')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
-                                        </div>
-
-                                        <div class="mb-3">
                                             <label for="school_email" class="form-label">School Email <span class="text-danger">*</span></label>
                                             <div class="input-group">
                                                 <span class="input-group-text"><i class="bi bi-envelope"></i></span>
-                                                <input type="email" name="school_email" id="school_email" class="form-control @error('school_email') is-invalid @enderror bg-secondary text-white" value="{{ old('school_email') }}" placeholder="school@example.com" required readonly>
+                                                <input type="email" name="school_email" id="school_email" class="form-control @error('school_email') is-invalid @enderror" value="{{ old('school_email') }}" placeholder="school@example.com" required>
                                             </div>
                                             @error('school_email')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
                                         </div>
 
                                         <div class="mb-3">
+                                            <label for="school_phone_no" class="form-label">School Phone <span class="text-danger">*</span></label>
+                                            <div class="input-group">
+                                                <span class="input-group-text"><i class="bi bi-telephone"></i></span>
+                                                <input type="text" name="school_phone_no" id="school_phone_no" class="form-control @error('school_phone_no') is-invalid @enderror" value="{{ old('school_phone_no') }}" placeholder="03001234567 or 04212332222" required>
+                                            </div>
+                                            @error('school_phone_no')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
+                                        </div>
+
+
+                                        <!-- <div class="mb-3">
                                             <label for="school_password" class="form-label">School Password <span class="text-danger">*</span></label>
                                             <div class="input-group">
                                                 <span class="input-group-text"><i class="bi bi-lock"></i></span>
                                                 <input type="text" name="school_password" id="school_password" class="form-control @error('school_password') is-invalid @enderror bg-secondary text-white" value="12345678" placeholder="Password" required readonly>
                                             </div>
                                             @error('school_password')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
-                                        </div>
+                                        </div> -->
 
                                         <div class="mb-3">
-                                            <label for="city" class="form-label">City <span class="text-danger">*</span></label>
+                                            <label for="city" class="form-label">City</label>
                                             <div class="input-group">
                                                 <span class="input-group-text"><i class="bi bi-geo-alt"></i></span>
-                                                <input type="text" name="city" id="city" class="form-control @error('city') is-invalid @enderror" value="{{ old('city') }}" placeholder="e.g. Layyah" required>
+                                                <input type="text" name="city" id="city" class="form-control @error('city') is-invalid @enderror" value="{{ old('city') }}" placeholder="e.g. Layyah">
                                             </div>
                                             @error('city')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
                                         </div>
 
                                         <div class="mb-0">
-                                            <label for="address" class="form-label">Address <span class="text-danger">*</span></label>
-                                            <textarea name="address" id="address" class="form-control @error('address') is-invalid @enderror" rows="2" placeholder="Full school address" required>{{ old('address') }}</textarea>
+                                            <label for="address" class="form-label">Address</label>
+                                            <textarea name="address" id="address" class="form-control @error('address') is-invalid @enderror" rows="2" placeholder="Full school address">{{ old('address') }}</textarea>
                                             @error('address')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
                                         </div>
                                     </div>
@@ -83,31 +84,42 @@
                             <div class="col-lg-6">
                                 <div class="auth-panel">
                                     <div class="auth-panel-header">
-                                        <h2><i class="bi bi-person-badge me-1"></i> Principal Information</h2>
+                                        <h2><i class="bi bi-person-badge me-1"></i> Admin Account</h2>
                                     </div>
                                     <div class="auth-panel-body">
                                         <div class="mb-3">
-                                            <label for="priciple_name" class="form-label">Principal Name <span class="text-danger">*</span></label>
-                                            <input type="text" name="priciple_name" id="priciple_name" class="form-control @error('priciple_name') is-invalid @enderror" value="{{ old('priciple_name') }}" placeholder="Principal full name" required>
-                                            @error('priciple_name')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
+                                            <label for="name" class="form-label">Admin Name <span class="text-danger">*</span></label>
+                                            <input type="text" name="name" id="name" class="form-control @error('name') is-invalid @enderror" value="{{ old('name') }}" placeholder="Full Name" required>
+                                            @error('name')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
                                         </div>
 
                                         <div class="mb-3">
-                                            <label for="priciple_phone_no" class="form-label">Principal Phone</label>
-                                            <input type="text" name="priciple_phone_no" id="priciple_phone_no" class="form-control @error('priciple_phone_no') is-invalid @enderror" value="{{ old('priciple_phone_no') }}" placeholder="+92 321 9876543">
-                                            @error('priciple_phone_no')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
+                                            <label for="email" class="form-label">Admin Email <span class="text-danger">*</span></label>
+                                            <input type="email" name="email" id="email" class="form-control @error('email') is-invalid @enderror" value="{{ old('email') }}" placeholder="admin@example.com">
+                                            @error('email')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
                                         </div>
 
-                                        <div class="mb-0">
-                                            <label for="priciple_email" class="form-label">Principal Email</label>
-                                            <input type="email" name="priciple_email" id="priciple_email" class="form-control @error('priciple_email') is-invalid @enderror" value="{{ old('priciple_email') }}" placeholder="principal@example.com">
-                                            @error('priciple_email')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
+                                        <div class="mb-3">
+                                            <label for="password" class="form-label">Password <span class="text-danger">*</span></label>
+                                            <input type="password" name="password" id="password" class="form-control @error('password') is-invalid @enderror" value="{{ old('password') }}" placeholder="Password" required>
+                                            @error('admin_password')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
+                                        </div>
+
+                                        <div class="mb-3">
+                                            
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <h5 class="card-title">Package</h5>
+                                                    <p class="card-text">
+                                                        <span class="badge bg-primary">Free Trail for 7 days</span>
+                                                        <p class="text-muted small">If you want to upgrade to a Paid Plan, please <a href="https://wa.me/{{ $supportWhatsApp }}" target="_blank" rel="noopener noreferrer">contact us</a>.</p>
+                                                    </p>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-
                         <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mt-4 pt-3 border-top">
                             <p class="text-muted small mb-0">
                                 Already have an account?
@@ -128,8 +140,9 @@
         </div>
     </div>
 </div>
+</div>
 
-<script>
+<!-- <script>
 document.getElementById('school_name').addEventListener('input', function () {
     let name = this.value;
 
@@ -143,4 +156,4 @@ document.getElementById('school_name').addEventListener('input', function () {
     document.getElementById('school_email').value = email;
 });
 </script>
-@endsection
+@endsection -->

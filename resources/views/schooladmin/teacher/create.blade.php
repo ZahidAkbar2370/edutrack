@@ -35,22 +35,48 @@
                     @enderror
                 </div>
                 <div class="col-md-6">
-                    <label for="teacher_email" class="form-label">Email</label>
+                    <label for="teacher_email" class="form-label">Email <span class="text-danger">*</span></label>
                     <input type="email" name="teacher_email" id="teacher_email" value="{{ old('teacher_email') }}" class="form-control" placeholder="teacher@example.com">
                     @error('teacher_email')
                         <div class="text-danger small">{{ $message }}</div>
                     @enderror
                 </div>
+
                 <div class="col-md-6">
-                    <label for="teacher_phone_no" class="form-label">Phone</label>
-                    <input type="text" name="teacher_phone_no" id="teacher_phone_no" value="{{ old('teacher_phone_no') }}" class="form-control" placeholder="923001234567">
+                    <label for="teacher_phone_no" class="form-label">Phone <span class="text-danger">*</span></label>
+                    <input type="text" name="teacher_phone_no" id="teacher_phone_no" value="{{ old('teacher_phone_no') }}" class="form-control" placeholder="03001234567">
                     @error('teacher_phone_no')
                         <div class="text-danger small">{{ $message }}</div>
                     @enderror
                 </div>
+
+                <div class="col-md-6">
+                    <label for="teacher_qualification" class="form-label">Qualification <span class="text-danger">*</span></label>
+                    <input type="text" name="teacher_qualification" id="teacher_qualification" value="{{ old('teacher_qualification') }}" class="form-control" placeholder="Qualification">
+                    @error('teacher_qualification')
+                        <div class="text-danger small">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="col-md-6">
+                    <label for="teacher_joining_date" class="form-label">Joining Date <span class="text-danger">*</span></label>
+                    <input type="date" name="teacher_joining_date" id="teacher_joining_date" value="{{ old('teacher_joining_date') }}" class="form-control">
+                    @error('teacher_joining_date')
+                        <div class="text-danger small">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="col-md-6">
+                    <label for="teacher_salary" class="form-label">Salary <span class="text-danger">*</span></label>
+                    <input type="number" name="teacher_salary" id="teacher_salary" value="{{ old('teacher_salary') }}" class="form-control">
+                    @error('teacher_salary')
+                        <div class="text-danger small">{{ $message }}</div>
+                    @enderror
+                </div>
+
                 <div class="col-md-6">
                     <label for="teacher_address" class="form-label">Address</label>
-                    <input type="text" name="teacher_address" id="teacher_address" value="{{ old('teacher_address') }}" class="form-control" placeholder="City, area">
+                    <textarea name="teacher_address" id="teacher_address" class="form-control" placeholder="City, area" rows="2">{{ old('teacher_address') }}</textarea>
                     @error('teacher_address')
                         <div class="text-danger small">{{ $message }}</div>
                     @enderror

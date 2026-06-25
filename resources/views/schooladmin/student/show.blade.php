@@ -106,6 +106,10 @@
                     <dd class="col-sm-8">{{ $student->student_email ?? '—' }}</dd>
                     <dt class="col-sm-4 text-muted">Phone</dt>
                     <dd class="col-sm-8">{{ $student->student_phone_no ?? '—' }}</dd>
+                    <dt class="col-sm-4 text-muted">Date of Birth</dt>
+                    <dd class="col-sm-8">{{ $student->student_date_of_birth ? \Illuminate\Support\Carbon::parse($student->student_date_of_birth)->format('d M Y') : '—' }}</dd>
+                    <dt class="col-sm-4 text-muted">Gender</dt>
+                    <dd class="col-sm-8">{{ ucfirst($student->student_gender) ? ucfirst($student->student_gender) : '—' }}</dd>
                     <dt class="col-sm-4 text-muted">Status</dt>
                     <dd class="col-sm-8">
                         <span class="badge bg-{{ $student->status == 'active' ? 'success' : ($student->status == 'completed' ? 'warning' : ($student->status == 'banned' ? 'danger' : 'secondary')) }}">

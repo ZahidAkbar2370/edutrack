@@ -34,7 +34,7 @@
             <i class="bi bi-pencil-square me-1"></i> Edit Attendance
         </a>
 
-        <a href="#" class="btn btn-outline-danger" data-confirm-action
+        <a href="{{ url('attendance/report-attendance/' . $classId . '/' . $sectionId . '/' . $attendanceDate) }}" class="btn btn-outline-danger" data-confirm-action
                     data-confirm-title="Report via Whatsapp"
                     data-confirm-message="We are working on it... this feature will be available soon..."
                     data-confirm-yes="Yes, Report"
@@ -98,7 +98,13 @@
                                 </td>
                                 <td class="status-text text-capitalize fw-semibold"> <span class="p-2 bg-{{ $rowClass }} text-white">{{ $status }}</span> </td>
                                 <td>
-                                    <span class="p-2 bg-warning text-white">Pending</span>
+                                    @if($attendance->whatsapp_status == 'pending')
+                                        <span class="p-2 bg-warning text-white">Pending</span>
+                                    @elseif($attendance->whatsapp_status == 'sent')
+                                        <span class="p-2 bg-success text-white">Sent</span>
+                                    @elseif($attendance->whatsapp_status == 'failed')
+                                        <span class="p-2 bg-danger text-white">Failed</span>
+                                    @endif
                                 </td>
                             </tr>
                         @endforeach

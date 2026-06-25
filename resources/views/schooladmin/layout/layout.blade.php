@@ -194,7 +194,7 @@
         </main>
 
         <footer class="border-top bg-white py-3 text-center text-muted small">
-            &copy; {{ date('Y') }} EduTrack Powered by <a href="#" target="_blank">Softwebies</a>. All rights reserved.
+            &copy; {{ date('Y') }} EduTrack Powered by <a href="https://softwebies.com" target="_blank">Softwebies</a>. All rights reserved.
         </footer>
 
     </div>

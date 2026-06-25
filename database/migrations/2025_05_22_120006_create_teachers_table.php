@@ -16,6 +16,9 @@ return new class extends Migration
             $table->string('teacher_phone_no')->nullable();
             $table->string('teacher_photo')->nullable();
             $table->string('teacher_address')->nullable();
+            $table->string('qualification')->nullable();
+            $table->string('joining_date')->nullable();
+            $table->string('salary')->default('0');
             $table->enum('publication_status', ['active', 'inactive'])->default('active');
             $table->timestamps();
             $table->softDeletes();

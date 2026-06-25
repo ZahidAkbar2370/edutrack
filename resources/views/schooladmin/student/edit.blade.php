@@ -56,6 +56,28 @@
                     </div>
 
                     <div class="mb-3">
+                        <label for="student_date_of_birth" class="form-label">Date of Birth</label>
+                        <input type="date" name="student_date_of_birth" id="student_date_of_birth" value="{{ old('student_date_of_birth') ?? $student->student_date_of_birth }}" class="form-control">
+                        @error('student_date_of_birth')
+                            <div class="text-danger small">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="mb-3">
+                        <label for="student_gender" class="form-label">Student Gender</label>
+                        <select name="student_gender" id="student_gender" class="form-select">
+                            <option value="">Select Gender</option>
+                            <option value="male" {{ old('student_gender') ?? $student->student_gender == 'male' ? 'selected' : '' }}>Male</option>
+                            <option value="female" {{ old('student_gender') ?? $student->student_gender == 'female' ? 'selected' : '' }}>Female</option>
+                            <option value="other" {{ old('student_gender') ?? $student->student_gender == 'other' ? 'selected' : '' }}>Other</option>
+                        </select>
+                        @error('student_gender')
+                            <div class="text-danger small">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <hr class="my-3">
+
+                    <div class="mb-3">
                         <label for="student_photo" class="form-label">Profile Image</label>
                         <input type="file" name="student_photo" id="student_photo" class="form-control" accept="image/jpeg,image/png,image/gif,image/webp">
                         <div class="form-text">Optional. If you do not choose a photo, the default profile image will be used.</div>
@@ -77,6 +99,15 @@
                     <h2 class="h6 mb-0 fw-semibold">Class and Section Information</h2>
                 </div>
                 <div class="card-body">
+
+                    <div class="mb-3">
+                        <label for="student_admission_date" class="form-label">Admission Date <span class="text-danger">*</span></label>
+                        <input type="date" name="student_admission_date" id="student_admission_date" value="{{ old('student_admission_date') ?? $student->student_admission_date }}" class="form-control" required>
+                        @error('student_admission_date')
+                            <div class="text-danger small">{{ $message }}</div>
+                        @enderror
+                    </div>
+
                     <div class="mb-3">
                         <label for="class_id" class="form-label">Class <span class="text-danger">*</span></label>
                         <select name="class_id" id="class_id" class="form-select" required>
@@ -156,7 +187,7 @@
                         @enderror
                     </div>
                     <div class="mb-3">
-                        <label for="parent_phone_no" class="form-label">Parent Phone <span class="text-danger">*</span></label>
+                        <label for="parent_phone_no" class="form-label">Parent Phone</label>
                         <input type="number" name="parent_phone_no" id="parent_phone_no" value="{{ old('parent_phone_no') ?? $student->parent->parent_phone_no }}" class="form-control" placeholder="923001234567" required>
                         @error('parent_phone_no')
                             <div class="text-danger small">{{ $message }}</div>

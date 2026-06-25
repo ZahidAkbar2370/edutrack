@@ -22,6 +22,8 @@ class Attendance extends Model
         'attendance_date',
         'attendance_status',
         'attendance_note',
+        'whatsapp_status',
+        'attendance_code',
     ];
 
     public function student()
@@ -37,5 +39,10 @@ class Attendance extends Model
     public function section()
     {
         return $this->belongsTo(Section::class, 'section_id', 'id');
+    }
+
+    public static function generateAttendanceCode()
+    {
+        return 'ATT-'.str_pad(Attendance::count() + 1, 6, '0', STR_PAD_LEFT);
     }
 }

@@ -62,11 +62,13 @@ class StudentController extends Controller
             'student_name' => 'required|string|max:255',
             'student_email' => 'nullable|email|max:255',
             'student_phone_no' => 'nullable|string|max:255',
+            'student_date_of_birth' => 'nullable|date',
+            'student_gender' => 'nullable|in:male,female',
             'student_roll_number' => 'nullable|string|max:255',
             'student_admission_date' => 'nullable|date',
             'student_photo' => 'nullable|image|mimes:jpeg,jpg,png',
             'parent_name' => 'required|string|max:255',
-            'parent_phone_no' => 'required|string|max:255',
+            'parent_phone_no' => 'nullable|string|max:255',
             'parent_email' => 'nullable|email|max:255',
             'parent_address' => 'nullable|string|max:255',
             'status' => 'required|in:active,completed,banned,inactive',
@@ -82,8 +84,10 @@ class StudentController extends Controller
                 'student_name' => $request->student_name,
                 'student_email' => $request->student_email,
                 'student_phone_no' => $request->student_phone_no,
+                'student_date_of_birth' => $request->student_date_of_birth,
+                'student_gender' => $request->student_gender,
                 'student_photo' => 'Admin/images/student/profiles/default.png',
-                'student_roll_number' => Student::generateRollNumber(),
+                'student_roll_number' => Student::generateRollNumberString(),
                 'student_admission_date' => $request->student_admission_date,
                 'status' => $request->status,
             ]);
@@ -91,10 +95,10 @@ class StudentController extends Controller
             if ($request->hasFile('student_photo')) {
                 $photo = $request->file('student_photo');
                 $photoName = uniqid('profile_') . '_' . $student->id . '.' . $photo->getClientOriginalExtension();
-                $photo->move(public_path('admin/images/student/profiles'), $photoName);
+                $photo->move(public_path('Admin/images/student/profiles'), $photoName);
 
                 $student->update([
-                    'student_photo' => 'admin/images/student/profiles/' . $photoName,
+                    'student_photo' => 'Admin/images/student/profiles/' . $photoName,
                 ]);
             }
 
@@ -155,11 +159,12 @@ class StudentController extends Controller
             'student_name' => 'required|string|max:255',
             'student_email' => 'nullable|email|max:255',
             'student_phone_no' => 'nullable|string|max:255',
-            'student_roll_number' => 'nullable|string|max:255',
+            'student_date_of_birth' => 'nullable|date',
+            'student_gender' => 'nullable|in:male,female',
             'student_admission_date' => 'nullable|date',
             'student_photo' => 'nullable|image|mimes:jpeg,jpg,png|max:2048',
             'parent_name' => 'required|string|max:255',
-            'parent_phone_no' => 'required|string|max:255',
+            'parent_phone_no' => 'nullable|string|max:255',
             'parent_email' => 'nullable|email|max:255',
             'parent_address' => 'nullable|string|max:255',
             'status' => 'required|in:active,completed,banned,inactive',
@@ -186,7 +191,8 @@ class StudentController extends Controller
                 'student_name' => $request->student_name,
                 'student_email' => $request->student_email,
                 'student_phone_no' => $request->student_phone_no,
-                'student_roll_number' => $request->student_roll_number,
+                'student_date_of_birth' => $request->student_date_of_birth,
+                'student_gender' => $request->student_gender,
                 'student_admission_date' => $request->student_admission_date,
                 'status' => $request->status,
             ]);
@@ -210,7 +216,7 @@ class StudentController extends Controller
             }
         });
 
-        return redirect('student')->with('success', 'Student updated successfully');
+        return redirect('student/show/' . $studentId)->with('success', 'Student updated successfully');
     }
 
     // Destroy Selected Student by id

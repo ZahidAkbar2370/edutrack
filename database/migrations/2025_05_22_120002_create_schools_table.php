@@ -15,14 +15,14 @@ return new class extends Migration
 
             // School Information
             $table->string('school_name');
-            $table->string('school_email')->nullable();
-            $table->string('school_phone_no');
-            $table->string('city');
-            $table->string('address');
+            $table->string('school_email');
+            $table->string('school_phone_no')->nullable();
+            $table->string('city')->nullable();
+            $table->string('address')->nullable();
             $table->string('school_logo')->default('Admin/images/school/logo/default.png');
 
             // Principal Information
-            $table->string('priciple_name');
+            $table->string('priciple_name')->nullable();
             $table->string('priciple_phone_no')->nullable();
             $table->string('priciple_email')->nullable();
             $table->timestamps();

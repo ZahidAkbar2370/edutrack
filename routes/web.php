@@ -17,7 +17,7 @@ use App\Http\Controllers\SuperAdmin\DashboardController as SuperAdminDashboardCo
 use App\Http\Controllers\GeneralController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SuperAdmin\ProfileController as SuperAdminProfileController;
-use App\Http\Controllers\LegalController;
+use App\Http\Controllers\Frontend\LegalController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -86,12 +86,15 @@ Route::group(['middleware' => ['auth', 'super-admin', 'verified']], function () 
 Route::group(['middleware' => ['auth', 'school-admin', 'verified', 'membership-plan']], function () {
 
     Route::get('/dashboard', [DashboardController::class, 'index']);
+    Route::post('/update-whatsapp-device', [DashboardController::class, 'updateWhatsappDeviceNumber']);
 
     // Ajax routes
     Route::prefix('ajax')->group(function () {
         Route::get('sections/{classId}', [AjaxController::class, 'sectionsByClassId']);
 
         Route::get('students/{classId}/{sectionId}', [AjaxController::class, 'studentsBySectionId']);
+
+        Route::post('generate-whatsapp-qr', [DashboardController::class, 'generateWhatsappQRCode']);
     });
 
     // Class routes
@@ -129,6 +132,10 @@ Route::group(['middleware' => ['auth', 'school-admin', 'verified', 'membership-p
 
         // Teacher export to csv
         Route::get('export-csv', [TeacherController::class, 'exportTeacherCsv']);
+
+        // Teacher pay salary
+        Route::get('pay-salary', [TeacherController::class, 'paySalaryForm']);
+        Route::post('pay-salary', [TeacherController::class, 'paySalary']);
     });
 
     // Student routes
@@ -187,6 +194,8 @@ Route::group(['middleware' => ['auth', 'school-admin', 'verified', 'membership-p
         Route::get('show', [AttendanceController::class, 'show'])->name('attendance.show');
         Route::post('update', [AttendanceController::class, 'update']);
         Route::get('edit/{classId}/{sectionId}/{attendanceDate}', [AttendanceController::class, 'edit'])->name('attendance.edit');
+
+        Route::get('report-attendance/{classId}/{sectionId}/{attendanceDate}', [AttendanceController::class, 'reportAttendance'])->name('attendance.report-attendance');
 
         Route::get('export-to-csv/{classId}/{sectionId}/{attendanceDate}', [AttendanceController::class, 'exportToCsv'])->name('attendance.export-to-csv');
     });

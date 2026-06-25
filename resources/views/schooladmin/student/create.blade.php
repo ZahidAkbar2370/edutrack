@@ -40,13 +40,37 @@
                             <div class="text-danger small">{{ $message }}</div>
                         @enderror
                     </div>
+
                     <div class="mb-3">
                         <label for="student_phone_no" class="form-label">Student Phone</label>
-                        <input type="number" name="student_phone_no" id="student_phone_no" value="{{ old('student_phone_no') }}" class="form-control" placeholder="923001234567">
+                        <input type="number" name="student_phone_no" id="student_phone_no" value="{{ old('student_phone_no') }}" class="form-control" placeholder="03001234567">
                         @error('student_phone_no')
                             <div class="text-danger small">{{ $message }}</div>
                         @enderror
                     </div>
+
+                    <div class="mb-3">
+                        <label for="student_date_of_birth" class="form-label">Date of Birth</label>
+                        <input type="date" name="student_date_of_birth" id="student_date_of_birth" value="{{ old('student_date_of_birth') }}" class="form-control">
+                        @error('student_date_of_birth')
+                            <div class="text-danger small">{{ $message }}</div>
+                        @enderror
+                    </div>   
+
+                    <div class="mb-3">
+                        <label for="student_gender" class="form-label">Student Gender</label>
+                        <select name="student_gender" id="student_gender" class="form-select">
+                            <option value="">Select Gender</option>
+                            <option value="male" {{ old('student_gender') == 'male' ? 'selected' : '' }}>Male</option>
+                            <option value="female" {{ old('student_gender') == 'female' ? 'selected' : '' }}>Female</option>
+                            <option value="other" {{ old('student_gender') == 'other' ? 'selected' : '' }}>Other</option>
+                        </select>
+                        @error('student_gender')
+                            <div class="text-danger small">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <hr class="my-3">
 
                     <div class="mb-3">
                         <label for="student_photo" class="form-label">Profile Image</label>
@@ -56,7 +80,7 @@
                             <div class="text-danger small">{{ $message }}</div>
                         @enderror
                         <div class="mt-2">
-                            <img id="student_photo_preview" src="{{ asset('images/default-student-profile.png') }}" alt="Preview" class="rounded border" style="width:120px;height:120px;object-fit:cover;">
+                            <img id="student_photo_preview" src="{{ asset('admin/images/student/profiles/default.png') }}" alt="Preview" class="rounded border" style="width:120px;height:120px;object-fit:cover;">
                         </div>
                     </div>
 
@@ -70,10 +94,19 @@
                     <h2 class="h6 mb-0 fw-semibold">Class and Section Information</h2>
                 </div>
                 <div class="card-body">
+
+                <div class="mb-3">
+                        <label for="student_admission_date" class="form-label">Admission Date <span class="text-danger">*</span></label>
+                        <input type="date" name="student_admission_date" id="student_admission_date" value="{{ old('student_admission_date') ?? date('Y-m-d') }}" class="form-control" required>
+                        @error('student_admission_date')
+                            <div class="text-danger small">{{ $message }}</div>
+                        @enderror
+                    </div>
+
                     <div class="mb-3">
                         <label for="class_id" class="form-label">Class <span class="text-danger">*</span></label>
                         <select name="class_id" id="class_id" class="form-select" required>
-                            <option value="">Select Class</option>
+                            <option value="">Select Class From List</option>
                             @if(!empty($classes))
                             @foreach($classes as $class)
                                 <option value="{{ $class->id }}" {{ old('class_id') == $class->id ? 'selected' : '' }}>
@@ -86,10 +119,11 @@
                             <div class="text-danger small">{{ $message }}</div>
                         @enderror
                     </div>
+
                     <div class="mb-3">
                         <label for="section_id" class="form-label">Section <span class="text-danger">*</span></label>
                         <select name="section_id" id="section_id" class="form-select" required>
-                            <option value="">Select Section</option>
+                            <option value="">Select Section From List</option>
                             @if(!empty($sections))
                             @foreach($sections as $section)
                                 <option value="{{ $section->id }}" data-class-id="{{ $section->class_id }}"
@@ -103,6 +137,7 @@
                             <div class="text-danger small">{{ $message }}</div>
                         @enderror
                     </div>
+
                     <div class="mb-3">
                         <label for="student_per_month_fee" class="form-label">Per Month Fee <span class="text-danger">*</span></label>
                         <input type="number" name="student_per_month_fee" id="student_per_month_fee" placeholder="0" value="{{ old('student_per_month_fee') ?? 0 }}" class="form-control" required>
@@ -110,18 +145,12 @@
                             <div class="text-danger small">{{ $message }}</div>
                         @enderror
                     </div>
-                    <div class="mb-3">
-                        <label for="student_admission_date" class="form-label">Admission Date <span class="text-danger">*</span></label>
-                        <input type="date" name="student_admission_date" id="student_admission_date" value="{{ old('student_admission_date') ?? date('Y-m-d') }}" class="form-control" required>
-                        @error('student_admission_date')
-                            <div class="text-danger small">{{ $message }}</div>
-                        @enderror
-                    </div>
+                    
                     <div class="mb-0">
                         <label for="status" class="form-label">Status <span class="text-danger">*</span></label>
                         <select name="status" id="status" class="form-select" required>
                             <option value="" disabled selected>Select Status</option>
-                                <option value="active" {{ old('status') === 'active' ? 'selected' : '' }}>
+                                <option value="active" {{ old('status') === 'active' ? 'selected' : '' }} selected>
                                     Active
                                 </option>
                                 <option value="inactive" {{ old('status') === 'inactive' ? 'selected' : '' }}>
@@ -156,7 +185,7 @@
                         @enderror
                     </div>
                     <div class="mb-3">
-                        <label for="parent_phone_no" class="form-label">Parent Phone <span class="text-danger">*</span></label>
+                        <label for="parent_phone_no" class="form-label">Parent Phone</label>
                         <input type="number" name="parent_phone_no" id="parent_phone_no" value="{{ old('parent_phone_no') }}" class="form-control" placeholder="923001234567" required>
                         @error('parent_phone_no')
                             <div class="text-danger small">{{ $message }}</div>

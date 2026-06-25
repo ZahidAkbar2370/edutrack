@@ -3,12 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Models\Attendance;
+use App\Models\ParentModel;
+use App\Models\School;
 use App\Models\SchoolClass;
 use App\Models\Section;
 use App\Models\Student;
+use App\Models\WhatsappDevice;
+use App\Models\WhatsappMessage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class AttendanceController extends Controller
 {
@@ -103,6 +109,7 @@ class AttendanceController extends Controller
                     'student_id' => $studentId,
                     'attendance_date' => $request->attendance_date,
                     'attendance_status' => $status,
+                    'attendance_code' => Attendance::generateAttendanceCode(),
                 ]);
             }
         });
@@ -183,6 +190,76 @@ class AttendanceController extends Controller
             'schoolClass',
             'section'
         ));
+    }
+
+    function reportAttendance($classId, $sectionId, $attendanceDate)
+    {
+        $attendanceList = Attendance::where('school_id', Auth::user()->school_id)->where('class_id', $classId)->where('section_id', $sectionId)->where('attendance_date', $attendanceDate)->get();
+
+        $whatsappDevice = WhatsappDevice::where('school_id', Auth::user()->school_id)->first();
+
+        $class = SchoolClass::find($classId);
+        $section = Section::find($sectionId);
+        $school = School::find(Auth::user()->school_id);
+
+        foreach($attendanceList as $attendance) {
+            $student = Student::find($attendance->student_id);
+            $parent = ParentModel::where('student_id', $student->id)->first();
+
+
+            WhatsappMessage::create([
+                'school_id' => Auth::user()->school_id,
+                'student_id' => $student->id,
+                'parent_id' => $parent->id,
+                'message_type' => 'attendance',
+                'from_number' => $whatsappDevice->wachat_device_number,
+                'to_number' => $parent->parent_phone_no,
+                'message' => 'Aslam o Alaikum, '.$parent->parent_name.'\n\n Attendance Update\n- Roll #: '.$student->student_roll_number.'\n- Student Name: '.$student->student_name.'\n- Class: '.$class->class_name.'\n- Section: '.$section->section_name.'\n- Attendance Date: '.$attendance->attendance_date.'\n- Attendance Status: '.$attendance->attendance_status.'\n\n Best Regard, \n '.$school->school_name,
+            ]);
+
+            $attendance->whatsapp_status = 'sent';
+            $attendance->update();
+        }
+
+        return redirect()->back()->with('success', 'Attendance reported successfully');
+
+        // $sendMessageUrl = env('WACHAT_API_URL').'/send-message';
+            // $apiKey = env('WACHAT_API_KEY');
+
+            // $messageBodyToStudent = "Aslam o Alaikum, ".$student->student_name.
+            //             "\n\n Attendance Update".
+            //             "\n-  Roll #: ".$student->student_roll_number.
+            //             "\n-  Class: ".$class->class_name.
+            //             "\n-  Section: ".$section->section_name.
+            //             "\n-  Attendance Date: ". $attendance->attendance_date.
+            //             "\n-  Attendance Status: ".$attendance->attendance_status.
+            //             "\n\n Best Regard, \n ".$school->school_name;
+
+            // $sendMessageResponseToStudent = Http::post($sendMessageUrl, [
+            //     'api_key' => $apiKey,
+            //     'sender' => $whatsappDevice->wachat_device_number,
+            //     'number' => $student->student_phone_no,
+            //     'message' => $messageBodyToStudent,
+            // ]);
+
+
+            // $messageBodyToParent = "Aslam o Alaikum, ".$parent->parent_name.
+            //             "\n\n Attendance Update".
+            //             "\n-  Student Name: ".$student->student_name.
+            //             "\n-  Roll #: ".$student->student_roll_number.
+            //             "\n-  Class: ".$class->class_name.
+            //             "\n-  Section: ".$section->section_name.
+            //             "\n-  Attendance Date: ". $attendance->attendance_date.
+            //             "\n-  Attendance Status: ".$attendance->attendance_status.
+            //             "\n\n Best Regard, \n ".$school->school_name;
+
+            // $sendMessageResponseToParent = Http::post($sendMessageUrl, [
+            //     'api_key' => $apiKey,
+            //     'sender' => $whatsappDevice->wachat_device_number,
+            //     'number' => $parent->parent_phone_no,
+            //     'message' => $messageBodyToParent,
+            // ]);
+
     }
 
     // Export attendance records to CSV

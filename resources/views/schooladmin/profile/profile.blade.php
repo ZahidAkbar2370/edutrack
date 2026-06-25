@@ -38,16 +38,17 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="school_phone_no" class="form-label">School Phone No <span class="text-danger">*</span></label>
-                        <input type="text" name="school_phone_no" id="school_phone_no" class="form-control" value="{{ old('school_phone_no', $school->school_phone_no) }}" placeholder="923001234567" required>
-                        @error('school_phone_no')
+                        <label for="school_email" class="form-label">School Email <span class="text-danger">*</span></label>
+                        <input type="email" name="school_email" id="school_email" class="form-control" value="{{ old('school_email', $school->school_email) }}" placeholder="example@edutrack.school" required>
+                        @error('school_email')
                             <div class="text-danger small">{{ $message }}</div>
                         @enderror
                     </div>
+
                     <div class="mb-3">
-                        <label for="school_email" class="form-label">School Email</label>
-                        <input type="email" name="school_email" id="school_email" class="form-control" value="{{ old('school_email', $school->school_email) }}" placeholder="example@edutrack.school" disabled>
-                        @error('school_email')
+                        <label for="school_phone_no" class="form-label">Phone No <span class="text-danger">*</span></label>
+                        <input type="text" name="school_phone_no" id="school_phone_no" class="form-control" value="{{ old('school_phone_no', $school->school_phone_no) }}" placeholder="923001234567" required>
+                        @error('school_phone_no')
                             <div class="text-danger small">{{ $message }}</div>
                         @enderror
                     </div>

@@ -13,7 +13,7 @@ return new class extends Migration
             $table->foreignUuid('school_id')->constrained('schools')->cascadeOnDelete();
             $table->foreignUuid('student_id')->constrained('students')->cascadeOnDelete();
             $table->string('parent_name');
-            $table->string('parent_phone_no');
+            $table->string('parent_phone_no')->nullable();
             $table->string('parent_email')->nullable();
             $table->string('parent_photo')->nullable();
             $table->string('parent_cnic_front')->nullable();

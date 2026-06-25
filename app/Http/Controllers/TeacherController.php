@@ -106,6 +106,34 @@ class TeacherController extends Controller
         return redirect('teacher')->with('error', 'Teacher not found');
     }
 
+    public function paySalaryForm()
+    {
+        $teachers = Teacher::with('school')
+            ->where('school_id', Auth::user()->school_id)
+            ->orderBy('teacher_name')
+            ->get();
+
+        return view('schooladmin.teacher.pay_salary', compact('teachers'));
+    }
+
+    public function paySalary(Request $request)
+    {
+        $request->validate([
+            'teacher_id' => 'required|exists:teachers,id',
+            'teacher_salary' => 'required|numeric',
+        ]);
+        
+        $teacher = Teacher::find($request->teacher_id);
+
+        if ($teacher) {
+            $teacher->update([
+                'teacher_salary' => $request->teacher_salary,
+            ]);
+        }
+        
+        return redirect('teacher')->with('success', 'Salary paid successfully');
+    }
+
     // export teacher records to CSV by teacher id
     public function exportTeacherCsv()
     {
@@ -129,4 +157,6 @@ class TeacherController extends Controller
             fclose($csv);
         }, 'Teacher_Records.csv');
     }
+
+
 }

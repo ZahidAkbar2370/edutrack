@@ -26,8 +26,14 @@
     </div>
 
     <div class="d-flex flex-wrap gap-2">
-        <a href="#" onclick="return confirm('we are working on it... this feature will be available soon...')" class="btn btn-success">
-            <i class="bi bi-whatsapp me-1"></i> Send Daily Test Result to Parents via Whatsapp
+        <a href="#" class="btn btn-outline-danger"
+        data-confirm-action
+        data-confirm-title="Notification to Parents via Whatsapp"
+        data-confirm-message="Are you sure you want to send notification to parents via whatsapp?"
+        data-confirm-yes="Yes, Send Notification"
+        data-confirm-yes-class="btn-danger"
+        >
+            <i class="bi bi-whatsapp me-1"></i> Notification to Parents via Whatsapp
         </a>
     </div>
 </div>

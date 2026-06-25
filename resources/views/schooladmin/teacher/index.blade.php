@@ -13,9 +13,7 @@
     <div class="d-flex flex-wrap gap-2">
 
 
-    <!-- <a href="#" class="btn btn-outline-secondary">
-        <i class="bi bi-upload me-1"></i> Import CSV
-    </a> -->
+  
 
     <a href="{{ url('teacher/export-csv') }}" class="btn btn-outline-success" data-confirm-action
                     data-confirm-title="Export Teachers to Excel"
@@ -24,6 +22,10 @@
                     data-confirm-yes-class="btn-success"
         >
         <i class="bi bi-download me-1"></i> Export CSV
+    </a>
+
+    <a href="{{ url('teacher/pay-salary') }}" class="btn btn-outline-secondary">
+        <i class="bi bi-cash-coin me-1"></i> Pay Salary
     </a>
 
         <a href="{{ url('teacher/create') }}" class="btn btn-primary">
@@ -54,6 +56,9 @@
                         <th>Teacher Name</th>
                         <th>Email</th>
                         <th>Phone</th>
+                        <th>Qualification</th>
+                        <th>Joining Date</th>
+                        <th>Salary</th>
                         <th>Address</th>
                         <th class="text-center">Actions</th>
                     </tr>
@@ -65,6 +70,9 @@
                             <td class="fw-medium">{{ $teacher->teacher_name }}</td>
                             <td>{{ $teacher->teacher_email ?? '—' }}</td>
                             <td>{{ $teacher->teacher_phone_no ?? '—' }}</td>
+                            <td>{{ $teacher->teacher_qualification ?? '—' }}</td>
+                            <td>{{ $teacher->teacher_joining_date ?? '—' }}</td>
+                            <td>{{ $teacher->teacher_salary ?? '—' }}</td>  
                             <td class="text-truncate" style="max-width: 200px;" title="{{ $teacher->teacher_address }}">
                                 {{ $teacher->teacher_address ?? '—' }}
                             </td>
@@ -92,7 +100,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="text-center text-muted py-4">No teachers found</td>
+                            <td colspan="9" class="text-center text-muted py-4">No teachers found</td>
                         </tr>
                     @endforelse
                 </tbody>

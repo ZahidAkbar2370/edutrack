@@ -4,12 +4,21 @@
 
 @section('content')
 
+@if(session('success'))
+    <div class="alert alert-success">{{ session('success') }}</div>
+@endif
+@if(session('error'))
+    <div class="alert alert-danger">{{ session('error') }}</div>
+@endif
+
 <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-4">
     <div>
         <h1 class="h3 mb-1 fw-bold">Edit Plan</h1>
         <p class="text-muted mb-0">Add a new membership plan to EduTrack</p>
     </div>
 </div>
+
+
 
 <form action="{{URL::to('membership/update', $membership->id)}}" method="POST" id="membership-form" class="need-validations">
     @csrf

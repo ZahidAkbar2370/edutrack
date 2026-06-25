@@ -82,7 +82,7 @@
                     <a href="#plans" class="me-3">Plans</a>
                     <a href="{{ url('privacy-policy') }}" class="me-3">Privacy</a>
                     <a href="{{ url('terms-and-conditions') }}">Terms & Conditions</a>
-                    <p class="mt-2 mb-0 small">&copy; {{ date('Y') }} EduTrack. All rights reserved.</p>
+                    <p class="mt-2 mb-0 small">&copy; {{ date('Y') }} EduTrack. All rights reserved. Powered by <a href="https://softwebies.com" target="_blank" rel="noopener noreferrer" class="text-white fw-bold">Softwebies</a></p>
                 </div>
             </div>
         </div>

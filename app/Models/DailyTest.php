@@ -26,6 +26,7 @@ class DailyTest extends Model
         'daily_test_total',
         'daily_test_percentage',
         'daily_test_note',
+        'whatsapp_status',
     ];
 
     public function student()

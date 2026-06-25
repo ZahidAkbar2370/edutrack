@@ -25,6 +25,9 @@ class Student extends Model
         'student_photo',
         'student_roll_number',
         'student_admission_date',
+        'student_date_of_birth',
+        'student_gender',
+        'student_per_month_fee',
         'status',
     ];
 
@@ -68,5 +71,19 @@ class Student extends Model
         }
 
         return 1;
+    }
+
+    public static function generateRollNumberString()
+    {
+        $lastStudent = Student::withTrashed()->where('school_id', Auth::user()->school_id)->orderBy('created_at', 'desc')->first();
+
+        if ($lastStudent) {
+
+            $lastNumber = (int) str_replace('STD-', '', $lastStudent->student_roll_number);
+    
+            return 'STD-' . str_pad($lastNumber + 1, 4, '0', STR_PAD_LEFT);
+        }
+    
+        return 'STD-0001';
     }
 }

@@ -15,9 +15,11 @@ return new class extends Migration
             $table->foreignUuid('class_id')->constrained('classes')->cascadeOnDelete();
             $table->foreignUuid('section_id')->constrained('sections')->cascadeOnDelete();
             $table->foreignUuid('student_id')->constrained('students')->cascadeOnDelete();
+            $table->string('attendance_code')->unique();
             $table->date('attendance_date');
             $table->enum('attendance_status', ['present', 'leave', 'late', 'absent'])->default('present');
             $table->string('attendance_note')->nullable();
+            $table->enum('whatsapp_status', ['pending', 'sent', 'failed'])->default('pending');
             $table->timestamps();
             $table->softDeletes();
         });

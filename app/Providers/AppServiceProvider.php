@@ -23,11 +23,11 @@ class AppServiceProvider extends ServiceProvider
     {
         Paginator::useBootstrapFive();
 
-        View::composer(['frontend.layout', 'frontend.pages.*', 'auth.*'], function ($view) {
+        View::composer(['frontend.layout', 'frontend.pages.*', 'auth.*', 'schooladmin.dashboard.*'], function ($view) {
             $view->with([
                 'supportEmail' => 'edutrack.softwebies@gmail.com',
                 'supportPhone' => '+92 308 1312527',
-                'supportWhatsApp' => '923081312527',
+                'supportWhatsApp' => '923200470584',
                 'supportAddress' => 'Housing Colony 2, B Block, Layyah, Pakistan',
             ]);
         });
