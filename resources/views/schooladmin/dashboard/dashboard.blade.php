@@ -184,7 +184,7 @@
                 <form action="{{ URL::to('update-whatsapp-device') }}" method="POST">
                     @csrf
                 <div class="mb-4">
-                    <label class="form-label text-muted small text-uppercase fw-semibold mb-1">Device Number <small class="text-danger">Whatsapp Number with country code (92xxxxxxxxxx). Example: 923200470584</small> </label>
+                    <label class="form-label text-muted small text-uppercase fw-semibold mb-1">Device Number <small class="text-danger text-small">Whatsapp Number with country code (92xxxxxxxxxx). Example: 923200470584</small> </label>
                         <input type="number" name="whatsapp_device_number" id="whatsapp_device_number" class="form-control" placeholder="WhatsApp Number" required value="{{ old('whatsapp_device_number') ?? $whatsappDevice->wachat_device_number ?? '92' }}">
 
                         @error('whatsapp_device_number')

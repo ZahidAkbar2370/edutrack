@@ -10,10 +10,10 @@
         <div class="col-xl-10">
             <div class="auth-card">
 
-            <div class="auth-card-header">
-                <h1 class="h3 mb-1 fw-bold">Register Your School</h1>
-                <p class="mb-0 auth-card-subtitle">Create your EduTrack account and start managing attendance, tests, and students.</p>
-            </div>
+                <div class="auth-card-header">
+                    <h1 class="h3 mb-1 fw-bold">Register Your School</h1>
+                    <p class="mb-0 auth-card-subtitle">Create your EduTrack account and start managing attendance, tests, and students.</p>
+                </div>
 
                 <div class="auth-card-body">
                     <form method="POST" action="{{ route('register') }}" id="register-form">
@@ -106,13 +106,13 @@
                                         </div>
 
                                         <div class="mb-3">
-                                            
+
                                             <div class="card">
                                                 <div class="card-body">
                                                     <h5 class="card-title">Package</h5>
                                                     <p class="card-text">
                                                         <span class="badge bg-primary">Free Trail for 7 days</span>
-                                                        <p class="text-muted small">If you want to upgrade to a Paid Plan, please <a href="https://wa.me/{{ $supportWhatsApp }}" target="_blank" rel="noopener noreferrer">contact us</a>.</p>
+                                                    <p class="text-muted small">If you want to upgrade to a Paid Plan, please <a href="https://wa.me/{{ $supportWhatsApp }}" target="_blank" rel="noopener noreferrer">contact us</a>.</p>
                                                     </p>
                                                 </div>
                                             </div>
@@ -120,20 +120,20 @@
                                     </div>
                                 </div>
                             </div>
-                        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mt-4 pt-3 border-top">
-                            <p class="text-muted small mb-0">
-                                Already have an account?
-                                <a href="{{ route('login') }}" class="auth-link">Login here</a>
-                            </p>
-                            <button type="submit" class="btn btn-login px-4"
-                                data-confirm-action
-                                data-confirm-title="Register School"
-                                data-confirm-message="Are you sure you want to register this school?"
-                                data-confirm-yes="Yes, Register"
-                                data-confirm-yes-class="btn-primary">
-                                <i class="bi bi-building-add me-1"></i> Register School
-                            </button>
-                        </div>
+                            <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mt-4 pt-3 border-top">
+                                <p class="text-muted small mb-0">
+                                    Already have an account?
+                                    <a href="{{ route('login') }}" class="auth-link">Login here</a>
+                                </p>
+                                <button type="submit" class="btn btn-login px-4"
+                                    data-confirm-action
+                                    data-confirm-title="Register School"
+                                    data-confirm-message="Are you sure you want to register this school?"
+                                    data-confirm-yes="Yes, Register"
+                                    data-confirm-yes-class="btn-primary">
+                                    <i class="bi bi-building-add me-1"></i> Register School
+                                </button>
+                            </div>
                     </form>
                 </div>
             </div>
@@ -156,4 +156,5 @@ document.getElementById('school_name').addEventListener('input', function () {
     document.getElementById('school_email').value = email;
 });
 </script>
-@endsection -->
+-->
+@endsection

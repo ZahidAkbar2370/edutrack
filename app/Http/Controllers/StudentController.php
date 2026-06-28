@@ -59,18 +59,21 @@ class StudentController extends Controller
         $request->validate([
             'class_id' => 'required|exists:classes,id',
             'section_id' => 'required|exists:sections,id',
+
             'student_name' => 'required|string|max:255',
             'student_email' => 'nullable|email|max:255',
-            'student_phone_no' => 'nullable|string|max:255',
+            'student_phone_no' => 'nullable|string|max:255|regex:/^92\d{10}$/',
             'student_date_of_birth' => 'nullable|date',
             'student_gender' => 'nullable|in:male,female',
-            'student_roll_number' => 'nullable|string|max:255',
             'student_admission_date' => 'nullable|date',
+            'student_per_month_fee' => 'nullable|string|max:255',
             'student_photo' => 'nullable|image|mimes:jpeg,jpg,png',
+
             'parent_name' => 'required|string|max:255',
-            'parent_phone_no' => 'nullable|string|max:255',
+            'parent_phone_no' => 'nullable|string|max:255|regex:/^92\d{10}$/',
             'parent_email' => 'nullable|email|max:255',
             'parent_address' => 'nullable|string|max:255',
+
             'status' => 'required|in:active,completed,banned,inactive',
         ]);
 
@@ -81,6 +84,7 @@ class StudentController extends Controller
                 'school_id' => Auth::user()->school_id,
                 'class_id' => $request->class_id,
                 'section_id' => $request->section_id,
+
                 'student_name' => $request->student_name,
                 'student_email' => $request->student_email,
                 'student_phone_no' => $request->student_phone_no,
@@ -88,7 +92,9 @@ class StudentController extends Controller
                 'student_gender' => $request->student_gender,
                 'student_photo' => 'Admin/images/student/profiles/default.png',
                 'student_roll_number' => Student::generateRollNumberString(),
+
                 'student_admission_date' => $request->student_admission_date,
+                'student_per_month_fee' => $request->student_per_month_fee,
                 'status' => $request->status,
             ]);
 
@@ -156,15 +162,19 @@ class StudentController extends Controller
         $request->validate([
             'class_id' => 'required|exists:classes,id',
             'section_id' => 'required|exists:sections,id',
+
             'student_name' => 'required|string|max:255',
             'student_email' => 'nullable|email|max:255',
-            'student_phone_no' => 'nullable|string|max:255',
+            'student_phone_no' => 'nullable|string|max:255|regex:/^92\d{10}$/',
             'student_date_of_birth' => 'nullable|date',
             'student_gender' => 'nullable|in:male,female',
+            'student_photo' => 'nullable|image|mimes:jpeg,jpg,png',
+
             'student_admission_date' => 'nullable|date',
-            'student_photo' => 'nullable|image|mimes:jpeg,jpg,png|max:2048',
+            'student_per_month_fee' => 'nullable|string|max:255',
+
             'parent_name' => 'required|string|max:255',
-            'parent_phone_no' => 'nullable|string|max:255',
+            'parent_phone_no' => 'nullable|string|max:255|regex:/^92\d{10}$/',
             'parent_email' => 'nullable|email|max:255',
             'parent_address' => 'nullable|string|max:255',
             'status' => 'required|in:active,completed,banned,inactive',
@@ -180,7 +190,7 @@ class StudentController extends Controller
                 $photo->move(public_path('admin/images/student/profiles'), $photoName);
 
                 $student->update([
-                    'student_photo' => 'admin/images/student/profiles/' . $photoName ?? null,
+                    'student_photo' => 'Admin/images/student/profiles/' . $photoName ?? null,
                 ]);
             }
 
@@ -194,6 +204,7 @@ class StudentController extends Controller
                 'student_date_of_birth' => $request->student_date_of_birth,
                 'student_gender' => $request->student_gender,
                 'student_admission_date' => $request->student_admission_date,
+                'student_per_month_fee' => $request->student_per_month_fee,
                 'status' => $request->status,
             ]);
 

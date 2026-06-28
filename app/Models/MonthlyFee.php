@@ -18,13 +18,18 @@ class MonthlyFee extends Model
         'student_id',
         'payment_date',
         'payment_prove_image',
+
+        'previous_remaining_amount',
         'monthly_fee_amount',
+
         'any_fine_amount',
         'any_discount_amount',
         'total_amount',
         'paid_amount',
+
         'remaining_amount',
         'note',
+        'system_remarks',
     ];
 
     public function student()

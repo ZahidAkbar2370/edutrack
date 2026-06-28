@@ -3,15 +3,15 @@
     <div class="id-hole"></div>
 
     <div class="id-header-uni">
-        <span class="id-logo-text">LOGO</span>
+        <!-- <span class="id-logo-text">LOGO</span> -->
         <div class="id-school-title">{{ strtoupper($schoolName) }}</div>
     </div>
 
     <div class="id-photo-zone">
         <!-- <div class="id-stripe-left" aria-hidden="true"></div> -->
-        <div class="id-diamond">
-            <img src="{{ $photoUrl }}" alt="">
-        </div>
+        <!-- <div class="id-diamond"> -->
+            <img src="{{ asset($photoUrl) }}" alt="" style="object-fit: cover;">
+        <!-- </div> -->
         <!-- <div class="id-stripe-right" aria-hidden="true"></div> -->
     </div>
 
@@ -22,8 +22,8 @@
         <div class="id-fields mt-4">
             <div><span class="id-label">Roll #</span> : {{ $cardId }}</div>
             <div><span class="id-label">Father Name</span> : {{ $fatherName }}</div>
-            <div><span class="id-label">Phone</span> : {{ $fatherPhone }}</div>
-            <div><span class="id-label">Class</span> : {{ $className }}</div>
+            <div><span class="id-label">Gender</span> : {{ ucfirst($studentGender) }}</div>
+            <div><span class="id-label">Class</span> : {{ str_replace('Class ', '', $className) }}</div>
             <div><span class="id-label">Section</span> : {{ $sectionName }}</div>
         </div>
     </div>

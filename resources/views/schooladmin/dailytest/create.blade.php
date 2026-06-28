@@ -42,12 +42,6 @@
                     <label for="section_id" class="form-label">Section <span class="text-danger">*</span></label>
                     <select name="section_id" id="section_id" class="form-select" required>
                         <option value="">Select Section</option>
-                        @foreach($sections as $section)
-                            <option value="{{ $section->id }}" data-class-id="{{ $section->class_id }}"
-                                {{ old('section_id') == $section->id ? 'selected' : '' }}>
-                                {{ $section->section_name }} ({{ $section->schoolClass->class_name ?? '' }})
-                            </option>
-                        @endforeach
                     </select>
                 </div>
                 <div class="col-md-4">
@@ -116,6 +110,10 @@
         </div>
     </div>
 
+    <div class="alert alert-warning">
+    <strong>Attention:</strong> The system will display only those students whose admission date is on or before the selected test date.
+</div>
+
     <div class="card shadow-sm d-none" id="students-card">
         <div class="card-header bg-light d-flex justify-content-between align-items-center">
             <h2 class="h6 mb-0 fw-semibold">Students — Obtained Marks</h2>
@@ -150,140 +148,7 @@
     </div>
 </form>
 
+
+@include('schooladmin.dailytest.javascript')
+
 @endsection
-
-@push('scripts')
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var classSelect = document.getElementById('class_id');
-        var sectionSelect = document.getElementById('section_id');
-        var totalMarksInput = document.getElementById('daily_test_total');
-        var studentsCard = document.getElementById('students-card');
-        var studentsTable = document.getElementById('students-table');
-        var studentsTbody = document.getElementById('students-tbody');
-        var studentsLoading = document.getElementById('students-loading');
-        var studentsEmpty = document.getElementById('students-empty');
-        var studentsCount = document.getElementById('students-count');
-        var submitWrap = document.getElementById('submit-wrap');
-        var csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
-        var allSectionOptions = Array.from(sectionSelect.querySelectorAll('option[data-class-id]'));
-
-        function getTotalMarks() {
-            return parseInt(totalMarksInput.value, 10) || 0;
-        }
-
-        function calcPercentage(obtained) {
-            var total = getTotalMarks();
-            if (total <= 0) return '0%';
-            return ((obtained / total) * 100).toFixed(2) + '%';
-        }
-
-        function updateRowPercentage(input) {
-            var pctCell = input.closest('tr').querySelector('.pct-cell');
-            if (pctCell) {
-                pctCell.textContent = calcPercentage(parseInt(input.value, 10) || 0);
-            }
-        }
-
-        function filterSections() {
-            var classId = classSelect.value;
-            var currentValue = sectionSelect.value;
-            sectionSelect.innerHTML = '<option value="">Select Section</option>';
-            if (!classId) return;
-            allSectionOptions.forEach(function (opt) {
-                if (opt.getAttribute('data-class-id') === classId) {
-                    sectionSelect.appendChild(opt.cloneNode(true));
-                }
-            });
-            if (currentValue && sectionSelect.querySelector('option[value="' + currentValue + '"]')) {
-                sectionSelect.value = currentValue;
-            }
-            loadStudents();
-        }
-
-        function loadStudents() {
-            var classId = classSelect.value;
-            var sectionId = sectionSelect.value;
-
-            studentsTbody.innerHTML = '';
-            studentsTable.classList.add('d-none');
-            studentsEmpty.classList.add('d-none');
-            submitWrap.classList.add('d-none');
-
-            if (!classId || !sectionId) {
-                studentsCard.classList.add('d-none');
-                return;
-            }
-
-            studentsCard.classList.remove('d-none');
-            studentsLoading.classList.remove('d-none');
-
-            fetch('{{ url('daily-test/students-list') }}?class_id=' + encodeURIComponent(classId) + '&section_id=' + encodeURIComponent(sectionId), {
-                headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': csrfToken }
-            })
-            .then(function (res) { return res.json(); })
-            .then(function (students) {
-                studentsLoading.classList.add('d-none');
-                var total = getTotalMarks();
-
-                if (!students.length) {
-                    studentsEmpty.classList.remove('d-none');
-                    studentsCount.textContent = '';
-                    return;
-                }
-
-                students.forEach(function (student, index) {
-                    var row = document.createElement('tr');
-                    row.innerHTML =
-                        '<td>' + (index + 1) + '</td>' +
-                        '<td class="fw-medium">' + escapeHtml(student.student_name) + '</td>' +
-                        '<td>' + escapeHtml(student.student_roll_number || '—') + '</td>' +
-                        '<td class="text-center">' +
-                            '<input type="number" name="students[' + student.id + ']" class="form-control form-control-sm obtained-input text-center mx-auto" style="max-width: 100px;" min="0" max="' + total + '" value="0" required>' +
-                        '</td>' +
-                        '<td class="text-center pct-cell text-muted">0%</td>';
-                    studentsTbody.appendChild(row);
-                });
-
-                studentsTable.classList.remove('d-none');
-                submitWrap.classList.remove('d-none');
-                studentsCount.textContent = students.length + ' student(s)';
-
-                document.querySelectorAll('.obtained-input').forEach(function (input) {
-                    input.addEventListener('input', function () {
-                        var total = getTotalMarks();
-                        input.max = total;
-                        if (parseInt(input.value, 10) > total) input.value = total;
-                        updateRowPercentage(input);
-                    });
-                });
-            })
-            .catch(function () {
-                studentsLoading.classList.add('d-none');
-                studentsEmpty.textContent = 'Failed to load students.';
-                studentsEmpty.classList.remove('d-none');
-            });
-        }
-
-        function escapeHtml(text) {
-            var div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-
-        totalMarksInput.addEventListener('input', function () {
-            var total = getTotalMarks();
-            document.querySelectorAll('.obtained-input').forEach(function (input) {
-                input.max = total;
-                if (parseInt(input.value, 10) > total) input.value = total;
-                updateRowPercentage(input);
-            });
-        });
-
-        classSelect.addEventListener('change', filterSections);
-        sectionSelect.addEventListener('change', loadStudents);
-        filterSections();
-    });
-</script>
-@endpush

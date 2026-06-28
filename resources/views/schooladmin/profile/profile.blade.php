@@ -48,6 +48,7 @@
                     <div class="mb-3">
                         <label for="school_phone_no" class="form-label">Phone No <span class="text-danger">*</span></label>
                         <input type="text" name="school_phone_no" id="school_phone_no" class="form-control" value="{{ old('school_phone_no', $school->school_phone_no) }}" placeholder="923001234567" required>
+                        <small class="text-danger">With country code. Format: 923001234567</small>
                         @error('school_phone_no')
                             <div class="text-danger small">{{ $message }}</div>
                         @enderror
@@ -86,7 +87,8 @@
                     </div>
                     <div class="mb-3">
                         <label for="priciple_phone_no" class="form-label">Principal Phone No</label>
-                        <input type="text" name="priciple_phone_no" id="priciple_phone_no" class="form-control" value="{{ old('priciple_phone_no', $school->priciple_phone_no) }}" placeholder="+92 321 9876543">
+                        <input type="text" name="priciple_phone_no" id="priciple_phone_no" class="form-control" value="{{ old('priciple_phone_no', $school->priciple_phone_no) }}" placeholder="923001234567">
+                        <small class="text-danger">With country code. Format: 923001234567</small>
                         @error('priciple_phone_no')
                             <div class="text-danger small">{{ $message }}</div>
                         @enderror

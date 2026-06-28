@@ -10,21 +10,26 @@ return new class extends Migration
     {
         Schema::create('students', function (Blueprint $table) {
             $table->uuid('id')->primary();
+
             $table->foreignUuid('user_id')->nullable()->constrained('users')->nullOnDelete();
             $table->foreignUuid('school_id')->constrained('schools')->cascadeOnDelete();
             $table->foreignUuid('class_id')->constrained('classes')->cascadeOnDelete();
             $table->foreignUuid('section_id')->constrained('sections')->cascadeOnDelete();
+
             $table->string('student_name');
             $table->string('student_email')->nullable();
             $table->string('student_phone_no')->nullable();
             $table->date('student_date_of_birth')->nullable();
             $table->enum('student_gender', ['male', 'female', 'other'])->nullable();
             $table->string('student_photo')->default('Admin/images/student/profiles/default.png');
+
             $table->string('student_roll_number')->nullable();
             $table->date('student_admission_date')->nullable();
             $table->string('student_per_month_fee')->default('0');
+
             $table->enum('status', ['active', 'completed', 'banned', 'inactive'])
                 ->default('active');
+
             $table->timestamps();
             $table->softDeletes();
         });

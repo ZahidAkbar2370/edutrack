@@ -5,7 +5,7 @@
 @section('content')
 
 @php
-    $monthLabel = \Illuminate\Support\Carbon::createFromFormat('Y-m', $feeMonth)->format('F Y');
+$monthLabel = \Illuminate\Support\Carbon::createFromFormat('Y-m', $feeMonth)->format('F Y');
 @endphp
 
 <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-4">
@@ -16,27 +16,26 @@
 
     <div class="d-flex flex-wrap gap-2">
         <a href="#" class="btn btn-outline-success" data-confirm-action
-                        data-confirm-title="Export Unpaid Students to Excel"
-                        data-confirm-message="Are you sure you want to export unpaid students to Excel?"
-                        data-confirm-yes="Yes, Export"
-                        data-confirm-yes-class="btn-success"
-            >
-                <i class="bi bi-download me-1"></i> Export Unpaid Students to CSV
-            </a>
+            data-confirm-title="Export Unpaid Students to Excel"
+            data-confirm-message="Are you sure you want to export unpaid students to Excel?"
+            data-confirm-yes="Yes, Export"
+            data-confirm-yes-class="btn-success">
+            <i class="bi bi-download me-1"></i> Export Unpaid Students to CSV
+        </a>
 
-    <a href="{{ url('fee-management?fee_month=' . $feeMonth) }}" class="btn btn-outline-secondary">
-        <i class="bi bi-arrow-left me-1"></i> Back to List
-    </a>
+        <a href="{{ url('fee-management?fee_month=' . $feeMonth) }}" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left me-1"></i> Back to List
+        </a>
 
     </div>
-    
+
 </div>
 
 @if(session('success'))
-    <div class="alert alert-success">{{ session('success') }}</div>
+<div class="alert alert-success">{{ session('success') }}</div>
 @endif
 @if(session('error'))
-    <div class="alert alert-danger">{{ session('error') }}</div>
+<div class="alert alert-danger">{{ session('error') }}</div>
 @endif
 
 <div class="card shadow-sm mb-4">
@@ -54,170 +53,115 @@
 </div>
 
 @if($students->isEmpty())
-    <div class="alert alert-warning">No active students in this class.</div>
+<div class="alert alert-warning">No active students in this class.</div>
 @else
-    <form action="{{ url('fee-management/store') }}" method="POST" id="fee-form">
-        @csrf
-        <input type="hidden" name="class_id" value="{{ $schoolClass->id }}">
-        <input type="hidden" name="fee_month" value="{{ $feeMonth }}">
+<div class="row">
+    <div class="col-md-6">
 
-        <div class="card shadow-sm">
-            <div class="card-header bg-light d-flex justify-content-between align-items-center">
-                <h2 class="h6 mb-0 fw-semibold">Students</h2>
-                <span class="small text-muted">{{ $students->count() }} student(s)</span>
-            </div>
-            <div class="card-body p-0">
-                <div class="table-responsive">
-                    <table class="table table-bordered align-middle mb-0">
-                        <thead class="table-light">
-                            <tr>
-                                <th>#</th>
-                                <th>Student</th>
-                                <th>Section</th>
-                                <th>Monthly Fee</th>
-                                <th>Fine</th>
-                                <th>Discount</th>
-                                <th>Total</th>
-                                <th>Paid</th>
-                                <th>Remaining</th>
-                                <th>Status</th>
-                                <th>Note</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($students as $key => $student)
+        <form action="{{ url('fee-management/store') }}" method="POST" id="fee-form">
+            @csrf
+            <input type="hidden" name="class_id" value="{{ $schoolClass->id }}">
+            <input type="hidden" name="fee_month" value="{{ $feeMonth }}">
+
+            <div class="card shadow-sm">
+                <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                    <h2 class="h6 mb-0 fw-semibold">Students</h2>
+                    <span class="small text-muted">{{ $students->count() }} student(s)</span>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-bordered align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Student</th>
+                                    <th>Section</th>
+                                    <th>Remaining Amount</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($students as $key => $student)
+
                                 @php
-                                    $fee = $fees->get($student->id);
-                                    $isPaid = $fee && (float) $fee->remaining_amount <= 0;
-                                    $monthly = (float) ($fee->monthly_fee_amount ?? $student->student_per_month_fee ?? 0);
-                                    $fine = (float) ($fee->any_fine_amount ?? 0);
-                                    $discount = (float) ($fee->any_discount_amount ?? 0);
-                                    $total = (float) ($fee->total_amount ?? max(0, $monthly + $fine - $discount));
-                                    $paid = (float) ($fee->paid_amount ?? 0);
-                                    $remaining = (float) ($fee->remaining_amount ?? max(0, $total - $paid));
+                                $studentFeeLastestRecord = \App\Models\MonthlyFee::where('student_id', $student->id)->latest()->first();
                                 @endphp
-                                <tr class="fee-row {{ $isPaid ? 'table-success' : '' }}"
-                                    data-student-id="{{ $student->id }}"
-                                    data-readonly="{{ $isPaid ? '1' : '0' }}"
-                                    data-monthly="{{ $monthly }}">
+
+                                <tr class="fee-row">
                                     <td>{{ $key + 1 }}</td>
+
                                     <td class="fw-medium">
                                         {{ $student->student_name }}
                                         <br>
                                         <span class="text-muted small">Roll: {{ $student->student_roll_number ?? '—' }}</span>
                                     </td>
+
                                     <td>{{ $student->section->section_name ?? '—' }}</td>
+
+
                                     <td>
-                                        <span class="monthly-display">{{ number_format($monthly, 2) }}</span>
-                                    </td>
-                                    <td>
-                                        @if($isPaid)
-                                            <span>{{ number_format($fine, 2) }}</span>
+
+                                        @if($studentFeeLastestRecord)
+                                            <span class="monthly-display monthly-display-remaining-amount-{{ $student->id }}">{{ number_format($studentFeeLastestRecord->remaining_amount, 2) }}</span>
                                         @else
-                                            <input type="number" step="0.01" min="0"
-                                                   name="students[{{ $student->id }}][any_fine_amount]"
-                                                   class="form-control form-control-sm fee-fine"
-                                                   value="{{ $fine > 0 ? $fine : '' }}" placeholder="0">
+                                            <span class="monthly-display monthly-display-remaining-amount-{{ $student->id }}">{{ number_format($student->student_per_month_fee, 2) }}</span>
                                         @endif
                                     </td>
+
+
                                     <td>
-                                        @if($isPaid)
-                                            <span>{{ number_format($discount, 2) }}</span>
+                                        <div class="monthly-fee-status-container-{{ $student->id }}">
+                                        @if($studentFeeLastestRecord)
+                                            @if($studentFeeLastestRecord->remaining_amount > 0)
+                                                <span class="badge bg-warning text-dark monthly-fee-remaining-status-{{ $student->id }}">Remaining</span>
+                                            @else
+                                                <span class="badge bg-success text-dark monthly-fee-paid-status-{{ $student->id }}">Paid</span>
+                                            @endif
                                         @else
-                                            <input type="number" step="0.01" min="0"
-                                                   name="students[{{ $student->id }}][any_discount_amount]"
-                                                   class="form-control form-control-sm fee-discount"
-                                                   value="{{ $discount > 0 ? $discount : '' }}" placeholder="0">
+                                            <span class="badge bg-danger monthly-fee-unpaid-status-{{ $student->id }}">Unpaid</span>
                                         @endif
+                                        </div>
                                     </td>
+
                                     <td>
-                                        <span class="fee-total fw-semibold">{{ number_format($total, 2) }}</span>
-                                    </td>
-                                    <td>
-                                        @if($isPaid)
-                                            <span class="text-success fw-semibold">{{ number_format($paid, 2) }}</span>
-                                        @else
-                                            <input type="number" step="0.01" min="0"
-                                                   name="students[{{ $student->id }}][paid_amount]"
-                                                   class="form-control form-control-sm fee-paid"
-                                                   value="{{ $paid > 0 ? $paid : '' }}" placeholder="0">
-                                        @endif
-                                    </td>
-                                    <td>
-                                        <span class="fee-remaining fw-semibold {{ $remaining > 0 ? 'text-danger' : 'text-success' }}">
-                                            {{ number_format($remaining, 2) }}
-                                        </span>
-                                    </td>
-                                    <td>
-                                        @if($isPaid)
-                                            <span class="badge bg-success">Paid</span>
-                                        @else
-                                            <span class="badge bg-warning text-dark">Unpaid</span>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        @if($isPaid)
-                                            <span class="small text-muted">{{ $fee->note ?? '—' }}</span>
-                                        @else
-                                            <input type="text"
-                                                   name="students[{{ $student->id }}][note]"
-                                                   class="form-control form-control-sm"
-                                                   value="{{ $fee->note ?? '' }}"
-                                                   placeholder="Optional note">
-                                        @endif
+                                        <button type="button" class="btn btn-primary btn-sm pay-fee-button" data-student-id="{{ $student->id }}" data-payment-month="{{ $_GET['fee_month'] }}" id="pay-fee-button">
+                                            <i class="bi bi-cash-coin me-1"></i> Pay Fee
+                                        </button>
                                     </td>
                                 </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="d-flex justify-content-end gap-2 mt-3">
-            <button type="submit" class="btn btn-primary"
-                    onclick="return confirm('Save fee payments for unpaid students?')">
-                <i class="bi bi-check-lg me-1"></i> Save Fees
-            </button>
+        </form>
+
+    </div>
+
+
+
+    <div class="col-md-6">
+        <div class="row card p-1" id="student-fee-payment-records">
+
+            <div class="col-md-12">
+
+                <!-- no record found -->
+                <div class="text-center text-muted py-4">Select a student to view their fee payment records</div>
+
+            </div>
+
+
+
         </div>
-    </form>
+    </div>
+
+</div>
 @endif
 
+
+@include('schooladmin.feemanagement.javascript')
+
 @endsection
-
-@push('scripts')
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        function parseNum(val) {
-            var n = parseFloat(val);
-            return isNaN(n) ? 0 : n;
-        }
-
-        function recalcRow(row) {
-            if (row.dataset.readonly === '1') return;
-
-            var monthly = parseNum(row.dataset.monthly);
-            var fine = parseNum(row.querySelector('.fee-fine')?.value);
-            var discount = parseNum(row.querySelector('.fee-discount')?.value);
-            var paid = parseNum(row.querySelector('.fee-paid')?.value);
-
-            var total = Math.max(0, monthly + fine - discount);
-            var remaining = Math.max(0, total - paid);
-
-            row.querySelector('.fee-total').textContent = total.toFixed(2);
-            var remEl = row.querySelector('.fee-remaining');
-            remEl.textContent = remaining.toFixed(2);
-            remEl.classList.toggle('text-danger', remaining > 0);
-            remEl.classList.toggle('text-success', remaining <= 0);
-        }
-
-        document.querySelectorAll('.fee-row').forEach(function (row) {
-            row.querySelectorAll('.fee-fine, .fee-discount, .fee-paid').forEach(function (input) {
-                input.addEventListener('input', function () {
-                    recalcRow(row);
-                });
-            });
-        });
-    });
-</script>
-@endpush

@@ -24,13 +24,13 @@ class ProfileController extends Controller
         $request->validate([
             'school_name' => 'required|string|max:255',
             'school_email' => 'nullable|email',
-            'school_phone_no' => 'required|string|max:255',
+            'school_phone_no' => 'required|string|max:255|regex:/^92\d{10}$/',
             'city' => 'required|string|max:255',
             'address' => 'required|string|max:255',
 
             'priciple_name' => 'required|string|max:255',
             'priciple_email' => 'nullable|email',
-            'priciple_phone_no' => 'nullable|string|max:255',
+            'priciple_phone_no' => 'nullable|string|max:255|regex:/^92\d{10}$/',
         ]);
 
         $school = School::find(Auth::user()->school_id);

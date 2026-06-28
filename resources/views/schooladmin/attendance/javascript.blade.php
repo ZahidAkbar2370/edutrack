@@ -50,10 +50,19 @@ $(document).ready(function () {
         loadStudents();
     });
 
+    // Attendance Date Change
+    $('#attendance_date').on('change', function () {
+
+        $('#attendance-submit-wrap').addClass('d-none');
+
+        loadStudents();
+    });
+
     function loadStudents()
     {
         let classId = $('#class_id').val();
         let sectionId = $('#section_id').val();
+        let attendanceDate = $('#attendance_date').val();
 
         if (!classId || !sectionId) {
             return;
@@ -65,7 +74,7 @@ $(document).ready(function () {
         $('#students-table').addClass('d-none');
 
         $.ajax({
-            url: "{{ url('ajax/students/') }}" + '/' + classId + '/' + sectionId,
+            url: "{{ url('ajax/students/') }}" + '/' + classId + '/' + sectionId + '/' + attendanceDate,
             type: 'GET',
                 success: function (response) {
 

@@ -41,7 +41,7 @@
                     <tr>
                         <th>#</th>
                         <th>Fee Month</th>
-                        <th>Monthly Fee</th>
+                        <th>Monthly Fee / Remaining Amount</th>
                         <th>Any Fine</th>
                         <th>Discount</th>
                         <th>Total Amount</th>
@@ -75,7 +75,7 @@
                                     {{ $fee->remaining_amount }}
                                 </td>
                                 <td>
-                                    {{ \Illuminate\Support\Carbon::parse($fee->created_at)->format('d M Y') }}
+                                    {{ $fee->created_at }} - {{$fee->created_at->diffForHumans()}}
                                 </td>
                             </tr>
                         @endforeach

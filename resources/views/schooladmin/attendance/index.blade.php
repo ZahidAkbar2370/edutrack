@@ -109,11 +109,8 @@
                                 <td class="text-center text-warning fw-semibold">{{ $group->leave_count }}</td>
                                 <td>{{ \Illuminate\Support\Carbon::parse($group->attendance_date)->format('d M Y') }}</td>
                                 <td class="text-center">
-                                    <a href="{{ route('attendance.show', [
-                                        'class_id' => $group->class_id,
-                                        'section_id' => $group->section_id,
-                                        'attendance_date' => $group->attendance_date,
-                                    ]) }}" class="btn btn-sm btn-outline-secondary" title="View">
+                                    <a href="{{ URL::to('attendance/show/' . $group->attendance_code) }}"
+                                             class="btn btn-sm btn-outline-secondary" title="View">
                                         <i class="bi bi-eye"></i> View
                                     </a>
                                 </td>

@@ -4,22 +4,45 @@
 
 @section('content')
 
+@php
+
+    $className = $attendances->first()->schoolClass->class_name;
+    $sectionName = $attendances->first()->section->section_name;
+    $attendanceDate = $attendances->first()->attendance_date;
+    $attendanceCode = $attendances->first()->attendance_code;
+
+@endphp
+
 <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-4">
     <div>
         <h1 class="h3 mb-1 fw-bold">Edit Attendance</h1>
         <p class="text-muted mb-0">
-            <code><span class="fw-medium">{{ $schoolClass->class_name ?? 'N/A' }}</span> - ({{ $section->section_name ?? 'N/A' }})
+            <code><span class="fw-medium">{{ $className ?? 'N/A' }}</span> - ({{ $sectionName ?? 'N/A' }})
             · {{ $attendanceDate ? \Illuminate\Support\Carbon::parse($attendanceDate)->format('d M Y') : '' }}</code>
         </p>
     </div>
+
+    <div class="d-flex flex-wrap gap-2">
+        <a href="{{ url('attendance/show/' . $attendanceCode) }}" class="btn btn-outline-secondary btn-sm">
+                <i class="bi bi-arrow-left me-1"></i> Back to Attendance Detail
+            </a>
+    </div>
 </div>
 
+@if(session('success'))
+    <div class="alert alert-success">{{ session('success') }}</div>
+@endif
 @if(session('error'))
     <div class="alert alert-danger">{{ session('error') }}</div>
 @endif
 
-<form action="{{ url('attendance/update') }}" method="POST" id="attendance-form">
+<form action="{{ URL::to('attendance/update/' . $attendanceCode) }}" method="POST">
     @csrf
+
+
+    <div class="alert alert-warning">
+    <strong>Attention:</strong> Attendance records are generated based on the selected Class, Section, and Attendance Date. The system displays only those students whose admission date is on or before the selected attendance date.
+</div>
 
     <div class="card shadow-sm" id="students-card">
         <div class="card-header bg-light d-flex justify-content-between align-items-center">
@@ -40,12 +63,6 @@
                     <tbody id="students-tbody">
                         @if(!empty($attendances) && $attendances->count() > 0)
                         @foreach($attendances as $key => $attendance)
-
-    <input type="hidden" name="attendance_id" value="{{ $attendance->id }}">
-    <input type="hidden" name="class_id" value="{{ $attendance->class_id }}">
-    <input type="hidden" name="section_id" value="{{ $attendance->section_id }}">
-    <input type="hidden" name="attendance_date" value="{{ $attendance->attendance_date }}">
-
 
                         <tr>
                             <td>{{ $key + 1 }}</td>

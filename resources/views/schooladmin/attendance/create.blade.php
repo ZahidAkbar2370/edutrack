@@ -9,6 +9,13 @@
         <h1 class="h3 mb-1 fw-bold">Mark Attendance</h1>
         <p class="text-muted mb-0">Select class and section, then mark each student</p>
     </div>
+
+    <div class="d-flex flex-wrap gap-2">
+        <a href="{{ url('attendance') }}" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left me-1"></i> Back to List
+        </a>
+    </div>
+
 </div>
 
 @if(session('error'))
@@ -50,6 +57,10 @@
             </div>
         </div>
     </div>
+
+    <div class="alert alert-warning">
+    <strong>Attention:</strong> The system will display only those students whose admission date is on or before the selected attendance date.
+</div>
 
     <div class="card shadow-sm d-none" id="students-card">
         <div class="card-header bg-light d-flex justify-content-between align-items-center">

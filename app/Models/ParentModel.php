@@ -15,12 +15,10 @@ class ParentModel extends Model
     protected $fillable = [
         'school_id',
         'student_id',
+
         'parent_name',
         'parent_phone_no',
         'parent_email',
-        'parent_photo',
-        'parent_cnic_front',
-        'parent_cnic_back',
         'parent_address',
     ];
 

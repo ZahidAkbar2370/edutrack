@@ -22,11 +22,11 @@ class Student extends Model
         'student_name',
         'student_email',
         'student_phone_no',
+        'student_date_of_birth',
+        'student_gender',
         'student_photo',
         'student_roll_number',
         'student_admission_date',
-        'student_date_of_birth',
-        'student_gender',
         'student_per_month_fee',
         'status',
     ];
@@ -81,7 +81,7 @@ class Student extends Model
 
             $lastNumber = (int) str_replace('STD-', '', $lastStudent->student_roll_number);
     
-            return 'STD-' . str_pad($lastNumber + 1, 4, '0', STR_PAD_LEFT);
+            return 'STD-' . str_pad($lastNumber + 1, 6, '0', STR_PAD_LEFT);
         }
     
         return 'STD-0001';

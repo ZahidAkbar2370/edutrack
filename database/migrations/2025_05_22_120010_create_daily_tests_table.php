@@ -16,6 +16,9 @@ return new class extends Migration
             $table->foreignUuid('section_id')->constrained('sections')->cascadeOnDelete();
             $table->foreignUuid('student_id')->constrained('students')->cascadeOnDelete();
             $table->foreignUuid('teacher_id')->constrained('teachers')->cascadeOnDelete();
+
+            $table->string('daily_test_code')->nullable();
+
             $table->date('daily_test_date');
             $table->string('daily_test_name');
             $table->string('subject');
@@ -23,6 +26,7 @@ return new class extends Migration
             $table->unsignedInteger('daily_test_total');
             $table->double('daily_test_percentage');
             $table->string('daily_test_note')->nullable();
+            $table->enum('whatsapp_status', ['pending', 'processing', 'sent', 'failed'])->default('pending');
             $table->timestamps();
             $table->softDeletes();
         });

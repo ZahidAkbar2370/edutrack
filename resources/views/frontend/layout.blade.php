@@ -2,8 +2,14 @@
 <html lang="en">
 <head><meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="keywords" content="EduTrack, Smart School Management System, School Management System, School Management Software, School Management Solution, School Management Solution Software, School Management Solution Software">
+    <meta name="author" content="EduTrack Powered by Softwebies">
     <meta name="description" content="@yield('meta_description', 'EduTrack — Smart School Management System')">
+
     <title>@yield('title', 'EduTrack') — EduTrack</title>
+
+    <link rel="icon" href="{{ asset('images/favicon.png') }}" type="image/x-icon">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -79,7 +85,7 @@
                 </div>
                 <div class="col-md-6 text-md-end">
                     <a href="{{ route('login') }}" class="me-3">Login</a>
-                    <a href="#plans" class="me-3">Plans</a>
+                    <a href="{{ url('/#pricing') }}" class="me-3">Plans</a>
                     <a href="{{ url('privacy-policy') }}" class="me-3">Privacy</a>
                     <a href="{{ url('terms-and-conditions') }}">Terms & Conditions</a>
                     <p class="mt-2 mb-0 small">&copy; {{ date('Y') }} EduTrack. All rights reserved. Powered by <a href="https://softwebies.com" target="_blank" rel="noopener noreferrer" class="text-white fw-bold">Softwebies</a></p>

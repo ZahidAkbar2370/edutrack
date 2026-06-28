@@ -42,8 +42,8 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="student_phone_no" class="form-label">Student Phone</label>
-                        <input type="number" name="student_phone_no" id="student_phone_no" value="{{ old('student_phone_no') }}" class="form-control" placeholder="03001234567">
+                        <label for="student_phone_no" class="form-label">Student Phone <small class="text-danger">(With Country Code - Format: 923001234567)</small></label>
+                        <input type="number" name="student_phone_no" id="student_phone_no" value="{{ old('student_phone_no') }}" class="form-control" placeholder="923001234567">
                         @error('student_phone_no')
                             <div class="text-danger small">{{ $message }}</div>
                         @enderror
@@ -80,7 +80,7 @@
                             <div class="text-danger small">{{ $message }}</div>
                         @enderror
                         <div class="mt-2">
-                            <img id="student_photo_preview" src="{{ asset('admin/images/student/profiles/default.png') }}" alt="Preview" class="rounded border" style="width:120px;height:120px;object-fit:cover;">
+                            <img id="student_photo_preview" src="{{ asset('Admin/images/student/profiles/default.png') }}" alt="Preview" class="rounded border" style="width:120px;height:120px;object-fit:cover;">
                         </div>
                     </div>
 
@@ -185,8 +185,8 @@
                         @enderror
                     </div>
                     <div class="mb-3">
-                        <label for="parent_phone_no" class="form-label">Parent Phone</label>
-                        <input type="number" name="parent_phone_no" id="parent_phone_no" value="{{ old('parent_phone_no') }}" class="form-control" placeholder="923001234567" required>
+                        <label for="parent_phone_no" class="form-label">Parent Phone <small class="text-danger">(With Country Code - Format: 923001234567)</small></label>
+                        <input type="number" name="parent_phone_no" id="parent_phone_no" value="{{ old('parent_phone_no') }}" class="form-control" placeholder="923001234567">
                         @error('parent_phone_no')
                             <div class="text-danger small">{{ $message }}</div>
                         @enderror

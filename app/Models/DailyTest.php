@@ -27,6 +27,7 @@ class DailyTest extends Model
         'daily_test_percentage',
         'daily_test_note',
         'whatsapp_status',
+        'daily_test_code',
     ];
 
     public function student()
@@ -47,5 +48,10 @@ class DailyTest extends Model
     public function section()
     {
         return $this->belongsTo(Section::class, 'section_id', 'id');
+    }
+
+    public static function generateDailyTestCode()
+    {
+        return 'DT-'.str_pad(DailyTest::count() + 1, 10, '0', STR_PAD_LEFT);
     }
 }

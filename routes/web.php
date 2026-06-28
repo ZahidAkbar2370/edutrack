@@ -92,7 +92,11 @@ Route::group(['middleware' => ['auth', 'school-admin', 'verified', 'membership-p
     Route::prefix('ajax')->group(function () {
         Route::get('sections/{classId}', [AjaxController::class, 'sectionsByClassId']);
 
-        Route::get('students/{classId}/{sectionId}', [AjaxController::class, 'studentsBySectionId']);
+        Route::get('students/{classId}/{sectionId}/{attendanceDate}', [AjaxController::class, 'studentsBySectionId']);
+
+        Route::get('getStudentFeePaymentRecords/{studentId}/{paymentMonth}', [AjaxController::class, 'getStudentFeePaymentRecords']);
+
+        Route::post('storePayFee', [AjaxController::class, 'storePayFee']);
 
         Route::post('generate-whatsapp-qr', [DashboardController::class, 'generateWhatsappQRCode']);
     });
@@ -191,13 +195,13 @@ Route::group(['middleware' => ['auth', 'school-admin', 'verified', 'membership-p
         Route::get('create', [AttendanceController::class, 'create']);
         Route::get('students-list', [AttendanceController::class, 'studentsList']);
         Route::post('store', [AttendanceController::class, 'store']);
-        Route::get('show', [AttendanceController::class, 'show'])->name('attendance.show');
-        Route::post('update', [AttendanceController::class, 'update']);
-        Route::get('edit/{classId}/{sectionId}/{attendanceDate}', [AttendanceController::class, 'edit'])->name('attendance.edit');
+        Route::get('show/{attendanceCode}', [AttendanceController::class, 'show'])->name('attendance.show');
+        Route::post('update/{attendanceCode}', [AttendanceController::class, 'update']);
+        Route::get('edit/{attendanceCode}', [AttendanceController::class, 'edit'])->name('attendance.edit');
 
-        Route::get('report-attendance/{classId}/{sectionId}/{attendanceDate}', [AttendanceController::class, 'reportAttendance'])->name('attendance.report-attendance');
+        Route::get('report-attendance/{attendanceCode}', [AttendanceController::class, 'reportAttendance'])->name('attendance.report-attendance');
 
-        Route::get('export-to-csv/{classId}/{sectionId}/{attendanceDate}', [AttendanceController::class, 'exportToCsv'])->name('attendance.export-to-csv');
+        Route::get('export-to-csv/{attendanceCode}', [AttendanceController::class, 'exportToCsv'])->name('attendance.export-to-csv');
     });
 
     // Daily test routes

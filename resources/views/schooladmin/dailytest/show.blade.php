@@ -26,6 +26,17 @@
     </div>
 
     <div class="d-flex flex-wrap gap-2">
+
+    <!-- <a href="{{ url('daily-test/export-to-csv/' . $dailyTests->first()->daily_test_code) }}" class="btn btn-outline-success">
+        <i class="bi bi-file-earmark-excel me-1"></i> Export to CSV
+    </a> -->
+
+    <!-- edit daily test -->
+    <!-- <a href="{{ url('daily-test/edit/' . $dailyTests->first()->daily_test_code) }}" class="btn btn-outline-primary">
+        <i class="bi bi-pencil-square me-1"></i> Edit Daily Test
+    </a> -->
+
+
         <a href="#" class="btn btn-outline-danger"
         data-confirm-action
         data-confirm-title="Notification to Parents via Whatsapp"
@@ -33,8 +44,12 @@
         data-confirm-yes="Yes, Send Notification"
         data-confirm-yes-class="btn-danger"
         >
-            <i class="bi bi-whatsapp me-1"></i> Notification to Parents via Whatsapp
+            <i class="bi bi-whatsapp me-1"></i> Report to Parents via Whatsapp
         </a>
+
+        <a href="{{ url('daily-test') }}" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left me-1"></i> Back to Daily Test List
+    </a>
     </div>
 </div>
 
@@ -72,6 +87,9 @@
                             <th>Student Name</th>
                             <th class="text-center" style="min-width: 140px;">Obtained Marks</th>
                             <th class="text-center">Percentage</th>
+                            <th>Whatsapp Notification Status</th>
+                            <th>Created On</th>
+                            <th>Updated On</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -90,6 +108,19 @@
                                            value="{{ $test->daily_test_obtained }}" required>
                                 </td>
                                 <td class="text-center pct-cell fw-semibold">{{ number_format($test->daily_test_percentage, 2) }}%</td>
+                                <td>
+                                    @if($test->whatsapp_status == 'pending')
+                                    <span class="p-2 bg-warning text-white">Pending</span>
+                                    @elseif($test->whatsapp_status == 'processing')
+                                    <span class="p-2 bg-info text-white">Processing</span>
+                                    @elseif($test->whatsapp_status == 'sent')
+                                    <span class="p-2 bg-success text-white">Sent</span>
+                                    @elseif($test->whatsapp_status == 'failed')
+                                    <span class="p-2 bg-danger text-white">Failed</span>
+                                    @endif
+                                </td>
+                                <td>{{ $test->created_at ? \Illuminate\Support\Carbon::parse($test->created_at)->format('d M Y h:i A') : 'N/A' }}</td>
+                                <td>{{ $test->updated_at ? \Illuminate\Support\Carbon::parse($test->updated_at)->format('d M Y h:i A') : 'N/A' }}</td>
                             </tr>
                         @endforeach
                     </tbody>

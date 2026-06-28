@@ -45,7 +45,7 @@ class DailyTestController extends Controller
             ->selectRaw('MAX(daily_test_total) as total_marks')
             ->selectRaw('COUNT(*) as total_students')
             ->groupBy('class_id', 'section_id', 'daily_test_date', 'daily_test_name', 'teacher_id', 'subject')
-            ->orderByDesc('daily_test_date')
+            ->orderByDesc('created_at')
             ->get();
 
         $classIds = $testGroups->pluck('class_id')->unique();

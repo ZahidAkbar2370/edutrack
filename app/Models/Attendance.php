@@ -43,6 +43,6 @@ class Attendance extends Model
 
     public static function generateAttendanceCode()
     {
-        return 'ATT-'.str_pad(Attendance::count() + 1, 6, '0', STR_PAD_LEFT);
+        return 'ATT-'.str_pad(Attendance::count() + 1, 10, '0', STR_PAD_LEFT);
     }
 }

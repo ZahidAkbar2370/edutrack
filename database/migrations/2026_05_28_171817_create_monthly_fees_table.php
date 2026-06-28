@@ -18,13 +18,21 @@ return new class extends Migration
             $table->foreignUuid('student_id')->constrained('students')->cascadeOnDelete();
             $table->string('payment_date')->nullable();
             $table->string('payment_prove_image')->nullable();
-            $table->string('monthly_fee_amount')->default(0);
+
+            $table->string('previous_remaining_amount')->nullable();
+            $table->string('monthly_fee_amount')->nullable();
+
             $table->string('any_fine_amount')->default(0);
             $table->string('any_discount_amount')->default(0);
+
             $table->string('total_amount')->default(0);
             $table->string('paid_amount')->default(0);
+
             $table->string('remaining_amount')->default(0);
             $table->string('note')->nullable();
+
+            $table->string('system_remarks')->nullable();
+
             $table->timestamps();
             $table->softDeletes();
         });
